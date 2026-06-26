@@ -1,6 +1,6 @@
 # Bootstrap templates
 
-Reference implementation for the Expo project bootstrap prompt. **Adapt** into a new app **after** `bunx create-expo-app@latest … --template default@sdk-56` and removing default template cruft.
+Reference implementation for the Expo project bootstrap prompt. **Adapt** into a new app **after** `bunx create-expo-app@latest … --template default` and removing default template cruft.
 
 **Source repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
 

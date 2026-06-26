@@ -31,11 +31,11 @@ Do not copy demo gallery screens, photo flows, or domain APIs from sample repos.
 ---
 
 ### Project scaffold
-Always bootstrap from the official Expo default template for SDK 56 — **do not** hand-roll `package.json` or clone a sample app repo as the project base.
+Always bootstrap from the official Expo default template for the **latest SDK** — **do not** hand-roll `package.json` or clone a sample app repo as the project base.
 
-1. **Create the Expo app** with `create-expo-app@latest` in the project root:
-   - New local directory: `bunx create-expo-app@latest <APP_NAME> --template default@sdk-56`
-   - Empty git checkout: `cd` into the repo root and run `bunx create-expo-app@latest . --template default@sdk-56`
+1. **Create the Expo app** with `create-expo-app@latest` in the project root (no SDK pin — `@latest` + `--template default` installs the current Expo SDK):
+   - New local directory: `bunx create-expo-app@latest <APP_NAME> --template default`
+   - Empty git checkout: `cd` into the repo root and run `bunx create-expo-app@latest . --template default`
    - Set `name` / `slug` in `app.json` to match **New app name / slug** when they differ from the folder name.
 2. **Remove unnecessary default template files** before layering bootstrap architecture:
    - Demo routes and screens (e.g. tab explore/demo flows, sample modals) — replace with the minimal placeholder shell from templates
@@ -49,7 +49,7 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - `bun add` for runtime libraries; `bun add -d` for devDependencies
    - See `templates/README.md` for dependency groups (`dependencies` vs `devDependencies`)
 4. **Apply bootstrap templates** — read files from `templates/` and **adapt** them into the scaffolded project. **Do not bulk-copy** over `package.json`, `app.json`, `tsconfig.json`, or other files the Expo template already generated; **merge** template intent with what `create-expo-app` produced:
-   - **`package.json`:** merge `dependencies` and `devDependencies` from `templates/README.md` (use `bun add -d` for devDependencies); keep Expo-scaffolded versions where `bunx expo install` already pinned SDK 56–compatible packages
+   - **`package.json`:** merge `dependencies` and `devDependencies` from `templates/README.md` (use `bun add -d` for devDependencies); keep Expo-scaffolded versions where `bunx expo install` already pinned SDK-compatible packages
    - **`app.json` / `expo` config:** merge plugins (`expo-router`, splash, `expo-localization`, `react-native-nano-icons`, etc.), `experiments`, and platform settings into the existing config; set `name` / `slug` / `scheme` from **New app name / slug**
    - **`tsconfig.json`:** extend `expo/tsconfig.base`; merge `paths` (`@/*`, `@/assets/*`) and `strict` with any Expo defaults already present
    - **`metro.config.js`:** start from the scaffolded Expo Metro config; layer Uniwind (`withUniwindConfig`) and Storybook (`withStorybook`) from templates
@@ -77,7 +77,7 @@ Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use
 ---
 
 ### Required stack
-- **Expo SDK 56** — scaffold with `bunx create-expo-app@latest … --template default@sdk-56`; use `bunx expo install` for Expo libraries; read version-matched docs at https://docs.expo.dev/versions/v56.0.0/ (or `/versions/latest/` if newer) before writing code
+- **Expo (latest SDK)** — scaffold with `bunx create-expo-app@latest … --template default`; use `bunx expo install` for all Expo / React Native libraries so versions stay aligned with the scaffolded SDK; read docs at https://docs.expo.dev/versions/latest/ (or the version-specific URL matching `expo` in `package.json`) before writing code
 - **expo-router** — file-based routing in `src/app/`, typed routes; enable `experiments.typedRoutes` and `reactCompiler` in `app.json` (per templates)
 - **Uniwind + Tailwind CSS v4**
   - CSS entry: `src/theme/global.css`
@@ -218,7 +218,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 
 ### Git deliverable
 1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory and `git init` with `main` as the default branch.
-2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default@sdk-56`, remove template cruft, install packages, adapt bootstrap templates into the project).
+2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default`, remove template cruft, install packages, adapt bootstrap templates into the project).
 3. Implement per Inputs and remaining sections above.
 4. Run and verify:
    - `bun install`
@@ -241,7 +241,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 ---
 
 ### Constraints
-- Start from `bunx create-expo-app@latest … --template default@sdk-56` — do not skip the official template or clone a sample app as the project base
+- Start from `bunx create-expo-app@latest … --template default` — do not pin an SDK version (`@sdk-NN`) or skip the official template; do not clone a sample app as the project base
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
 - Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`

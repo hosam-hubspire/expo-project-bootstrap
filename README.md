@@ -1,6 +1,6 @@
 # Expo project bootstrap
 
-Reusable agent prompt and **canonical templates** for scaffolding new Expo React Native apps (SDK 56, Uniwind, Bun, Biome, design tokens, optional Storybook / GraphQL / icons).
+Reusable agent prompt and **canonical templates** for scaffolding new Expo React Native apps (latest Expo SDK via `create-expo-app@latest`, Uniwind, Bun, Biome, design tokens, optional Storybook / GraphQL / icons).
 
 ## Usage
 
