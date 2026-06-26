@@ -58,7 +58,7 @@ Track progress; do not skip gates:
 - [ ] 0 — Intake: AskQuestion (or conversational) for all inputs; pre-fill from first message but confirm every field
 - [ ] A — Scaffold: create-expo-app, remove cruft, install deps, apply templates, bun install exit 0
 - [ ] B — Design tokens (if Figma design system URL): persist exports, token gate passes
-- [ ] C — Icons (if Figma icons URL): persist SVGs, icon gate passes
+- [ ] C — Icons (if Figma icons URL): **read and follow [figma-icons-sync](../figma-icons-sync/SKILL.md)**; icon gate passes
 - [ ] D — Verify: lint, test, tsc; Argent smoke tests on iOS + Android when available
 - [ ] E — Commit (+ push if GitHub repo provided)
 ```
@@ -79,7 +79,7 @@ This is the **only** allowed Figma → disk pipeline. Do not invent alternatives
 
 **Allowed loop (repeat per collection / batch):**
 
-1. `use_figma` — **one** variable collection, text-styles call, or ~20–25 icon batch
+1. `use_figma` — **one** variable collection or text-styles call (~20–25 icon batches are handled by **figma-icons-sync**, not inline here)
 2. Write the MCP JSON to `/tmp/<name>.json` (Write tool or shell — **not** a new project script)
 3. Run `node scripts/persist-figma-export.mjs …` **immediately** (see `templates/FIGMA_EXPORT.md`)
 4. Verify counts/modes on disk **before** the next `use_figma` call
@@ -87,7 +87,8 @@ This is the **only** allowed Figma → disk pipeline. Do not invent alternatives
 **Forbidden — never do these:**
 
 - Add project scripts to bridge Figma export (`save-figma-*.mjs`, `save-json.mjs`, `flush-*`, batch importers, icon manifests, etc.)
-- Delegate Figma export to a subagent/Task instead of running the loop yourself
+- Delegate **token** export to a subagent/Task instead of running the loop yourself
+- Run **Phase C icons** without reading **[figma-icons-sync](../figma-icons-sync/SKILL.md)** (parallel slice workers are defined there)
 - Treat a successful `use_figma` response in chat as export complete without `persist-figma-export.mjs`
 - Export multiple collections in one `use_figma` call
 - Proceed to the next phase or commit while template stub token/icon counts remain on disk
@@ -101,7 +102,9 @@ node scripts/persist-figma-export.mjs token color-tokens.json /tmp/color-tokens.
 node -e "const d=require('./src/theme/tokens/raw/color-tokens.json'); console.log(d.modes, d.variables.length)"
 ```
 
-Full phase gates and export helpers: `templates/FIGMA_EXPORT.md` and **Phase B / C** in [bootstrap.md](bootstrap.md).
+Full phase gates and token export helpers: `templates/FIGMA_EXPORT.md` and **Phase B** in [bootstrap.md](bootstrap.md).
+
+**Phase C (icons):** when a Figma icons URL was provided in intake, **read and follow [figma-icons-sync](../figma-icons-sync/SKILL.md)** before Phase D. Do not inline a different icon export strategy.
 
 ## Optional add-ons
 
@@ -110,7 +113,7 @@ When the user requests specific capabilities, also apply the matching block in [
 - GraphQL subscriptions
 - Storybook
 - Figma tokens only (Phase B)
-- Figma icons only (Phase C)
+- Figma icons only (Phase C) — **[figma-icons-sync](../figma-icons-sync/SKILL.md)**
 - Device verification (Argent)
 
 ## Templates source

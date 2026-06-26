@@ -14,7 +14,10 @@ use expo-project-bootstrap skill to bootstrap a project
 
 ```bash
 npx skills add hosam-hubspire/expo-project-bootstrap --skill expo-project-bootstrap -g -y
+npx skills add hosam-hubspire/expo-project-bootstrap --skill figma-icons-sync -g -y
 ```
+
+`figma-icons-sync` is invoked automatically by `expo-project-bootstrap` Phase C when a Figma icons URL is provided. Install it separately only if you sync icons outside bootstrap.
 
 **Manual prompt:** see [PROJECT_BOOTSTRAP.md](./PROJECT_BOOTSTRAP.md).
 
@@ -22,7 +25,8 @@ npx skills add hosam-hubspire/expo-project-bootstrap --skill expo-project-bootst
 
 | Path | Purpose |
 |------|---------|
-| `skills/expo-project-bootstrap/` | Agent skill (`SKILL.md`, `bootstrap.md`, `addons.md`) — single source of truth for workflow |
+| `skills/expo-project-bootstrap/` | Agent skill (`SKILL.md`, `bootstrap.md`, `addons.md`) — bootstrap workflow |
+| `skills/figma-icons-sync/` | Icon export from Figma (batched `/tmp` JSON, parallel slices) — Phase C |
 | `templates/` | Reference config, scripts, theme pipeline, minimal app shell, optional Storybook |
 | `PROJECT_BOOTSTRAP.md` | Thin prompt wrapper — links to skill, no duplicated workflow |
 | `templates/README.md` | Adaptation workflow and one-package-per-install dependency list |
@@ -32,7 +36,8 @@ npx skills add hosam-hubspire/expo-project-bootstrap --skill expo-project-bootst
 ## How it fits together
 
 ```
-skills/expo-project-bootstrap/   ← agent instructions (what to do)
+skills/expo-project-bootstrap/   ← bootstrap workflow
+skills/figma-icons-sync/         ← Phase C icon sync (called when icons URL provided)
 templates/                       ← files to merge into the new app
 ```
 

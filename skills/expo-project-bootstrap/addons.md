@@ -16,7 +16,7 @@ Run Phase B only (design tokens). One collection per `use_figma` call; persist i
 
 ## Figma icons only
 
-Run Phase C only (icons) after scaffold + `bun install`. Export from the provided Figma icons URL in batches; persist each batch before the next. Deduplicate size and light/dark variants — one SVG per logical icon; size and color are Icon props. Icon gate: SVG count on disk must match inventory. Document any ambiguous variants (same name, different shape) in the bootstrap summary.
+Run Phase C only (icons) after scaffold + `bun install`. **Read and follow [figma-icons-sync](../figma-icons-sync/SKILL.md)** with the provided Figma icons URL and project root. Document any ambiguous variants (same name, different shape) in the bootstrap summary.
 
 ## Device verification (Argent)
 

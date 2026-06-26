@@ -93,15 +93,11 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
 
 **Phase C — Icons (icon gate):** Only after Phase B passes (or when no design-system URL — then after Phase A). Requires `react-native-nano-icons` installed.
 
-1. `get_metadata` on the icons frame — inventory logical icon names and count **N**.
-2. Export SVGs in batches (~20–25 per `use_figma` call); persist each batch immediately:
-   `node scripts/persist-figma-export.mjs icons /tmp/icons-batch-N.json`
-3. **Verify on disk:** `ls assets/icons/*.svg | wc -l` equals **N** (deduplicated logical icons only).
-4. Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`; run `bun run icons:generate` (or `bunx react-native-nano-icons --path ./assets/icons`). **Never** run the CLI without `--path ./assets/icons` — default cwd writes stray `nanoicons.glyphmap.json` to the project root.
+**Read and follow the [figma-icons-sync](../figma-icons-sync/SKILL.md) skill** using the Figma icons URL from intake and the project root. That skill defines inventory, batched raw JSON export to `/tmp`, parallel slice workers, persist via `scripts/persist-figma-export.mjs`, and the icon gate (`ls assets/icons/*.svg | wc -l` === **N**, then `bun run icons:generate`).
 
 Do not add ad-hoc export scripts (`save-figma-*.mjs`, `save-json.mjs`, `flush-*`, icon manifests, batch importers, etc.). **Never** add project scripts to bridge MCP → disk — write payloads to `/tmp` and call `scripts/persist-figma-export.mjs` from templates. See `templates/FIGMA_EXPORT.md`.
 
-**STRICT agent rule:** If export feels slow or JSON is large, still use `/tmp` + `persist-figma-export.mjs`. Do not delegate to subagents or invent helpers. A chat-only `use_figma` success is not export complete until persist + gate pass.
+**STRICT agent rule (tokens):** If token export feels slow or JSON is large, still use `/tmp` + `persist-figma-export.mjs`. Do not invent helpers. A chat-only `use_figma` success is not export complete until persist + gate pass. **Icons:** follow **figma-icons-sync** (parallel slice Task workers allowed when **N > 20**).
 
 Then continue with feature-specific work and Phase D verification.
 
@@ -170,24 +166,16 @@ If Figma JSON is not available yet, scaffold the theme folder and generator conf
 
 ### Icon pipeline (when Figma icons section URL is provided)
 
-Run as **Phase C** only — after Phase A (and Phase B when a design-system URL was provided). See `templates/FIGMA_EXPORT.md` **Phase C**. Requires successful `bun install` including `react-native-nano-icons`.
+Run as **Phase C** only — after Phase A (and Phase B when a design-system URL was provided). Requires successful `bun install` including `react-native-nano-icons`.
 
-1. Open the linked section (frame, page, or component set) and inventory every distinct **logical** icon — not every layer variant. Record total count **N**.
-2. **Deduplicate before export.** The source section may repeat the same icon at multiple sizes and in light/dark (or other) modes. Export **one SVG per logical icon** only:
-   - Treat size variants (16, 20, 24, 32, …) as the same icon — `size` is a prop on `Icon`.
-   - Treat light/dark (or filled/tinted) color variants as the same icon — `color` / `colorToken` are props on `Icon`.
-   - When variants differ only by size or color, pick a single canonical source (prefer the default/neutral mode and a mid size such as 24px).
-   - When variants differ by **shape** (e.g. outline vs solid, chevron-left vs chevron-right), export separate icons with distinct semantic names.
-   - Normalize names to kebab-case filenames that match the glyph name (e.g. `home.svg`, `chevron-left.svg`) — never encode size or theme in the filename.
-3. Export SVGs into `assets/icons/` via **`use_figma`** (`exportAsync({ format: 'SVG' })`) in batches (~20–25 icons per call) — see `templates/FIGMA_EXPORT.md`. **Persist each batch immediately** with `node scripts/persist-figma-export.mjs icons …`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
-4. **Icon gate:** verify `ls assets/icons/*.svg | wc -l` equals inventory **N** before font regeneration.
-5. Wire the icon font pipeline from templates:
+**Export and persist:** read and follow **[figma-icons-sync](../figma-icons-sync/SKILL.md)** (inventory, batched raw JSON to `/tmp`, parallel slices when **N > 20**, persist, icon gate). See also `templates/FIGMA_EXPORT.md` Phase C.
+
+**After the icon gate passes**, wire from templates:
    - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons` (`.ttf` + `.glyphmap.json` at runtime via prebuild)
-   - **Bootstrap / CI:** copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`, then `bun run icons:generate` to regenerate font/glyphmap before prebuild. `.nanoicons.json` uses `inputDir` / `outputDir` `"."` relative to `--path ./assets/icons`.
    - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props
    - `IconFontLoader` in root layout when fonts are required
-6. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
-7. After adding or changing SVGs, regenerate the font/glyphmap and verify `Icon` renders a sample set at multiple sizes and color tokens.
+   - Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled
+   - Verify `Icon` renders a sample set at multiple sizes and color tokens
 
 If the icons link is omitted, keep placeholder SVGs from templates or scaffold `assets/icons/` empty only when the user asked for the icon font pipeline in **Optional capabilities**.
 

@@ -14,7 +14,7 @@ After **every** MCP call:
 2. Run `scripts/persist-figma-export.mjs` immediately.
 3. Verify the target path on disk (variable count, mode names, or SVG count) before the next MCP call.
 
-Large combined responses **truncate** (~20KB). Export **one variable collection per** `use_figma` call; export icons in batches of ~20–25 SVGs.
+Large combined responses **truncate** (~20KB). Export **one variable collection per** `use_figma` call; export icons via the **figma-icons-sync** skill (batched raw JSON, default **10** icons per call — see `skills/figma-icons-sync/SKILL.md` in the bootstrap repo).
 
 ## Phases overview
 
@@ -49,7 +49,7 @@ Agents **must** follow this loop with no substitutions:
 4. Verify on disk (counts, modes, or SVG total)
 5. Only then — next `use_figma` call or next phase
 
-**Violations (do not do):** inventing `scripts/save-*.mjs` or similar; delegating export to a Task/subagent; skipping persist because JSON is large; marking Phase B/C complete while stub files remain.
+**Violations (do not do):** inventing `scripts/save-*.mjs` or similar; delegating **token** export to a Task/subagent; skipping persist because JSON is large; marking Phase B/C complete while stub files remain. **Icons:** follow **figma-icons-sync** (parallel slice workers allowed).
 
 ---
 
@@ -165,6 +165,8 @@ node -e "const d=require('./src/theme/tokens/raw/color-tokens.json'); console.lo
 
 Run only after Phase A succeeds and Phase B passes when a design-system URL was provided.
 
+**Follow the expo-project-bootstrap skill [figma-icons-sync](../skills/figma-icons-sync/SKILL.md)** for the full workflow (inventory, slice plan, parallel export, persist, gate). Summary below matches that skill.
+
 ### C1 — Inventory
 
 Use `get_metadata` on the icons frame URL. List `COMPONENT` children; deduplicate logical icons (one name per glyph). Record total **N**.
@@ -178,7 +180,7 @@ Deduplication rules:
 
 ### C2 — Export in batches
 
-~20–25 icons per `use_figma` call:
+Default **10** icons per `use_figma` call (use **5** if responses truncate). **No base64.** Parallel slice workers when **N > 20** — see **figma-icons-sync**.
 
 ```javascript
 function normalizeSvg(svg) {
