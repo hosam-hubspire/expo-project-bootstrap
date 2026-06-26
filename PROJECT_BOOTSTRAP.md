@@ -45,7 +45,7 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
    - Web-only artifacts (`+html.tsx`, web scripts, `.web.tsx` variants) — iOS and Android only
    - Restructure to match template conventions (move `app/` → `src/app/`, wire `@/` path aliases in `tsconfig.json`)
 3. **Install additional packages** per **Required stack** and **Optional capabilities** (see `templates/README.md` **Installing dependencies**):
-   - `templates/README.md` lists **package names only** — not version ranges. Install every required/enabled package with `bun add`, `bun add -d`, or `bunx expo install`; **do not** hand-write `"dependency": "^x.y.z"` in `package.json` (guessed versions fail install — e.g. `react-native-nano-icons@^0.4.0` does not exist; `bun add react-native-nano-icons` resolves the published version).
+   - `templates/README.md` lists **package names only** — not version ranges. Install every required/enabled package with `bun add`, `bun add -d`, or `bunx expo install`; **do not** hand-write version ranges in `package.json` — let the CLI resolve versions into `package.json` and `bun.lock`.
    - `bunx expo install` for Expo / React Native packages (SDK-aligned)
    - `bun add` for runtime libraries; `bun add -d` for devDependencies
    - Run `bun install` and confirm exit code **0** before step 4 — do not continue bootstrap on a failed install

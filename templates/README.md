@@ -34,9 +34,9 @@ Install after scaffolding. The lists below are a **package checklist only** — 
 1. Read the checklist sections below for **which** packages to add (required + enabled optional capabilities).
 2. Install each package with the CLI — **never** type `"name": "^x.y.z"` into `package.json` by hand:
    ```bash
-   bunx expo install expo-localization expo-font   # Expo / RN — SDK-aligned
+   bunx expo install expo-localization expo-font
    bun add uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules
-   bun add react-native-nano-icons                  # resolves npm latest (e.g. 0.2.0) — do not guess versions
+   bun add react-native-nano-icons
    bun add -d @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint jest jest-expo @testing-library/react-native @types/jest
    ```
 3. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
