@@ -480,15 +480,15 @@ function groupPathToTextStyleName(groupPath) {
     "global/body/xs bold": "Global/Body/XS Bold",
     "global/body/xxs": "Global/Body/XXS",
     "global/body/xxs bold": "Global/Body/XXS Bold",
-    "heading/rider tools/page title": "Rider Tools/Heading/Page title",
-    "heading/rider tools/arrival time": "Rider Tools/Heading/Arrival time",
+    "heading/app/page title": "App/Heading/Page title",
+    "heading/app/section": "App/Heading/Section",
   };
   if (overrides[groupPath]) return overrides[groupPath];
 
-  if (groupPath.startsWith("heading/rider tools/")) {
-    const rest = groupPath.replace("heading/rider tools/", "");
+  if (groupPath.startsWith("heading/app/")) {
+    const rest = groupPath.replace("heading/app/", "");
     const titleCase = rest.replace(/\b\w/g, (c) => c.toUpperCase());
-    return `Rider Tools/Heading/${titleCase}`;
+    return `App/Heading/${titleCase}`;
   }
   if (groupPath.startsWith("heading/web/")) {
     const rest = groupPath.replace("heading/web/", "");

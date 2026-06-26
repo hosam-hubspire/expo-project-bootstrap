@@ -54,16 +54,25 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - **`tsconfig.json`:** extend `expo/tsconfig.base`; merge `paths` (`@/*`, `@/assets/*`) and `strict` with any Expo defaults already present
    - **`metro.config.js`:** start from the scaffolded Expo Metro config; layer Uniwind (`withUniwindConfig`) and Storybook (`withStorybook`) from templates
    - **`biome.json`, `eslint.config.mjs`, `jest.config.js`, `.gitignore`, `codegen.ts`:** adopt from templates; adjust includes/ignores if the scaffold uses different paths
-   - **`scripts/generate-design-tokens.mjs`, `.github/workflows/ci.yml`:** add as new files (or merge CI steps if a workflow already exists)
+   - **`scripts/generate-design-tokens.mjs`, `scripts/persist-figma-export.mjs`, `.github/workflows/ci.yml`:** add as new files (or merge CI steps if a workflow already exists)
    - **`src/`, `assets/`:** add template modules (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL example) at the paths templates define; replace demo routes/components removed in step 2 — do not overwrite unrelated scaffold files blindly
    - **Storybook (when enabled):** adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project; wire Metro and env flags per templates
-   - **Figma tokens / icons:** replace sample raw JSON and placeholder SVGs when project inputs provide them; run `bun run tokens:generate` and regenerate icon font as needed
+   - **Figma tokens / icons:** when Figma URLs are provided, export via MCP **before** treating bootstrap as complete — see **Figma export (MCP)** below and `templates/FIGMA_EXPORT.md`; persist raw JSON and SVGs, then run `bun run tokens:generate` and regenerate icon font as needed
 5. **Argent setup (for device smoke tests):** In the project root after templates are in place:
    - If `command -v argent` fails, install the CLI: `npm i -g @swmansion/argent`
    - Run `npx @swmansion/argent init -y` (or `argent init -y` when the CLI is on PATH) to generate project config (`.cursor/rules/argent.md`, MCP entries, etc.)
    - If the CLI cannot be installed in this environment, skip Argent setup and device verification; note that in the summary
 
 Then continue with design tokens, icons, and feature-specific work.
+
+**Figma export checkpoint (when Figma URLs are provided):** Do not commit until all of the following pass:
+
+- Raw JSON files are written under `src/theme/tokens/raw/` (not template stubs — verify variable counts and mode names on disk)
+- `LIGHT_MODE`, `DARK_MODE`, and typography/size mode constants in `scripts/generate-design-tokens.mjs` match the exported collections
+- `bun run tokens:generate` logs the project's mode names and token counts
+- Icon SVG count matches the Figma inventory (when icons are in scope); `.ttf` and `.glyphmap.json` regenerated (when icons are in scope)
+
+Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` from templates or direct writes to the paths in `templates/FIGMA_EXPORT.md`.
 
 ---
 
@@ -103,22 +112,23 @@ Then continue with design tokens, icons, and feature-specific work.
 
 ### Design token pipeline (when Figma is provided)
 1. Inspect the Figma file and inventory variable collections: colors, typography, spacing/sizing, radius, shadows, etc. **Not every project has everything** — some have no dark mode, no breakpoint modes, no primitives, or different mode names.
-2. Export raw JSON (Figma MCP, Variables export, or manual extraction) into `src/theme/tokens/raw/`. Templates ship **format examples only** (one entry per collection type) — replace entirely with this project's Figma variables. **Filenames and collections are project-specific** — map them in `scripts/generate-design-tokens.mjs` under `RAW_FILES`.
-3. **Adapt the generator per project** (templates ship a sample Figma structure — reconfigure, do not assume every project matches):
-   - Configure `RAW_FILES`, mode names (`LIGHT_MODE`, `DARK_MODE`, typography/size modes), and breakpoints
+2. **Export via Figma MCP `use_figma`** (Plugin API) — see `templates/FIGMA_EXPORT.md`. List collections with `figma.variables.getLocalVariableCollectionsAsync()`, export each collection to the raw JSON schema, and export text styles with `figma.getLocalTextStylesAsync()`. **Do not rely on** `get_variable_defs`, `get_design_context`, or variable search alone — they often fail or return empty without a selected layer.
+3. **Persist immediately** into `src/theme/tokens/raw/` using `node scripts/persist-figma-export.mjs token …` (or equivalent writes). Templates ship **format examples only** — replace entirely with this project's exports. Map collections in `scripts/generate-design-tokens.mjs` under `RAW_FILES` when filenames differ.
+4. **Adapt the generator per project** (templates ship a sample Figma structure — reconfigure, do not assume every project matches):
+   - Set `RAW_FILES`, mode names (`LIGHT_MODE`, `DARK_MODE`, typography/size modes), and breakpoints from **discovered** collection modes — do not assume mode names like `Dark` until the export confirms them
    - Detect which modes exist and fall back gracefully:
      - **No dark mode:** emit `@variant light` only
      - **Typography/size breakpoints:** may be separate `sm` / `md` / `lg`, combined modes, or a single mode — emit responsive Uniwind classes only when modes exist and differ
      - **Missing optional files** (primitives, text styles): skip those outputs
    - Emit only what the project needs — typically semantic colors, spacing, and typography as Uniwind CSS variables
    - Emit Storybook metadata only when Storybook is enabled
-4. Wire `src/theme/global.css` to import generated CSS and register Uniwind breakpoints when responsive tokens exist.
-5. Run `bun run tokens:generate` and commit generated output.
-6. **Never hand-edit** `src/theme/tokens/generated/*` or auto-generated story metadata files.
+5. Wire `src/theme/global.css` to import generated CSS and register Uniwind breakpoints when responsive tokens exist.
+6. Run `bun run tokens:generate` and commit generated output.
+7. **Never hand-edit** `src/theme/tokens/generated/*` or auto-generated story metadata files.
 
 The template generator (`scripts/generate-design-tokens.mjs`) is a **starting point**, not a fixed spec. Trim or extend it to match this project's Figma file and goals.
 
-If Figma JSON is not available yet, scaffold the theme folder and generator config, stub minimal tokens if needed for CI, and document what remains in `TOKENS.md`.
+If Figma JSON is not available yet, scaffold the theme folder and generator config, stub minimal tokens if needed for CI, and copy `templates/TOKENS.md` to the project root to document what remains.
 
 ---
 
@@ -130,9 +140,10 @@ If Figma JSON is not available yet, scaffold the theme folder and generator conf
    - When variants differ only by size or color, pick a single canonical source (prefer the default/neutral mode and a mid size such as 24px).
    - When variants differ by **shape** (e.g. outline vs solid, chevron-left vs chevron-right), export separate icons with distinct semantic names.
    - Normalize names to kebab-case filenames that match the glyph name (e.g. `home.svg`, `chevron-left.svg`) — never encode size or theme in the filename.
-3. Export SVGs into `assets/icons/app-icons/`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
+3. Export SVGs into `assets/icons/app-icons/` via **`use_figma`** (`exportAsync({ format: 'SVG' })`) in batches if needed — see `templates/FIGMA_EXPORT.md`. Persist with `node scripts/persist-figma-export.mjs icons …`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
 4. Wire the icon font pipeline from templates:
-   - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons/app-icons` (`.ttf` + `.glyphmap.json` generated alongside SVGs — no `.nanoicons.json` needed for Expo)
+   - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons/app-icons` (`.ttf` + `.glyphmap.json` at runtime via prebuild)
+   - **Bootstrap / CI:** copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` to regenerate font/glyphmap before prebuild
    - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props
    - `IconFontLoader` in root layout when fonts are required
 5. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
@@ -232,6 +243,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 ### Constraints
 - Start from `bunx create-expo-app@latest … --template default@sdk-56` — do not skip the official template or clone a sample app as the project base
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
+- Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`
 - Biome for formatting/general lint; ESLint only for `eslint-plugin-react-native-a11y`
 - Bun only (no npm/yarn)

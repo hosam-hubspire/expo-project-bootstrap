@@ -14,12 +14,12 @@ Read template files from this directory and merge them into the scaffolded proje
    - Merge `app.json` plugins, experiments, and platform settings
    - Extend `tsconfig.json` paths and strict mode without dropping Expo base config
    - Layer Uniwind/Storybook onto the existing Metro config
-3. **Add** template-only files: `biome.json`, `eslint.config.mjs`, `jest.config.js`, `codegen.ts`, `scripts/`, `.github/workflows/ci.yml`, and new paths under `src/` and `assets/`.
+3. **Add** template-only files: `biome.json`, `eslint.config.mjs`, `jest.config.js`, `codegen.ts`, `scripts/`, `FIGMA_EXPORT.md`, `TOKENS.md`, `.github/workflows/ci.yml`, and new paths under `src/` and `assets/`.
 4. **Replace** demo routes/components removed during scaffold cleanup with the minimal shell from templates (`src/app/`, core components, theme pipeline).
 5. When **Storybook** is enabled, adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project.
 6. Set `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
-7. **Design tokens:** `src/theme/tokens/raw/` ships **one example per collection type** (semantic colors, primitives, spacing, typography, text styles) so the generator and shell compile — not a full Figma export. Replace with this project's exports when a design file is provided; run `bun run tokens:generate`.
-8. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap via the Expo plugin (outputs `.ttf` and `.glyphmap.json` alongside SVGs in the same directory).
+7. **Design tokens:** `src/theme/tokens/raw/` ships **illustrative samples** so the generator and shell compile — not a full Figma export. When a design file is provided, export via MCP (`templates/FIGMA_EXPORT.md`), persist with `scripts/persist-figma-export.mjs`, replace raw JSON, configure mode names in `generate-design-tokens.mjs`, then run `bun run tokens:generate`.
+8. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap — Expo plugin at prebuild, or CLI during bootstrap (see **Icons** below and `FIGMA_EXPORT.md`).
 9. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
 
 ## Dependencies
@@ -69,6 +69,8 @@ Merge these into the scaffolded `package.json` (keep Expo defaults like `start` 
 | `test:watch` | `jest --watchAll` |
 | `tokens:generate` | `node scripts/generate-design-tokens.mjs` (when Figma pipeline is in scope) |
 
+**Figma export (when a design file is provided):** see [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md). Persist MCP payloads with `scripts/persist-figma-export.mjs` — do not add project-specific export scripts.
+
 **When optional capabilities are enabled:**
 
 | Script | Command |
@@ -83,7 +85,14 @@ Templates include a sample `GalleryCharacters` operation against `https://rickan
 
 ## Icons
 
-`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons/app-icons`. No `.nanoicons.json` is required for Expo projects. Merge this plugin block into the scaffolded `app.json`.
+`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons/app-icons`.
+
+| When | Regenerate `.ttf` + `.glyphmap.json` |
+|------|--------------------------------------|
+| **Expo prebuild / dev client build** | Expo config plugin (no `.nanoicons.json` required) |
+| **Bootstrap / CI before prebuild** | Copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` |
+
+Merge the plugin block into the scaffolded `app.json`. Export and persist SVGs per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
 ## Argent (device smoke tests)
 

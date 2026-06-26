@@ -30,17 +30,10 @@ export const Default: Story = {
   },
 };
 
-export const PageTitle: Story = {
-  args: {
-    children: "Page Title",
-    variant: "heading-rider-tools-page-title",
-  },
-};
-
 export const Section: Story = {
   args: {
     children: "Section heading",
-    variant: "heading-rider-tools-section",
+    variant: "heading-app-section",
   },
 };
 

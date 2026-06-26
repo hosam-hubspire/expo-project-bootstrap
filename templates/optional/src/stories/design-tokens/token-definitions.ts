@@ -176,8 +176,8 @@ export type TypographyPrimitiveGroup = keyof typeof typographyPrimitiveGroups;
 
 export const typographyTokenEntries = [
   {
-    "path": "heading/rider tools/section",
-    "key": "heading-rider-tools-section",
+    "path": "heading/app/section",
+    "key": "heading-app-section",
     "family": "Helvetica Neue",
     "size": 24,
     "weight": "700",
@@ -252,7 +252,7 @@ export const typographyVariants = [
   { name: 'global-body-xxs', label: 'global body xxs', size: 12, sizeSmMd: 10, lineHeight: 12, lineHeightSmMd: 10, weight: '400', weightSmMd: '400' },
   { name: 'global-body-xxs-bold', label: 'global body xxs bold', size: 12, sizeSmMd: 10, lineHeight: 12, lineHeightSmMd: 10, weight: '500', weightSmMd: '500' },
   { name: 'global-underlined-links-base-link', label: 'global underlined links base link', size: 18, sizeSmMd: 16, lineHeight: 25, lineHeightSmMd: 22, weight: '700', weightSmMd: '700' },
-  { name: 'heading-rider-tools-section', label: 'heading rider tools section', size: 24, sizeSmMd: 20, lineHeight: 31, lineHeightSmMd: 26, weight: '700', weightSmMd: '700' },
+  { name: 'heading-app-section', label: 'heading app section', size: 24, sizeSmMd: 20, lineHeight: 31, lineHeightSmMd: 26, weight: '700', weightSmMd: '700' },
 ] as const;
 
 export const tokenCounts = {

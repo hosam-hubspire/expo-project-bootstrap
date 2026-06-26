@@ -58,7 +58,7 @@ export default function SettingsScreen() {
   return (
     <ThemedView className="flex-1">
       <SafeAreaView className="w-full max-w-content flex-1 gap-base self-center px-lg pb-base pt-base ios:pb-[66px] android:pb-[96px]">
-        <ThemedText variant="heading-rider-tools-section">{t("settings.title")}</ThemedText>
+        <ThemedText variant="heading-app-section">{t("settings.title")}</ThemedText>
 
         <ThemedView colorToken="surface-secondary" className="gap-xs rounded-panel p-base">
           <View className="flex-row items-center gap-xs">

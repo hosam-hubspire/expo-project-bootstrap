@@ -3,17 +3,17 @@
   "modes": ["lg+", "sm/md"],
   "variables": [
     {
-      "name": "heading/rider tools/section/font-family",
+      "name": "heading/app/section/font-family",
       "type": "STRING",
       "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
     },
     {
-      "name": "heading/rider tools/section/font-size",
+      "name": "heading/app/section/font-size",
       "type": "FLOAT",
       "values": { "lg+": 24, "sm/md": 20 }
     },
     {
-      "name": "heading/rider tools/section/font-weight",
+      "name": "heading/app/section/font-weight",
       "type": "STRING",
       "values": { "lg+": "Bold", "sm/md": "Bold" }
     },

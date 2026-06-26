@@ -17,3 +17,5 @@ The agent scaffolds with `create-expo-app@latest`, then **refers to and adapts**
 | `PROJECT_BOOTSTRAP.md` | Full agent prompt |
 | `templates/` | Reference config, scripts, theme pipeline, minimal app shell, optional Storybook |
 | `templates/README.md` | Adaptation workflow and dependency groups |
+| `templates/FIGMA_EXPORT.md` | Figma MCP export workflow (`use_figma`), persistence, icon font regen |
+| `templates/TOKENS.md` | Template to copy when Figma export is pending |

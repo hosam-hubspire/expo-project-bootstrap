@@ -10,7 +10,7 @@ export default function HomeScreen() {
   return (
     <ThemedView className="flex-1" colorToken="surface-default">
       <SafeAreaView className="flex-1 justify-center gap-sm p-base">
-        <ThemedText variant="heading-rider-tools-section">{t("home.title")}</ThemedText>
+        <ThemedText variant="heading-app-section">{t("home.title")}</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           {t("home.subtitle")}
         </ThemedText>

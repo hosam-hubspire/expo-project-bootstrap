@@ -66,11 +66,11 @@ function ColorsShowcase() {
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-base gap-lg">
       <View className="gap-2xs">
-        <ThemedText variant="heading-rider-tools-section">SweetTea Color Tokens</ThemedText>
+        <ThemedText variant="heading-app-section">Color Tokens</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           {tokenCounts.colorTokens} semantic tokens · {tokenCounts.colorPrimitives} color primitives
           · {tokenCounts.figmaTotal} total tokens in code ·{" "}
-          {theme === "dark" ? "Rider Tools (dark)" : "Default (light)"} mode
+          {theme === "dark" ? "dark" : "light"} mode
         </ThemedText>
       </View>
 
@@ -83,7 +83,7 @@ function ColorsShowcase() {
       ))}
 
       <View className="gap-2xs pt-base">
-        <ThemedText variant="heading-rider-tools-section">Color Primitives</ThemedText>
+        <ThemedText variant="heading-app-section">Color Primitives</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           Static brand palette (no mode)
         </ThemedText>

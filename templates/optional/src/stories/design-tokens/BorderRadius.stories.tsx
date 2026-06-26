@@ -10,7 +10,7 @@ function RadiusShowcase() {
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-base gap-base">
       <View className="gap-xs">
-        <ThemedText variant="heading-rider-tools-section">Border Radius</ThemedText>
+        <ThemedText variant="heading-app-section">Border Radius</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           Radius tokens from global.css
         </ThemedText>

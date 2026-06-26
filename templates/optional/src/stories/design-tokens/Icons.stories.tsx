@@ -11,7 +11,7 @@ function IconsShowcase() {
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-base gap-base">
       <View className="gap-xs">
-        <ThemedText variant="heading-rider-tools-section">SweetTea Icons</ThemedText>
+        <ThemedText variant="heading-app-section">Icons</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           Sample of {sampleIcons.length} icons from react-native-nano-icons (app-icons set)
         </ThemedText>

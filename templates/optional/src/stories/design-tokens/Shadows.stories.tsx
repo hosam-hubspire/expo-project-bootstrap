@@ -7,7 +7,7 @@ function ShadowsShowcase() {
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-base gap-base">
       <View className="gap-xs">
-        <ThemedText variant="heading-rider-tools-section">Shadows</ThemedText>
+        <ThemedText variant="heading-app-section">Shadows</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           No shadow tokens are defined in global.css yet. Add --shadow-* variables to @theme when
           Figma tokens land, then update this story.

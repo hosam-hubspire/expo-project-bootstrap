@@ -15,7 +15,7 @@ function TypographyShowcase() {
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-base gap-lg">
       <View className="gap-xs">
-        <ThemedText variant="heading-rider-tools-section">Font Families</ThemedText>
+        <ThemedText variant="heading-app-section">Font Families</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           From Figma typography primitives and global.css
         </ThemedText>
@@ -45,9 +45,9 @@ function TypographyShowcase() {
       )}
 
       <View className="gap-xs">
-        <ThemedText variant="heading-rider-tools-section">Typography Variants</ThemedText>
+        <ThemedText variant="heading-app-section">Typography Variants</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          All SweetTea typography tokens via ThemedText
+          All typography tokens via ThemedText
         </ThemedText>
       </View>
 
@@ -58,7 +58,7 @@ function TypographyShowcase() {
             {variant.weight}
           </ThemedText>
           <ThemedText variant={variant.name as TypographyTokenName}>
-            {variant.label}: SweetTea design system
+            {variant.label}: design system sample
           </ThemedText>
         </View>
       ))}

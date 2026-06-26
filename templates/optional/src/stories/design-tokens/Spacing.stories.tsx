@@ -10,7 +10,7 @@ function SpacingShowcase() {
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-base gap-base">
       <View className="gap-xs">
-        <ThemedText variant="heading-rider-tools-section">Spacing Scale</ThemedText>
+        <ThemedText variant="heading-app-section">Spacing Scale</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           Size tokens (sm default, md ≥768px, lg+ ≥1024px) from global.css
         </ThemedText>

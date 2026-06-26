@@ -1,0 +1,9 @@
+{
+  "iconSets": [
+    {
+      "inputDir": ".",
+      "outputDir": ".",
+      "fontFamily": "app-icons"
+    }
+  ]
+}
