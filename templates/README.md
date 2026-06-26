@@ -133,8 +133,6 @@ Templates include a sample `GalleryCharacters` operation against `https://rickan
 | **Expo prebuild / dev client build** | Expo config plugin (no `.nanoicons.json` required) |
 | **Bootstrap / CI before prebuild** | Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`, then `bun run icons:generate` |
 
-**Never** run `react-native-nano-icons` without `--path ./assets/icons` (or the `icons:generate` script) — the default cwd is the project root and produces a stray root-level `app-icons.glyphmap.json`. Add `/app-icons.glyphmap.json` and `/app-icons.ttf` to `.gitignore` as a safety net.
-
 Merge the plugin block into the scaffolded `app.json`. Export and persist SVGs per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
 ## Argent (device smoke tests)
