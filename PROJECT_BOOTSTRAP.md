@@ -44,12 +44,13 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
    - Non-Bun lockfiles (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`) — keep `bun.lock` only
    - Web-only artifacts (`+html.tsx`, web scripts, `.web.tsx` variants) — iOS and Android only
    - Restructure to match template conventions (move `app/` → `src/app/`, wire `@/` path aliases in `tsconfig.json`)
-3. **Install additional packages** per **Required stack** and **Optional capabilities**:
-   - `bunx expo install` for Expo / React Native packages
+3. **Install additional packages** per **Required stack** and **Optional capabilities** (see `templates/README.md` **Installing dependencies**):
+   - `templates/README.md` lists **package names only** — not version ranges. Install every required/enabled package with `bun add`, `bun add -d`, or `bunx expo install`; **do not** hand-write `"dependency": "^x.y.z"` in `package.json` (guessed versions fail install — e.g. `react-native-nano-icons@^0.4.0` does not exist; `bun add react-native-nano-icons` resolves the published version).
+   - `bunx expo install` for Expo / React Native packages (SDK-aligned)
    - `bun add` for runtime libraries; `bun add -d` for devDependencies
-   - See `templates/README.md` for dependency groups (`dependencies` vs `devDependencies`)
+   - Run `bun install` and confirm exit code **0** before step 4 — do not continue bootstrap on a failed install
 4. **Apply bootstrap templates** — read files from `templates/` and **adapt** them into the scaffolded project. **Do not bulk-copy** over `package.json`, `app.json`, `tsconfig.json`, or other files the Expo template already generated; **merge** template intent with what `create-expo-app` produced:
-   - **`package.json`:** merge `dependencies` and `devDependencies` from `templates/README.md` (use `bun add -d` for devDependencies); keep Expo-scaffolded versions where `bunx expo install` already pinned SDK-compatible packages
+   - **`package.json`:** dependencies and devDependencies come from step 3 CLI installs; manually merge **scripts** and `"packageManager"` from `templates/README.md` only — keep Expo-scaffolded versions where `bunx expo install` already pinned SDK-compatible packages
    - **`app.json` / `expo` config:** merge plugins (`expo-router`, splash, `expo-localization`, `react-native-nano-icons`, etc.), `experiments`, and platform settings into the existing config; set `name` / `slug` / `scheme` from **New app name / slug**
    - **`tsconfig.json`:** extend `expo/tsconfig.base`; merge `paths` (`@/*`, `@/assets/*`) and `strict` with any Expo defaults already present
    - **`metro.config.js`:** start from the scaffolded Expo Metro config; layer Uniwind (`withUniwindConfig`) and Storybook (`withStorybook`) from templates
@@ -242,6 +243,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 
 ### Constraints
 - Start from `bunx create-expo-app@latest … --template default` — do not pin an SDK version (`@sdk-NN`) or skip the official template; do not clone a sample app as the project base
+- Install bootstrap dependencies with `bun add` / `bunx expo install` — do not invent version ranges in `package.json`; `bun install` must succeed before Figma export, token generation, lint, or commit
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
 - Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`

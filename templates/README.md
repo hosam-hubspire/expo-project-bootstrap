@@ -10,7 +10,7 @@ Read template files from this directory and merge them into the scaffolded proje
 
 1. **Compare** each scaffolded file (`package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, etc.) with the matching template.
 2. **Merge** template requirements into the scaffold:
-   - Add dependencies (see **Dependencies** below) and scripts (see **Scripts** below); prefer `bunx expo install` for Expo/RN packages already partially present
+   - Install dependencies via CLI (see `templates/README.md` **Installing dependencies**) — checklist only, no hand-written versions; then merge scripts
    - Merge `app.json` plugins, experiments, and platform settings
    - Extend `tsconfig.json` paths and strict mode without dropping Expo base config
    - Layer Uniwind/Storybook onto the existing Metro config
@@ -24,11 +24,25 @@ Read template files from this directory and merge them into the scaffolded proje
 
 ## Dependencies
 
-Install after scaffolding. Merge into the scaffolded `package.json` — do not replace the whole file.
+Install after scaffolding. The lists below are a **package checklist only** — there is no `templates/package.json` and **no version pins**. Do not replace the scaffolded `package.json`; add packages with the CLI so Bun/npm resolve real versions into `package.json` and `bun.lock`.
 
-- **`bunx expo install`** — Expo and React Native packages (including packages the scaffold already partially lists)
-- **`bun add`** — runtime JS libraries
-- **`bun add -d`** — devDependencies (lint, test, codegen, Storybook)
+- **`bunx expo install <pkg> …`** — Expo and React Native packages (including packages the scaffold already partially lists)
+- **`bun add <pkg> …`** — runtime JS libraries
+- **`bun add -d <pkg> …`** — devDependencies (lint, test, codegen, Storybook)
+
+### Installing dependencies (required)
+
+1. Read the checklist sections below for **which** packages to add (required + enabled optional capabilities).
+2. Install each package with the CLI — **never** type `"name": "^x.y.z"` into `package.json` by hand:
+   ```bash
+   bunx expo install expo-localization expo-font   # Expo / RN — SDK-aligned
+   bun add uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules
+   bun add react-native-nano-icons                  # resolves npm latest (e.g. 0.2.0) — do not guess versions
+   bun add -d @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint jest jest-expo @testing-library/react-native @types/jest
+   ```
+3. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
+4. Run `bun install` (or `bun install --frozen-lockfile` after the lockfile exists) and **stop if it fails** — do not proceed to Figma export, `tokens:generate`, lint, or commit until install succeeds.
+5. To verify a version before pinning a nightly or override: `npm view <pkg> version` or `npm view <pkg> dist-tags`.
 
 ### `dependencies` (required, beyond `create-expo-app`)
 
