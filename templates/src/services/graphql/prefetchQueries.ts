@@ -1,9 +1,42 @@
-import type { ApolloClient } from "@apollo/client";
+import type { ApolloClient, TypedDocumentNode } from "@apollo/client";
 
-/** Queries prefetched on app startup. Add typed entries here as the app grows. */
-export const PREFETCH_QUERIES: [] = [];
+import { GalleryCharactersDocument } from "@/services/graphql/generated/graphql";
 
-/** Prefetches selected queries on startup when PREFETCH_QUERIES is non-empty. */
-export function prefetchQueries(_client: ApolloClient): void {
-  // Intentionally empty for bootstrap shell — extend when GraphQL operations exist.
+type PrefetchQueryConfig<TData, TVariables> = {
+  query: TypedDocumentNode<TData, TVariables>;
+  variables?: TVariables;
+};
+
+function prefetchQuery<TData, TVariables>(
+  config: PrefetchQueryConfig<TData, TVariables>,
+): PrefetchQueryConfig<TData, TVariables> {
+  return config;
+}
+
+/**
+ * Queries prefetched on app startup. Add entries here as the app grows.
+ */
+export const PREFETCH_QUERIES = [
+  prefetchQuery({
+    query: GalleryCharactersDocument,
+  }),
+];
+
+/**
+ * Prefetches selected queries on startup. With `cache-first`, reads from the
+ * persisted Apollo cache when available and only fetches from the network when missing.
+ */
+export function prefetchQueries(client: ApolloClient): void {
+  void Promise.allSettled(
+    PREFETCH_QUERIES.map((entry) =>
+      client.query({
+        query: entry.query,
+        ...("variables" in entry && entry.variables !== undefined
+          ? { variables: entry.variables }
+          : {}),
+        fetchPolicy: "cache-first",
+        errorPolicy: "all",
+      } as Parameters<ApolloClient["query"]>[0]),
+    ),
+  );
 }

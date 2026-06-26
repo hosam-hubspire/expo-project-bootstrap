@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 
-import glyphMap from "@/assets/icons/nanoicons/app-icons.glyphmap.json";
+import glyphMap from "@/assets/icons/app-icons/app-icons.glyphmap.json";
 import { Icon, type IconName } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 

@@ -1,7 +1,7 @@
 import { createNanoIconSet, type IconProps as NanoIconProps } from "react-native-nano-icons";
 import { withUniwind } from "uniwind";
 
-import glyphMap from "@/assets/icons/nanoicons/app-icons.glyphmap.json";
+import glyphMap from "@/assets/icons/app-icons/app-icons.glyphmap.json";
 import type { ColorTokenName } from "@/theme";
 import { accentColorClassName } from "@/theme/typography";
 

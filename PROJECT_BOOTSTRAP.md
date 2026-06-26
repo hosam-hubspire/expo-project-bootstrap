@@ -49,12 +49,12 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - `npx expo install` for Expo / React Native packages so versions stay compatible with SDK 56
    - See `templates/README.md` for dependency groups per capability
 4. **Copy and adapt bootstrap templates** from `templates/` (preserve paths into the project root):
-   - Root config: `biome.json`, `eslint.config.mjs`, `metro.config.js`, `jest.config.js`, `tsconfig.json`, `app.json`, `.nanoicons.json`, `.gitignore`, `codegen.ts`
+   - Root config: `biome.json`, `eslint.config.mjs`, `metro.config.js`, `jest.config.js`, `tsconfig.json`, `app.json`, `.gitignore`, `codegen.ts`
    - `scripts/generate-design-tokens.mjs`, `.github/workflows/ci.yml`
-   - `.cursor/rules/argent.md`, `.cursor/mcp.json`, `.mcp.json`
-   - `src/` (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL infra stubs)
+   - `src/` (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL example with `GalleryCharacters` + `prefetchQueries.ts`)
    - `assets/` (tab icons, placeholder icon SVGs — replace when Figma icons are in scope)
    - When Storybook is enabled: copy `optional/.rnstorybook/` → `.rnstorybook/` and merge `optional/src/stories/` into `src/stories/`
+   - When Argent device smoke tests are in scope: copy `optional/argent/` into the project root **or** run `npx @swmansion/argent init -y` (Argent is not created automatically by Expo)
    - Adapt `app.json` name/slug/scheme; trim or replace sample Figma raw JSON when project Figma differs
 
 Then continue with design tokens, icons, and feature-specific work.
@@ -89,7 +89,7 @@ Then continue with design tokens, icons, and feature-specific work.
 ### Optional stack (enable only when listed in Inputs)
 - **Storybook (on-device)** — `.rnstorybook/` from `templates/optional/`, gated by `EXPO_PUBLIC_STORYBOOK_ENABLED`; colocate component stories; design-token stories under `src/stories/design-tokens/` when used
 - **i18n** — `i18next`, `react-i18next`, `expo-localization` (templates include `src/i18n/` shell)
-- **GraphQL** — Apollo Client v4 with codegen (`graphql:generate`); operations in `src/services/graphql/operations/*.graphql`, generated output in `src/services/graphql/generated/`, singleton client in `src/services/graphql/client.ts`; env endpoint `EXPO_PUBLIC_GRAPHQL_URL`; **cache persist (MMKV via `apollo3-cache-persist`) and startup prefetch enabled by default** via `prefetchQueries.ts` (empty until operations exist); WebSocket subscriptions **optional** (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`, optional `EXPO_PUBLIC_GRAPHQL_WS_URL`); no demo queries unless I ask
+- **GraphQL** — Apollo Client v4 with codegen (`graphql:generate`); templates ship example `GalleryCharacters` operation and generated types against `https://rickandmortyapi.com/graphql` (override via `EXPO_PUBLIC_GRAPHQL_URL`); operations in `src/services/graphql/operations/*.graphql`, generated output in `src/services/graphql/generated/`, singleton client in `src/services/graphql/client.ts`; **cache persist (MMKV via `apollo3-cache-persist`) and startup prefetch enabled by default** via `prefetchQueries.ts`; WebSocket subscriptions **optional** (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`, optional `EXPO_PUBLIC_GRAPHQL_WS_URL`); replace the example operation with project queries when GraphQL is enabled
 - **Icons** — when **Figma icons section** is provided, follow the icon pipeline below (SVG → `react-native-nano-icons` font); otherwise use placeholder icons from templates or omit until a link is provided
 - **Fonts** — load via `expo-font` only when Figma or brand guidelines require them; define stacks in `src/theme/global.css`
 
@@ -126,9 +126,7 @@ If Figma JSON is not available yet, scaffold the theme folder and generator conf
    - Normalize names to kebab-case filenames that match the glyph name (e.g. `home.svg`, `chevron-left.svg`) — never encode size or theme in the filename.
 3. Export SVGs into `assets/icons/app-icons/`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
 4. Wire the icon font pipeline from templates:
-   - `.nanoicons.json` with `inputDir: "./assets/icons/app-icons"`
-   - `react-native-nano-icons` Expo config plugin (same `inputDir`)
-   - Generated output under `assets/icons/nanoicons/` (`.ttf` + `.glyphmap.json`) — do not hand-edit
+   - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons/app-icons` (`.ttf` + `.glyphmap.json` generated alongside SVGs — no `.nanoicons.json` needed for Expo)
    - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props
    - `IconFontLoader` in root layout when fonts are required
 5. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
@@ -221,7 +219,7 @@ Templates ship a thin shell: Home + Settings tabs, theme/language toggles on Set
    - `bun run test`
    - `npx tsc --noEmit`
 5. **Device smoke test (before commit/push, when Argent is available):** confirm Argent is installed (`command -v argent` or `mcp__argent__*` tools present). If yes, run the app on **both iOS and Android devices** (simulator, emulator, or connected hardware) and verify there are no issues before pushing:
-   - Copy Argent config from bootstrap templates (`.cursor/rules/argent.md`, `.cursor/mcp.json`, `.mcp.json`)
+   - Ensure Argent project config exists: copy `optional/argent/` from bootstrap templates into the project root, **or** run `npx @swmansion/argent init -y` (Argent is not auto-created by Expo or `create-expo-app`)
    - Boot or use a running iOS simulator and Android emulator (`list-devices` → prefer already-booted targets)
    - Start Metro if needed, then launch the app on each platform (`launch-app` / Expo dev client workflow)
    - Smoke-test the initial shell: app launches without redbox/crash, root layout and placeholder screen(s) render, theme/icons/fonts load if in scope, and basic navigation works when multiple screens exist
