@@ -49,8 +49,14 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
    - `templates/README.md` lists **package names only** — not version ranges. Install every required/enabled package with `bun add`, `bun add -d`, or `bunx expo install`; **do not** hand-write version ranges in `package.json` — let the CLI resolve versions into `package.json` and `bun.lock`.
    - `bunx expo install` for Expo / React Native packages (SDK-aligned)
    - `bun add` for runtime libraries; `bun add -d` for devDependencies
-   - **Run each install command separately** — do not chain multiple `bun add` / `bun add -d` calls with `&&`. Split required runtime, required dev, and each optional capability (Storybook, GraphQL codegen, etc.) into its own command; combined dev batches can hang on `Resolving dependencies`.
-   - Run `bun install` and confirm exit code **0** before step 4 — do not continue bootstrap on a failed install
+   - **One package per command** — each line in `templates/README.md` is a separate shell invocation with **exactly one** package name. Never `bun add uniwind tailwindcss …`, never batch Storybook addons, never combine GraphQL packages. Multi-package `bun add` calls often hang indefinitely on `Resolving dependencies`.
+   - **Live install logs (required for agents):**
+     - One Shell tool call per package — bare command only (e.g. `bun add uniwind`). No `echo` prefix, no output redirection.
+     - Foreground only with generous `block_until_ms` so Bun logs stream live. Never background installs or batch packages.
+     - Use the shell step description for UI context (e.g. `Install storybook`), not echoed text in the command.
+     - Wait for finish; read stdout/stderr before the next package. Non-zero exit = hard stop.
+     - If hung >2 minutes on `Resolving dependencies`, kill and retry that package once.
+   - After the last package, run `bun install` and confirm exit code **0** before step 4 — do not continue bootstrap on a failed install
 4. **Apply bootstrap templates** — read files from `templates/` and **adapt** them into the scaffolded project. **Do not bulk-copy** over `package.json`, `app.json`, `tsconfig.json`, or other files the Expo template already generated; **merge** template intent with what `create-expo-app` produced:
    - **`package.json`:** dependencies and devDependencies come from step 3 CLI installs; manually merge **scripts** and `"packageManager"` from `templates/README.md` only — keep Expo-scaffolded versions where `bunx expo install` already pinned SDK-compatible packages
    - **`app.json` / `expo` config:** merge plugins (`expo-router`, splash, `expo-localization`, `react-native-nano-icons`, etc.), `experiments`, and platform settings into the existing config; set `name` / `slug` / `scheme` from **New app name / slug**
@@ -271,7 +277,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 
 ### Constraints
 - Start from `bunx create-expo-app@latest … --template default` — do not pin an SDK version (`@sdk-NN`) or skip the official template; do not clone a sample app as the project base. When scaffolding into `.` inside an existing git repo, prefix with `CI=true` so the git-init prompt does not block non-interactive runs
-- Install bootstrap dependencies with `bun add` / `bunx expo install` — do not invent version ranges in `package.json`; run each install command separately (see `templates/README.md` **Installing dependencies**); `bun install` must succeed before Figma export, token generation, lint, or commit
+- Install bootstrap dependencies with `bun add` / `bunx expo install` — do not invent version ranges in `package.json`; **one package per foreground shell command** with visible logs (see `templates/README.md` **Installing dependencies**); never batch packages in a single `bun add`; `bun install` must succeed before Figma export, token generation, lint, or commit
 - Run Figma **Phase B (tokens)** and **Phase C (icons)** separately — persist each MCP payload to disk before the next call; MCP success in chat is not export complete
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
 - Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates

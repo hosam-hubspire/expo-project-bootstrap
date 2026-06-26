@@ -35,34 +35,58 @@ Install after scaffolding. The lists below are a **package checklist only** — 
 
 1. Read the checklist sections below for **which** packages to add (required + enabled optional capabilities).
 2. Install with the CLI — **never** type `"name": "^x.y.z"` into `package.json` by hand.
-3. **Run each command separately** — do not chain multiple `bun add` / `bun add -d` calls with `&&`. Large combined devDependency installs (especially Storybook + GraphQL codegen in one batch) can hang on `Resolving dependencies`.
-4. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
-5. Run `bun install` (or `bun install --frozen-lockfile` after the lockfile exists) and **stop if it fails** — do not proceed to Figma export, `tokens:generate`, lint, or commit until install succeeds.
-6. To verify a version before pinning a nightly or override: `npm view <pkg> version` or `npm view <pkg> dist-tags`.
+3. **One package per command** — each line below is exactly **one** shell invocation with **one** package. Never `bun add pkg1 pkg2 …`. Never batch Storybook addons or dev tools in a single `bun add -d`. Multi-package installs often hang indefinitely on `Resolving dependencies`.
+4. **Live install logs (agents):** one Shell tool call per package. Run the bare install command so Bun output streams live (`Resolving dependencies`, `installed …`, warnings). Foreground only — never background (`block_until_ms: 0`), never chain with `&&`, never prefix with `echo` or redirect stdout/stderr. Use the shell step **description** (e.g. `Install storybook`) for progress in the UI.
+5. Wait for each command to finish and read stdout/stderr before the next package. Non-zero exit = hard stop.
+6. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
+7. After the last package, run `bun install` and **stop if it fails** — do not proceed to Figma export, `tokens:generate`, lint, or commit until install succeeds.
+8. To verify a version before pinning a nightly or override: `npm view <pkg> version` or `npm view <pkg> dist-tags`.
 
-**Required — run in order (one command per line):**
+**Required — one package per shell step, in order:**
 
 ```bash
 bunx expo install expo-localization
-bun add uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules
+bun add uniwind
+bun add tailwindcss
+bun add zustand
+bun add react-native-mmkv
+bun add react-native-nitro-modules
 bun add react-native-nano-icons
-bun add -d @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint jest jest-expo @testing-library/react-native @types/jest
+bun add -d @biomejs/biome
+bun add -d eslint
+bun add -d eslint-plugin-react-native-a11y
+bun add -d typescript-eslint
+bun add -d jest
+bun add -d jest-expo
+bun add -d @testing-library/react-native
+bun add -d @types/jest
 ```
 
-**Optional — add only enabled capabilities (one command per line):**
+**Optional — add only enabled capabilities (one package per shell step):**
 
 ```bash
 # i18n (runtime)
-bun add i18next react-i18next
+bun add i18next
+bun add react-i18next
 
 # GraphQL (runtime)
-bun add @apollo/client graphql graphql-ws apollo3-cache-persist @graphql-typed-document-node/core
+bun add @apollo/client
+bun add graphql
+bun add graphql-ws
+bun add apollo3-cache-persist
+bun add @graphql-typed-document-node/core
 
-# Storybook (dev)
-bun add -d storybook @storybook/react-native @storybook/addon-ondevice-actions @storybook/addon-ondevice-backgrounds @storybook/addon-ondevice-controls @storybook/addon-ondevice-notes
+# Storybook (dev) — each addon is its own shell step
+bun add -d storybook
+bun add -d @storybook/react-native
+bun add -d @storybook/addon-ondevice-actions
+bun add -d @storybook/addon-ondevice-backgrounds
+bun add -d @storybook/addon-ondevice-controls
+bun add -d @storybook/addon-ondevice-notes
 
 # GraphQL codegen (dev)
-bun add -d @graphql-codegen/cli @graphql-codegen/client-preset
+bun add -d @graphql-codegen/cli
+bun add -d @graphql-codegen/client-preset
 
 # Fonts (when Figma/brand requires)
 bunx expo install expo-font
