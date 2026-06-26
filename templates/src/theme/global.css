@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@import "uniwind";
+
+/*
+ * Design system tokens (from Figma via bun run tokens:generate)
+ */
+
+@import "./tokens/generated/spacing.css";
+@import "./tokens/generated/primitives.css";
+@import "./tokens/generated/typography-primitives.css";
+@import "./tokens/generated/theme.css";
+
+@theme {
+  /*
+   * Uniwind mobile-first breakpoints (https://docs.uniwind.dev/breakpoints)
+   * sm: 640px (default), md: 768px, lg: 1024px
+   */
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --max-width-content: var(--responsive-max-content-width);
+}
+
+:root {
+  --font-sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}

@@ -1,0 +1,134 @@
+import type { Operation } from "@apollo/client";
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from "@apollo/client";
+import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
+import { ErrorLink } from "@apollo/client/link/error";
+import { RetryLink } from "@apollo/client/link/retry";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { persistCache } from "apollo3-cache-persist";
+import type { FragmentDefinitionNode, OperationDefinitionNode } from "graphql";
+import { createClient } from "graphql-ws";
+
+import {
+  APOLLO_CACHE_PERSIST_KEY,
+  apolloCacheStorage,
+} from "@/services/graphql/apollo-cache-storage";
+import { prefetchQueries } from "@/services/graphql/prefetchQueries";
+
+if (__DEV__) {
+  loadDevMessages();
+  loadErrorMessages();
+}
+
+export const GRAPHQL_URI =
+  process.env.EXPO_PUBLIC_GRAPHQL_URL ?? "https://rickandmortyapi.com/graphql";
+
+const subscriptionsEnabled = process.env.EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED === "true";
+
+const wsUri =
+  process.env.EXPO_PUBLIC_GRAPHQL_WS_URL?.trim() ??
+  GRAPHQL_URI.replace(/^http:/, "ws:").replace(/^https:/, "wss:");
+
+const errorLink = new ErrorLink(({ error }) => {
+  if (CombinedGraphQLErrors.is(error)) {
+    for (const { message } of error.errors) {
+      console.log(`GraphQL error: ${message}`);
+    }
+    return;
+  }
+
+  console.log(`Network error: ${error.message}`);
+});
+
+const retryLink = new RetryLink({
+  delay: {
+    initial: 300,
+    max: 1000,
+    jitter: true,
+  },
+  attempts: {
+    max: 2,
+  },
+});
+
+let resolvedClient: ApolloClient | null = null;
+let initPromise: Promise<ApolloClient> | null = null;
+
+function createHttpLink() {
+  return new HttpLink({
+    uri: GRAPHQL_URI,
+  });
+}
+
+function createSubscriptionLink() {
+  return new GraphQLWsLink(
+    createClient({
+      url: wsUri,
+      retryAttempts: 5,
+    }),
+  );
+}
+
+function createTransportLink() {
+  const httpLink = createHttpLink();
+  const opsLink = ApolloLink.from([errorLink, retryLink, httpLink]);
+
+  if (!subscriptionsEnabled) {
+    return opsLink;
+  }
+
+  return ApolloLink.split(
+    ({ query }: Operation) => {
+      const mainDefinition: OperationDefinitionNode | FragmentDefinitionNode =
+        getMainDefinition(query);
+      return (
+        mainDefinition.kind === "OperationDefinition" && mainDefinition.operation === "subscription"
+      );
+    },
+    createSubscriptionLink(),
+    opsLink,
+  );
+}
+
+async function createApolloClient(): Promise<ApolloClient> {
+  const cache = new InMemoryCache();
+
+  await persistCache({
+    cache,
+    storage: apolloCacheStorage,
+    key: APOLLO_CACHE_PERSIST_KEY,
+    debounce: 1000,
+    trigger: "write",
+  });
+
+  const client = new ApolloClient({
+    link: createTransportLink(),
+    cache,
+  });
+
+  prefetchQueries(client);
+
+  return client;
+}
+
+/**
+ * Returns a singleton Apollo Client after restoring persisted cache from MMKV.
+ * Safe to call from multiple places; initialization runs once.
+ */
+export async function ensureApolloClient(): Promise<ApolloClient> {
+  if (resolvedClient) {
+    return resolvedClient;
+  }
+
+  if (!initPromise) {
+    initPromise = createApolloClient().then((client) => {
+      resolvedClient = client;
+      return client;
+    });
+  }
+
+  return initPromise;
+}
+
+export default ensureApolloClient;

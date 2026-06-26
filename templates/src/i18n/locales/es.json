@@ -1,0 +1,23 @@
+{
+  "tabs": {
+    "home": "Inicio",
+    "settings": "Ajustes"
+  },
+  "home": {
+    "title": "Bienvenido",
+    "subtitle": "El shell de la app está listo. Reemplaza esta pantalla con la UI de tu producto."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "appearance": "Apariencia",
+    "appearanceDescription": "Elige cómo se ve la app en este dispositivo.",
+    "theme": "Tema",
+    "themeSystem": "Sistema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "language": "Idioma",
+    "languageDescription": "Elige tu idioma preferido.",
+    "languageEnglish": "Inglés",
+    "languageSpanish": "Español"
+  }
+}

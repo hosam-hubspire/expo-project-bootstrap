@@ -1,0 +1,468 @@
+{
+  "collection": "Color Primitives",
+  "modes": ["Mode 1"],
+  "variables": [
+    {
+      "name": "brand/blue/complementary/bc-crimson",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#d03e00"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/blue-78",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#96dbf8"
+      }
+    },
+    {
+      "name": "neutrals/black-20",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#333333"
+      }
+    },
+    {
+      "name": "neutrals/black-30",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#4d4d4d"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/blue-31",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#006f9e"
+      }
+    },
+    {
+      "name": "neutrals/black-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#f1f1f1"
+      }
+    },
+    {
+      "name": "brand/orange/shades + tints/orange-60",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ff9133"
+      }
+    },
+    {
+      "name": "brand/orange/complementary/oc-magenta",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#c6488c"
+      }
+    },
+    {
+      "name": "neutrals/white",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ffffff"
+      }
+    },
+    {
+      "name": "brand/orange/complementary/oc-rust",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#8a2b00"
+      }
+    },
+    {
+      "name": "brand/orange/complementary/oc-cyan",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#13b4d0"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-18",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#12284b"
+      }
+    },
+    {
+      "name": "brand/orange/complementary/oc-green",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#325d47"
+      }
+    },
+    {
+      "name": "brand/orange/shades + tints/orange-37",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#bd5700"
+      }
+    },
+    {
+      "name": "brand/yellow/primary/brand-yellow",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#fdbe43"
+      }
+    },
+    {
+      "name": "brand/yellow/complementary/yc-violet",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#501c6f"
+      }
+    },
+    {
+      "name": "brand/yellow/complementary/yc-teal",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#018080"
+      }
+    },
+    {
+      "name": "brand/yellow/shades + tints/yellow-85",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#fee5b4"
+      }
+    },
+    {
+      "name": "brand/blue/primary/brand-blue",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#0092d0"
+      }
+    },
+    {
+      "name": "brand/orange/shades + tints/orange-20",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#662f00"
+      }
+    },
+    {
+      "name": "brand/yellow/complementary/yc-navy",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#014785"
+      }
+    },
+    {
+      "name": "brand/orange/shades + tints/orange-80",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ffc899"
+      }
+    },
+    {
+      "name": "brand/yellow/shades + tints/yellow-25",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#654c1b"
+      }
+    },
+    {
+      "name": "brand/yellow/shades + tints/yellow-70",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#fdcb69"
+      }
+    },
+    {
+      "name": "neutrals/black-55",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#8c8c8c"
+      }
+    },
+    {
+      "name": "brand/yellow/shades + tints/yellow-50",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ca9836"
+      }
+    },
+    {
+      "name": "brand/blue/complementary/bc-cream",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#f8e0c1"
+      }
+    },
+    {
+      "name": "brand/blue/complementary/bc-tomato",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ff6746"
+      }
+    },
+    {
+      "name": "brand/blue/complementary/bc-orange",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ff7934"
+      }
+    },
+    {
+      "name": "brand/yellow/complementary/yc-moss",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#767c2d"
+      }
+    },
+    {
+      "name": "brand/orange/primary/brand-orange",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ff7500"
+      }
+    },
+    {
+      "name": "neutrals/black-40",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#666666"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-35",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#234d8f"
+      }
+    },
+    {
+      "name": "semantic/red-35",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#b20005"
+      }
+    },
+    {
+      "name": "neutrals/black-90",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#e5e5e5"
+      }
+    },
+    {
+      "name": "neutrals/logo-black",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#2d2a26"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/blue-90",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#d1eefa"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-24",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#183563"
+      }
+    },
+    {
+      "name": "neutrals/black-opacity-75",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "rgba(0, 0, 0, 0.75)"
+      }
+    },
+    {
+      "name": "semantic/green-36",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#00b800"
+      }
+    },
+    {
+      "name": "semantic/green-27",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#008a00"
+      }
+    },
+    {
+      "name": "semantic/red-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ffebe7"
+      }
+    },
+    {
+      "name": "semantic/red-85",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ffc0b2"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-54",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#6782ad"
+      }
+    },
+    {
+      "name": "neutrals/black-85",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#d9d9d9"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/gray-navy-48",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#6e7887"
+      }
+    },
+    {
+      "name": "semantic/green-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#e5ffe5"
+      }
+    },
+    {
+      "name": "neutrals/white-opacity-90",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "rgba(255, 255, 255, 0.9)"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-80",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#aac4ee"
+      }
+    },
+    {
+      "name": "brand/orange/shades + tints/orange-30",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#994700"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-31",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#2d4a73"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-18-opacity-75",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "rgba(18, 40, 75, 0.75)"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/gray-navy-34",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#3d5070"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-22",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#16305a"
+      }
+    },
+    {
+      "name": "neutrals/black-13",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#212121"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/blue-53",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#39abda"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/blue-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#e9f6fd"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/gray-navy-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#f0f2f5"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#edf1f8"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/navy-97",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#f1f4f8"
+      }
+    },
+    {
+      "name": "brand/blue/complementary/bc-cream-95",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#f8f3ed"
+      }
+    },
+    {
+      "name": "brand/blue/complementary/bc-cream-85",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#ecdac6"
+      }
+    },
+    {
+      "name": "brand/yellow/shades + tints/yellow-93",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#fff2d9"
+      }
+    },
+    {
+      "name": "brand/blue/shades + tints/gray-navy-40",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#485f84"
+      }
+    },
+    {
+      "name": "neutrals/black-64",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#a3a3a3"
+      }
+    },
+    {
+      "name": "neutrals/black-17",
+      "type": "COLOR",
+      "values": {
+        "Mode 1": "#2c2c2c"
+      }
+    }
+  ]
+}

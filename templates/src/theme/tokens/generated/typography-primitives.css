@@ -1,0 +1,37 @@
+/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+/* Typography primitives (static) */
+
+:root {
+  --primitive-family-family-sans: "Helvetica Neue";
+  --primitive-size-size-600: 24px;
+  --primitive-size-size-500: 20px;
+  --primitive-size-size-450: 18px;
+  --primitive-leading-leading-sm: 1.100000023841858;
+  --primitive-size-size-1200: 48px;
+  --primitive-leading-leading-xl: 1.399999976158142;
+  --primitive-size-size-1800: 72px;
+  --primitive-size-size-1600: 64px;
+  --primitive-size-size-400: 16px;
+  --primitive-size-size-1000: 40px;
+  --primitive-leading-leading-lg: 1.2999999523162842;
+  --primitive-size-size-350: 14px;
+  --primitive-size-size-800: 32px;
+  --primitive-weight-weight-regular-italic: 400;
+  --primitive-weight-weight-regular: 400;
+  --primitive-weight-weight-light-italic: 400;
+  --primitive-weight-weight-light: 300;
+  --primitive-weight-weight-ultra-light: 200;
+  --primitive-weight-weight-ultra-light-italic: 400;
+  --primitive-weight-weight-thin: 100;
+  --primitive-weight-weight-thin-italic: 400;
+  --primitive-weight-weight-medium: 500;
+  --primitive-weight-weight-medium-italic: 400;
+  --primitive-weight-weight-bold: 700;
+  --primitive-weight-weight-bold-italic: 400;
+  --primitive-size-size-300: 12px;
+  --primitive-size-size-2000: 80px;
+  --primitive-size-size-250: 10px;
+  --primitive-family-family-monospaced: "IBM Plex Mono";
+  --primitive-leading-leading-md: 1.2000000476837158;
+  --primitive-leading-leading-xs: 1;
+}

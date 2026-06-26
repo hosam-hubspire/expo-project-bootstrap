@@ -1,0 +1,249 @@
+{
+  "collection": "Size Tokens",
+  "modes": ["lg+", "md", "sm"],
+  "variables": [
+    {
+      "name": "space/spacing-2xl",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 40,
+        "md": 28,
+        "sm": 28
+      }
+    },
+    {
+      "name": "space/spacing-xl",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 32,
+        "md": 24,
+        "sm": 24
+      }
+    },
+    {
+      "name": "space/spacing-3xl",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 56,
+        "md": 32,
+        "sm": 32
+      }
+    },
+    {
+      "name": "space/spacing-lg",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 24,
+        "md": 20,
+        "sm": 20
+      }
+    },
+    {
+      "name": "space/spacing-base",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 16,
+        "md": 16,
+        "sm": 16
+      }
+    },
+    {
+      "name": "space/spacing-sm",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 12,
+        "md": 12,
+        "sm": 12
+      }
+    },
+    {
+      "name": "space/spacing-xs",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 8,
+        "md": 8,
+        "sm": 8
+      }
+    },
+    {
+      "name": "space/spacing-2xs",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 4,
+        "md": 4,
+        "sm": 4
+      }
+    },
+    {
+      "name": "space/spacing-5xl",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 80,
+        "md": 56,
+        "sm": 56
+      }
+    },
+    {
+      "name": "space/spacing-4xl",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 64,
+        "md": 40,
+        "sm": 40
+      }
+    },
+    {
+      "name": "space/spacing-3xs",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 2,
+        "md": 2,
+        "sm": 2
+      }
+    },
+    {
+      "name": "stroke/active-focus",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 4,
+        "md": 4,
+        "sm": 4
+      }
+    },
+    {
+      "name": "padding/padding-ridertools",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 24,
+        "md": 20,
+        "sm": 16
+      }
+    },
+    {
+      "name": "radius/panel",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 8,
+        "md": 8,
+        "sm": 8
+      }
+    },
+    {
+      "name": "radius/button-inset",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 4,
+        "md": 4,
+        "sm": 4
+      }
+    },
+    {
+      "name": "radius/input",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 4,
+        "md": 4,
+        "sm": 4
+      }
+    },
+    {
+      "name": "stroke/default",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 1,
+        "md": 1,
+        "sm": 1
+      }
+    },
+    {
+      "name": "radius/label",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 2,
+        "md": 2,
+        "sm": 2
+      }
+    },
+    {
+      "name": "stroke/map-inactive-walkbikedrive",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 4,
+        "md": 2,
+        "sm": 2
+      }
+    },
+    {
+      "name": "stroke/map-active-walkbikedrive",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 6,
+        "md": 3,
+        "sm": 3
+      }
+    },
+    {
+      "name": "stroke/map-active-rail",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 10,
+        "md": 6,
+        "sm": 6
+      }
+    },
+    {
+      "name": "stroke/map-active-bus",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 6,
+        "md": 4,
+        "sm": 4
+      }
+    },
+    {
+      "name": "stroke/map-inactive-transit",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 6,
+        "md": 4,
+        "sm": 4
+      }
+    },
+    {
+      "name": "padding/padding-info",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 64,
+        "md": 32,
+        "sm": 16
+      }
+    },
+    {
+      "name": "responsive/max-container",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 1440,
+        "md": 1312,
+        "sm": 1312
+      }
+    },
+    {
+      "name": "responsive/max-content-width",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 800,
+        "md": 800,
+        "sm": 800
+      }
+    },
+    {
+      "name": "radius/tile",
+      "type": "FLOAT",
+      "values": {
+        "lg+": 4,
+        "md": 4,
+        "sm": 4
+      }
+    }
+  ]
+}

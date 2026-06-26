@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "argent": {
+      "command": "argent",
+      "args": ["mcp"]
+    },
+    "expo": {
+      "url": "https://mcp.expo.dev/mcp"
+    }
+  }
+}

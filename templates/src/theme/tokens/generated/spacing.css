@@ -1,0 +1,58 @@
+/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+/* Size/spacing tokens — mobile-first (base default, md ≥768px, lg ≥1024px) */
+
+:root {
+  --padding-padding-info: 16px;
+  --padding-padding-ridertools: 16px;
+  --radius-button-inset: 4px;
+  --radius-input: 4px;
+  --radius-label: 2px;
+  --radius-panel: 8px;
+  --radius-tile: 4px;
+  --responsive-max-container: 1312px;
+  --responsive-max-content-width: 800px;
+  --spacing-2xl: 28px;
+  --spacing-2xs: 4px;
+  --spacing-3xl: 32px;
+  --spacing-3xs: 2px;
+  --spacing-4xl: 40px;
+  --spacing-5xl: 56px;
+  --spacing-base: 16px;
+  --spacing-lg: 20px;
+  --spacing-sm: 12px;
+  --spacing-xl: 24px;
+  --spacing-xs: 8px;
+  --stroke-active-focus: 4px;
+  --stroke-default: 1px;
+  --stroke-map-active-bus: 4px;
+  --stroke-map-active-rail: 6px;
+  --stroke-map-active-walkbikedrive: 3px;
+  --stroke-map-inactive-transit: 4px;
+  --stroke-map-inactive-walkbikedrive: 2px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --padding-padding-info: 32px;
+    --padding-padding-ridertools: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --padding-padding-info: 64px;
+    --padding-padding-ridertools: 24px;
+    --responsive-max-container: 1440px;
+    --spacing-2xl: 40px;
+    --spacing-3xl: 56px;
+    --spacing-4xl: 64px;
+    --spacing-5xl: 80px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --stroke-map-active-bus: 6px;
+    --stroke-map-active-rail: 10px;
+    --stroke-map-active-walkbikedrive: 6px;
+    --stroke-map-inactive-transit: 6px;
+    --stroke-map-inactive-walkbikedrive: 4px;
+  }
+}

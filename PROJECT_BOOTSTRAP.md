@@ -1,14 +1,16 @@
 # Project bootstrap prompt
 
-Reusable prompt for scaffolding a new Expo app from a reference architecture. Copy the block below into a new agent chat and fill in the placeholders.
+Reusable prompt for scaffolding a new Expo app. Copy the block below into a new agent chat and fill in the placeholders.
+
+**Canonical templates:** https://github.com/hosam-hubspire/expo-project-bootstrap (`templates/` directory)
 
 ---
 
 ```
-Bootstrap a new Expo React Native app using my reference repository as the architectural template.
+Bootstrap a new Expo React Native app using the architectural templates in the expo-project-bootstrap repository.
 
 ### Inputs
-- **Reference repo (template):** <REFERENCE_REPO_URL>
+- **Bootstrap templates:** https://github.com/hosam-hubspire/expo-project-bootstrap (`templates/` — clone or read files from `main`)
 - **New project GitHub repo:** <GITHUB_REPO_URL> (optional — omit to scaffold locally only; push when provided)
 - **Figma design system:** <FIGMA_FILE_URL> (omit if not using Figma tokens yet)
 - **Figma icons section:** <FIGMA_ICONS_URL> (optional — link to any Figma frame/page/section that contains the icon set to export as SVGs; omit if icons are not in scope yet)
@@ -18,43 +20,50 @@ Bootstrap a new Expo React Native app using my reference repository as the archi
 - **Optional capabilities** (include only what I list): Storybook, i18n, GraphQL subscriptions, custom icon font pipeline (enable automatically when **Figma icons section** is provided)
 
 ### Goal
-Create the initial project with the same **tooling, folder conventions, and design-token workflow** as the reference repo — adapted to this project's Figma file and feature scope. When **New project GitHub repo** is provided, deliver an initial commit there; otherwise scaffold locally and report the working directory path.
+Create the initial project with the **tooling, folder conventions, and design-token workflow** defined in the bootstrap templates — adapted to this project's Figma file and feature scope. When **New project GitHub repo** is provided, deliver an initial commit there; otherwise scaffold locally and report the working directory path.
 
 Figma token values, collection names, and raw export filenames will differ per project. The workflow stays the same when tokens are in scope:
 
 discover Figma variables → raw JSON exports → generate script → generated CSS/TS → Uniwind consumption in the app (and Storybook when enabled).
 
-Do not copy demo-only screens, APIs, or domain features unless I ask. Copy the **platform setup**, **token pipeline** (when Figma is provided), **theming approach**, **lint/test/CI**, and **component/file conventions**.
+Do not copy demo gallery screens, photo flows, or domain APIs from sample repos. Use the **bootstrap templates** for platform setup, token pipeline (when Figma is provided), theming, lint/test/CI, and the minimal app shell.
 
 ---
 
 ### Project scaffold
-Always bootstrap from the official Expo default template for SDK 56 — **do not** hand-roll `package.json` or copy the reference repo wholesale.
+Always bootstrap from the official Expo default template for SDK 56 — **do not** hand-roll `package.json` or clone a sample app repo as the project base.
 
 1. **Create the Expo app** with `create-expo-app@latest` in the project root:
    - New local directory: `bunx create-expo-app@latest <APP_NAME> --template default@sdk-56`
    - Empty git checkout: `cd` into the repo root and run `bunx create-expo-app@latest . --template default@sdk-56`
    - Set `name` / `slug` in `app.json` to match **New app name / slug** when they differ from the folder name.
-2. **Remove unnecessary default template files** before layering reference architecture:
-   - Demo routes and screens (e.g. tab explore/demo flows, sample modals) — replace with the minimal placeholder shell defined below
-   - Template-only components (`components/ui/*`, parallax/demo helpers, stock `ThemedText` / `ThemedView` when superseded by project primitives)
+2. **Remove unnecessary default template files** before layering bootstrap architecture:
+   - Demo routes and screens (e.g. tab explore/demo flows, sample modals) — replace with the minimal placeholder shell from templates
+   - Template-only components (`components/ui/*`, parallax/demo helpers, stock `ThemedText` / `ThemedView` when superseded)
    - Template theming not used by Uniwind (`constants/Colors.ts`, `hooks/use-color-scheme*.ts`, `StyleSheet`-based theme helpers)
    - Non-Bun lockfiles (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`) — keep `bun.lock` only
    - Web-only artifacts (`+html.tsx`, web scripts, `.web.tsx` variants) — iOS and Android only
-   - Restructure to match reference conventions when needed (e.g. move `app/` → `src/app/`, wire `@/` path aliases in `tsconfig.json`)
-3. **Install additional packages** required by this prompt and the reference repo:
+   - Restructure to match template conventions (move `app/` → `src/app/`, wire `@/` path aliases in `tsconfig.json`)
+3. **Install additional packages** per **Required stack** and **Optional capabilities**:
    - `bun add` for JS libraries (Uniwind, Tailwind, Biome, Zustand, MMKV, etc.)
    - `npx expo install` for Expo / React Native packages so versions stay compatible with SDK 56
-   - Enable only optional dependencies listed in **Optional capabilities**
-4. **Copy and adapt config from the reference repo** (`biome.json`, `eslint.config.mjs`, `metro.config.js`, `jest.config.js`, CI workflow, token/icon scripts, Argent rules) — do not copy demo app code or domain features.
+   - See `templates/README.md` for dependency groups per capability
+4. **Copy and adapt bootstrap templates** from `templates/` (preserve paths into the project root):
+   - Root config: `biome.json`, `eslint.config.mjs`, `metro.config.js`, `jest.config.js`, `tsconfig.json`, `app.json`, `.nanoicons.json`, `.gitignore`, `codegen.ts`
+   - `scripts/generate-design-tokens.mjs`, `.github/workflows/ci.yml`
+   - `.cursor/rules/argent.md`, `.cursor/mcp.json`, `.mcp.json`
+   - `src/` (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL infra stubs)
+   - `assets/` (tab icons, placeholder icon SVGs — replace when Figma icons are in scope)
+   - When Storybook is enabled: copy `optional/.rnstorybook/` → `.rnstorybook/` and merge `optional/src/stories/` into `src/stories/`
+   - Adapt `app.json` name/slug/scheme; trim or replace sample Figma raw JSON when project Figma differs
 
-Then continue with design tokens, icons, architecture, and the minimal initial app.
+Then continue with design tokens, icons, and feature-specific work.
 
 ---
 
 ### Required stack
 - **Expo SDK 56** — scaffold with `bunx create-expo-app@latest … --template default@sdk-56`; use `npx expo install` for Expo libraries; read version-matched docs at https://docs.expo.dev/versions/v56.0.0/ (or `/versions/latest/` if newer) before writing code
-- **expo-router** — file-based routing, typed routes; enable React Compiler if the reference does
+- **expo-router** — file-based routing in `src/app/`, typed routes; enable `experiments.typedRoutes` and `reactCompiler` in `app.json` (per templates)
 - **Uniwind + Tailwind CSS v4**
   - CSS entry: `src/theme/global.css`
   - `metro.config.js` with `withUniwindConfig({ cssEntryFile: "./src/theme/global.css" })`
@@ -62,26 +71,26 @@ Then continue with design tokens, icons, architecture, and the minimal initial a
   - Semantic tokens in `@layer theme` with `@variant light` / `@variant dark` when Figma provides them (https://docs.uniwind.dev/theming/basics)
   - Styling via `className` — no `StyleSheet` for layout/theme unless a third-party API requires it
 - **Bun** — package manager (`bun.lock`, `"packageManager": "bun@…"`; no `package-lock.json`)
-- **Biome** — lint + format (`biome.json`):
+- **Biome** — lint + format (`biome.json` from templates):
   - `a11y` preset
-  - `nursery/noReactNativeRawText` with the project's text primitive component(s) in `skip` (reference may use something like `ThemedText` — use whatever this app defines)
-  - `style/useFilenamingConvention` with path overrides for component vs route naming (see conventions below)
+  - `nursery/noReactNativeRawText` with `ThemedText` in `skip`
+  - `style/useFilenamingConvention` with path overrides for components, routes, and design-token stories
   - Exclude generated tokens, generated assets, and native folders from lint
-- **ESLint** — React Native accessibility only (`eslint.config.mjs`):
+- **ESLint** — React Native accessibility only (`eslint.config.mjs` from templates):
   - `eslint-plugin-react-native-a11y` with `configs.all`
   - `typescript-eslint` parser only — do not duplicate Biome rules
   - When `accessibilityLabel` is set, also provide `accessibilityHint`
   - Use `withUniwind` + `accent-*` classes for third-party color props where needed
-- **Jest** — `jest-expo`, `@testing-library/react-native`, `@/` path aliases
-- **GitHub Actions CI** — `bun install --frozen-lockfile` → `bun run lint` → `bun run test`
-- **TypeScript** — strict mode, `@/` path aliases
-- **State / storage** — Zustand + react-native-mmkv; shared MMKV adapter in `src/lib/mmkv.ts`; persisted stores in `src/stores/` (e.g. theme and language preferences)
+- **Jest** — `jest-expo`, `@testing-library/react-native`, `@/` path aliases (`jest.config.js` from templates)
+- **GitHub Actions CI** — `bun install --frozen-lockfile` → `bun run lint` → `bun run test` (`.github/workflows/ci.yml` from templates)
+- **TypeScript** — strict mode, `@/` path aliases (`tsconfig.json` from templates)
+- **State / storage** — Zustand + react-native-mmkv; shared MMKV adapter in `src/lib/mmkv.ts`; persisted stores in `src/stores/` (templates include theme/language preferences)
 
 ### Optional stack (enable only when listed in Inputs)
-- **Storybook (on-device)** — `.rnstorybook/`, gated by `EXPO_PUBLIC_STORYBOOK_ENABLED`; colocate component stories; keep design-token stories under `src/stories/design-tokens/` when used
-- **i18n** — `i18next`, `react-i18next`, `expo-localization`
-- **GraphQL** — Apollo Client v4 with codegen (`graphql:generate`); operations in `src/services/graphql/operations/*.graphql`, generated output in `src/services/graphql/generated/`, singleton client in `src/services/graphql/client.ts`; env endpoint `EXPO_PUBLIC_GRAPHQL_URL`; **cache persist (MMKV via `apollo3-cache-persist`) and startup prefetch enabled by default** via `prefetchQueries.ts`; WebSocket subscriptions **optional** (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`, optional `EXPO_PUBLIC_GRAPHQL_WS_URL`); no demo queries unless I ask
-- **Icons** — when **Figma icons section** is provided, follow the icon pipeline below (SVG → `react-native-nano-icons` font); otherwise use whatever the Figma file and product require, or omit until a link is provided
+- **Storybook (on-device)** — `.rnstorybook/` from `templates/optional/`, gated by `EXPO_PUBLIC_STORYBOOK_ENABLED`; colocate component stories; design-token stories under `src/stories/design-tokens/` when used
+- **i18n** — `i18next`, `react-i18next`, `expo-localization` (templates include `src/i18n/` shell)
+- **GraphQL** — Apollo Client v4 with codegen (`graphql:generate`); operations in `src/services/graphql/operations/*.graphql`, generated output in `src/services/graphql/generated/`, singleton client in `src/services/graphql/client.ts`; env endpoint `EXPO_PUBLIC_GRAPHQL_URL`; **cache persist (MMKV via `apollo3-cache-persist`) and startup prefetch enabled by default** via `prefetchQueries.ts` (empty until operations exist); WebSocket subscriptions **optional** (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`, optional `EXPO_PUBLIC_GRAPHQL_WS_URL`); no demo queries unless I ask
+- **Icons** — when **Figma icons section** is provided, follow the icon pipeline below (SVG → `react-native-nano-icons` font); otherwise use placeholder icons from templates or omit until a link is provided
 - **Fonts** — load via `expo-font` only when Figma or brand guidelines require them; define stacks in `src/theme/global.css`
 
 ---
@@ -89,7 +98,7 @@ Then continue with design tokens, icons, architecture, and the minimal initial a
 ### Design token pipeline (when Figma is provided)
 1. Inspect the Figma file and inventory variable collections: colors, typography, spacing/sizing, radius, shadows, etc. **Not every project has everything** — some have no dark mode, no breakpoint modes, no primitives, or different mode names.
 2. Export raw JSON (Figma MCP, Variables export, or manual extraction) into `src/theme/tokens/raw/`. **Filenames and collections are project-specific** — map them in `scripts/generate-design-tokens.mjs` under `RAW_FILES`.
-3. **Adapt the generator per project** (do not assume the reference Figma structure):
+3. **Adapt the generator per project** (templates ship a sample Figma structure — reconfigure, do not assume every project matches):
    - Configure `RAW_FILES`, mode names (`LIGHT_MODE`, `DARK_MODE`, typography/size modes), and breakpoints
    - Detect which modes exist and fall back gracefully:
      - **No dark mode:** emit `@variant light` only
@@ -101,7 +110,7 @@ Then continue with design tokens, icons, architecture, and the minimal initial a
 5. Run `bun run tokens:generate` and commit generated output.
 6. **Never hand-edit** `src/theme/tokens/generated/*` or auto-generated story metadata files.
 
-The reference generator (`generate-design-tokens.mjs`) is a **starting point**, not a fixed spec. Trim or extend it to match this project's Figma file and goals.
+The template generator (`scripts/generate-design-tokens.mjs`) is a **starting point**, not a fixed spec. Trim or extend it to match this project's Figma file and goals.
 
 If Figma JSON is not available yet, scaffold the theme folder and generator config, stub minimal tokens if needed for CI, and document what remains in `TOKENS.md`.
 
@@ -116,16 +125,16 @@ If Figma JSON is not available yet, scaffold the theme folder and generator conf
    - When variants differ by **shape** (e.g. outline vs solid, chevron-left vs chevron-right), export separate icons with distinct semantic names.
    - Normalize names to kebab-case filenames that match the glyph name (e.g. `home.svg`, `chevron-left.svg`) — never encode size or theme in the filename.
 3. Export SVGs into `assets/icons/app-icons/`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
-4. Wire the reference icon font pipeline:
+4. Wire the icon font pipeline from templates:
    - `.nanoicons.json` with `inputDir: "./assets/icons/app-icons"`
    - `react-native-nano-icons` Expo config plugin (same `inputDir`)
    - Generated output under `assets/icons/nanoicons/` (`.ttf` + `.glyphmap.json`) — do not hand-edit
-   - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props (match reference)
+   - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props
    - `IconFontLoader` in root layout when fonts are required
-5. Exclude `assets/icons/**` from Biome/ESLint where the reference does; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
-6. After adding or changing SVGs, regenerate the font/glyphmap per the reference (`bun run` script or plugin build step) and verify `Icon` renders a sample set at multiple sizes and color tokens.
+5. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
+6. After adding or changing SVGs, regenerate the font/glyphmap and verify `Icon` renders a sample set at multiple sizes and color tokens.
 
-If the icons link is omitted, scaffold `assets/icons/app-icons/` empty (or with a minimal placeholder) only when I asked for the icon font pipeline in **Optional capabilities**.
+If the icons link is omitted, keep placeholder SVGs from templates or scaffold `assets/icons/app-icons/` empty only when I asked for the icon font pipeline in **Optional capabilities**.
 
 ---
 
@@ -141,7 +150,7 @@ If the icons link is omitted, scaffold `assets/icons/app-icons/` empty (or with 
           index.ts                 # barrel re-export
       theme/
         global.css                 # CSS entry (import in root layout)
-        typography.ts              # className helpers for tokens (name as needed)
+        typography.ts              # className helpers for tokens
         tokens/raw/
         tokens/generated/
       stories/design-tokens/       # optional — token Storybook stories only
@@ -159,7 +168,7 @@ If the icons link is omitted, scaffold `assets/icons/app-icons/` empty (or with 
           generated/
       i18n/                        # optional
 
-**File naming (enforce with Biome `useFilenamingConvention` overrides):**
+**File naming (enforce with Biome `useFilenamingConvention` overrides from templates):**
 - **Components:** PascalCase folders and files (`src/components/Button/Button.tsx`); import via barrel `@/components/Button`
 - **Component stories/tests:** colocated in the component folder
 - **App routes:** kebab-case files and folders; Expo Router route groups `(group)` and dynamic segments `[param]` are allowed
@@ -168,7 +177,7 @@ If the icons link is omitted, scaffold `assets/icons/app-icons/` empty (or with 
 - **Barrel `index.ts` in component folders:** allowed; exempt from PascalCase via Biome override
 
 **Styling conventions:**
-- Route all user-facing text through a small set of token-aware text primitive(s) using generated typography tokens
+- Route all user-facing text through `ThemedText` (or equivalent token-aware primitives from templates)
 - Layout and colors through Uniwind `className`
 - Third-party components that only accept color/style props: `withUniwind` or `useResolveClassNames`
 - Navigation targets: `accessibilityRole`, `accessibilityLabel`, `accessibilityHint`; prefer `Link` with `asChild` + `Pressable` where applicable
@@ -181,10 +190,8 @@ If the icons link is omitted, scaffold `assets/icons/app-icons/` empty (or with 
 ---
 
 ### Minimal initial app
-Replace reference demo content with a thin shell appropriate to this product. Unless I specify otherwise:
-- A simple root layout and one or two placeholder screens
-- Settings or equivalent screen only if I asked for theme/language toggles
-- No sample API, gallery, or domain-specific flows unless I list them in Inputs
+Templates ship a thin shell: Home + Settings tabs, theme/language toggles on Settings, root layout with providers. Unless I specify otherwise:
+- Keep or simplify that shell — do not add sample APIs, galleries, or domain flows unless I list them in Inputs
 - All interactive elements meet the a11y rules above
 
 ---
@@ -192,7 +199,7 @@ Replace reference demo content with a thin shell appropriate to this product. Un
 ### Scripts (package.json)
 **Required:**
 - `start`, `ios`, `android`
-- `lint` (`biome check . && eslint .`), `lint:fix`, `lint:a11y` (if split out in reference)
+- `lint` (`biome check . && eslint .`), `lint:fix`, `lint:a11y`
 - `test`, `test:watch`
 - `tokens:generate` (when Figma pipeline is in scope)
 
@@ -203,8 +210,8 @@ Replace reference demo content with a thin shell appropriate to this product. Un
 ---
 
 ### Git deliverable
-1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory (e.g. next to the reference clone) and `git init` with `main` as the default branch.
-2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default@sdk-56`, remove template cruft, install additional packages, adapt reference config).
+1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory and `git init` with `main` as the default branch.
+2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default@sdk-56`, remove template cruft, install packages, copy bootstrap templates).
 3. Implement per Inputs and remaining sections above.
 4. Run and verify:
    - `bun install`
@@ -214,13 +221,13 @@ Replace reference demo content with a thin shell appropriate to this product. Un
    - `bun run test`
    - `npx tsc --noEmit`
 5. **Device smoke test (before commit/push, when Argent is available):** confirm Argent is installed (`command -v argent` or `mcp__argent__*` tools present). If yes, run the app on **both iOS and Android devices** (simulator, emulator, or connected hardware) and verify there are no issues before pushing:
-   - Copy Argent config from the reference repo when present (`.cursor/rules/argent.md`, `.cursor/mcp.json` or `.mcp.json`, related skills/agents).
-   - Boot or use a running iOS simulator and Android emulator (`list-devices` → prefer already-booted targets).
-   - Start Metro if needed, then launch the app on each platform (`launch-app` / Expo dev client workflow per reference).
-   - Smoke-test the initial shell: app launches without redbox/crash, root layout and placeholder screen(s) render, theme/icons/fonts load if in scope, and basic navigation works when multiple screens exist.
-   - Use Argent discovery tools (`describe`, `debugger-component-tree`) before interactions — do not guess tap coordinates from screenshots.
-   - Fix any launch, runtime, or visible UI issues found; re-run lint/tests after fixes.
-   - If Argent is **not** installed, skip device verification, note that in the summary, and still complete static checks above.
+   - Copy Argent config from bootstrap templates (`.cursor/rules/argent.md`, `.cursor/mcp.json`, `.mcp.json`)
+   - Boot or use a running iOS simulator and Android emulator (`list-devices` → prefer already-booted targets)
+   - Start Metro if needed, then launch the app on each platform (`launch-app` / Expo dev client workflow)
+   - Smoke-test the initial shell: app launches without redbox/crash, root layout and placeholder screen(s) render, theme/icons/fonts load if in scope, and basic navigation works when multiple screens exist
+   - Use Argent discovery tools (`describe`, `debugger-component-tree`) before interactions — do not guess tap coordinates from screenshots
+   - Fix any launch, runtime, or visible UI issues found; re-run lint/tests after fixes
+   - If Argent is **not** installed, skip device verification, note that in the summary, and still complete static checks above
 6. One initial commit on `main` (or ask if the repo is not empty).
 7. **Push (only when New project GitHub repo is provided):** add `origin` if needed, then push to the remote. If no GitHub repo was given, stop after the local commit and report the local path.
 8. Reply with: local project path, remote repo URL (if pushed), commit SHA, what was enabled vs omitted, Figma file key (if any), mode names and raw files used, icon count exported (and how duplicates were collapsed, if any), **device verification results on iOS and Android (or that Argent was unavailable)**, and any custom Figma → code mappings.
@@ -228,7 +235,8 @@ Replace reference demo content with a thin shell appropriate to this product. Un
 ---
 
 ### Constraints
-- Start from `bunx create-expo-app@latest … --template default@sdk-56` — do not skip the official template or clone the reference app source as the project base
+- Start from `bunx create-expo-app@latest … --template default@sdk-56` — do not skip the official template or clone a sample app as the project base
+- Copy implementation files from bootstrap `templates/` — do not invent parallel config from scratch unless a template file must be adapted for this project
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`
 - Biome for formatting/general lint; ESLint only for `eslint-plugin-react-native-a11y`
 - Bun only (no npm/yarn)
@@ -259,11 +267,6 @@ Enable on-device Storybook. Before pushing, confirm tokens render for each theme
 **Figma / tokens only**
 ```
 Light-only or single-breakpoint projects are valid — do not add dark or responsive output the Figma file does not define.
-```
-
-**Match reference repo literally**
-```
-Mirror optional dependencies and folder layout from <REFERENCE_REPO_URL> unless they conflict with my Inputs above.
 ```
 
 **Figma icons only**

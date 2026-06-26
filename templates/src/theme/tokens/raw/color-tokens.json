@@ -1,0 +1,870 @@
+{
+  "collection": "Color Tokens",
+  "modes": ["Rider Tools", "Default"],
+  "variables": [
+    {
+      "name": "text/text-default",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#333333"
+      }
+    },
+    {
+      "name": "surface/default",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#12284b",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "icon/active",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#96dbf8",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "icon/hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d1eefa",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "icon/inactive",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d9d9d9",
+        "Default": "#8c8c8c"
+      }
+    },
+    {
+      "name": "text/text-link",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#96dbf8",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "stroke/active",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#96dbf8",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "text/text-link-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d1eefa",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "stroke/default",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#6782ad",
+        "Default": "#6782ad"
+      }
+    },
+    {
+      "name": "surface/tiles/active",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#183563",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "mode/rail/streetcar",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#49bdcf",
+        "Default": "#49bdcf"
+      }
+    },
+    {
+      "name": "mode/rail/blue line",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#0075b2",
+        "Default": "#0075b2"
+      }
+    },
+    {
+      "name": "mode/bus/30 min",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#367aa8",
+        "Default": "#367aa8"
+      }
+    },
+    {
+      "name": "mode/bus/20 min",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#9b3694",
+        "Default": "#9b3694"
+      }
+    },
+    {
+      "name": "mode/rail/red line",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ce242b",
+        "Default": "#ce242b"
+      }
+    },
+    {
+      "name": "mode/rail/gold line",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d4a723",
+        "Default": "#d4a723"
+      }
+    },
+    {
+      "name": "mode/bus/MARTA Reach",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#08608f",
+        "Default": "#08608f"
+      }
+    },
+    {
+      "name": "mode/bus/40 min+",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#26b16b",
+        "Default": "#26b16b"
+      }
+    },
+    {
+      "name": "mode/bus/10-15 min",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#db2f26",
+        "Default": "#db2f26"
+      }
+    },
+    {
+      "name": "mode/rail/green line",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#038640",
+        "Default": "#038640"
+      }
+    },
+    {
+      "name": "icon/default",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#333333"
+      }
+    },
+    {
+      "name": "text/text-secondary",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d9d9d9",
+        "Default": "#666666"
+      }
+    },
+    {
+      "name": "stroke/disabled",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#8c8c8c",
+        "Default": "#8c8c8c"
+      }
+    },
+    {
+      "name": "surface/tiles/info",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#2d4a73",
+        "Default": "#f1f4f8"
+      }
+    },
+    {
+      "name": "button/button-primary",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#96dbf8",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "text/text-error",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ff9133",
+        "Default": "#b20005"
+      }
+    },
+    {
+      "name": "button/button-primary-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#39abda",
+        "Default": "#234d8f"
+      }
+    },
+    {
+      "name": "text/text-inactive",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d9d9d9",
+        "Default": "#8c8c8c"
+      }
+    },
+    {
+      "name": "icon/logo",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "button/button-secondary",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#183563",
+        "Default": "#d1eefa"
+      }
+    },
+    {
+      "name": "button/button-secondary-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#234d8f",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "surface/overlay",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "rgba(0, 0, 0, 0.75)",
+        "Default": "rgba(0, 0, 0, 0.75)"
+      }
+    },
+    {
+      "name": "surface/tiles/active-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#234d8f",
+        "Default": "#edf1f8"
+      }
+    },
+    {
+      "name": "text/text-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#333333",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "mode/bus/Regional Operator",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#5977a6",
+        "Default": "#5977a6"
+      }
+    },
+    {
+      "name": "icon/on-icon-light",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "icon/alert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#bd5700",
+        "Default": "#bd5700"
+      }
+    },
+    {
+      "name": "icon/success",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#00b800",
+        "Default": "#008a00"
+      }
+    },
+    {
+      "name": "stroke/error",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ff9133",
+        "Default": "#b20005"
+      }
+    },
+    {
+      "name": "surface/alert-crit",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#bd5700",
+        "Default": "#bd5700"
+      }
+    },
+    {
+      "name": "surface/success",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#008a00",
+        "Default": "#e5ffe5"
+      }
+    },
+    {
+      "name": "stroke/success",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#008a00",
+        "Default": "#008a00"
+      }
+    },
+    {
+      "name": "icon/station-base",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "rgba(255, 255, 255, 0.9)",
+        "Default": "rgba(255, 255, 255, 0.9)"
+      }
+    },
+    {
+      "name": "stroke/map/map-active-path",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#234d8f",
+        "Default": "#234d8f"
+      }
+    },
+    {
+      "name": "stroke/map/map-inactive-path",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#aac4ee",
+        "Default": "#aac4ee"
+      }
+    },
+    {
+      "name": "icon/invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#183563",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "icon/on-icon-dark",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#333333",
+        "Default": "#333333"
+      }
+    },
+    {
+      "name": "surface/alert-crit-active-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#994700",
+        "Default": "#994700"
+      }
+    },
+    {
+      "name": "surface/disabled",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#6e7887",
+        "Default": "#e5e5e5"
+      }
+    },
+    {
+      "name": "icon/real-time",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#00b800",
+        "Default": "#008a00"
+      }
+    },
+    {
+      "name": "icon/tracker-base",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "rgba(18, 40, 75, 0.75)",
+        "Default": "rgba(18, 40, 75, 0.75)"
+      }
+    },
+    {
+      "name": "stroke/table",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#3d5070",
+        "Default": "#d9d9d9"
+      }
+    },
+    {
+      "name": "surface/table",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#16305a",
+        "Default": "#f1f1f1"
+      }
+    },
+    {
+      "name": "surface/invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "text/text-link-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#234d8f",
+        "Default": "#96dbf8"
+      }
+    },
+    {
+      "name": "text/text-link-invert-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#006f9e",
+        "Default": "#d1eefa"
+      }
+    },
+    {
+      "name": "icon/active-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#234d8f",
+        "Default": "#96dbf8"
+      }
+    },
+    {
+      "name": "icon/active-invert-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#006f9e",
+        "Default": "#d1eefa"
+      }
+    },
+    {
+      "name": "icon/active-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d1eefa",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "surface/tiles/invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d1eefa",
+        "Default": "#2d4a73"
+      }
+    },
+    {
+      "name": "button/button-primary-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#12284b",
+        "Default": "#96dbf8"
+      }
+    },
+    {
+      "name": "button/button-primary-hover-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#234d8f",
+        "Default": "#39abda"
+      }
+    },
+    {
+      "name": "button/button-secondary-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "button/button-secondary-hover-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d1eefa",
+        "Default": "#234d8f"
+      }
+    },
+    {
+      "name": "mode/bus/Bus Rapid Transit",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#4f2683",
+        "Default": "#4f2683"
+      }
+    },
+    {
+      "name": "surface/brand/blue",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#39abda",
+        "Default": "#39abda"
+      }
+    },
+    {
+      "name": "surface/brand/orange",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ff9133",
+        "Default": "#ff9133"
+      }
+    },
+    {
+      "name": "surface/brand/yellow",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#fdbe43",
+        "Default": "#fdbe43"
+      }
+    },
+    {
+      "name": "text/text-success",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#00b800",
+        "Default": "#008a00"
+      }
+    },
+    {
+      "name": "surface/secondary",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#16305a",
+        "Default": "#f8f3ed"
+      }
+    },
+    {
+      "name": "text/text-heading",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "text/text-heading-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#12284b",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "surface/tertiary",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#2d4a73",
+        "Default": "#f0f2f5"
+      }
+    },
+    {
+      "name": "button/button-content-default",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "button/button-content-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#183563",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "button/content-on-secondary-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "surface/tiles/active-invert-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#e9f6fd",
+        "Default": "#234d8f"
+      }
+    },
+    {
+      "name": "surface/tiles/active-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d1eefa",
+        "Default": "#183563"
+      }
+    },
+    {
+      "name": "text/text-secondary-invert",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#666666",
+        "Default": "#d9d9d9"
+      }
+    },
+    {
+      "name": "surface/tiles/inline-message",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#2d4a73",
+        "Default": "#fff2d9"
+      }
+    },
+    {
+      "name": "surface/raised",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#16305a",
+        "Default": "#16305a"
+      }
+    },
+    {
+      "name": "stroke/map/map-bus-default",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#8c8c8c",
+        "Default": "#8c8c8c"
+      }
+    },
+    {
+      "name": "stroke/button-outlined",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#6782ad"
+      }
+    },
+    {
+      "name": "mode/bus/Regular Bus",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#e5e5e5",
+        "Default": "#e5e5e5"
+      }
+    },
+    {
+      "name": "mode/bus/Shuttle",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#654c1b",
+        "Default": "#654c1b"
+      }
+    },
+    {
+      "name": "surface/tiles/map-foreground",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "surface/tiles/map-foreground-disabled",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#e5e5e5",
+        "Default": "#e5e5e5"
+      }
+    },
+    {
+      "name": "surface/tiles/map-foreground-hover",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#edf1f8",
+        "Default": "#edf1f8"
+      }
+    },
+    {
+      "name": "icon/outline",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#12284b",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "surface/error",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffebe7",
+        "Default": "#ffebe7"
+      }
+    },
+    {
+      "name": "icon/current-location",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#006f9e",
+        "Default": "#006f9e"
+      }
+    },
+    {
+      "name": "special vehicles/01",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#0092d0",
+        "Default": "#0092d0"
+      }
+    },
+    {
+      "name": "special vehicles/02",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#4d4d4d",
+        "Default": "#4d4d4d"
+      }
+    },
+    {
+      "name": "special vehicles/03",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#12284b",
+        "Default": "#12284b"
+      }
+    },
+    {
+      "name": "special vehicles/04",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#006f9e",
+        "Default": "#006f9e"
+      }
+    },
+    {
+      "name": "special vehicles/05",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#d03e00",
+        "Default": "#d03e00"
+      }
+    },
+    {
+      "name": "special vehicles/06",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#654c1b",
+        "Default": "#654c1b"
+      }
+    },
+    {
+      "name": "special vehicles/07",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ca9836",
+        "Default": "#ca9836"
+      }
+    },
+    {
+      "name": "special vehicles/08",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#501c6f",
+        "Default": "#501c6f"
+      }
+    },
+    {
+      "name": "special vehicles/09",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#662f00",
+        "Default": "#662f00"
+      }
+    },
+    {
+      "name": "special vehicles/10",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#994700",
+        "Default": "#994700"
+      }
+    },
+    {
+      "name": "special vehicles/11",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#325d47",
+        "Default": "#325d47"
+      }
+    },
+    {
+      "name": "special vehicles/12",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#c6488c",
+        "Default": "#c6488c"
+      }
+    },
+    {
+      "name": "special vehicles/13",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#8a2b00",
+        "Default": "#8a2b00"
+      }
+    },
+    {
+      "name": "stroke/map/map-approach-path",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#8c8c8c",
+        "Default": "#8c8c8c"
+      }
+    },
+    {
+      "name": "icon/badge-text-light",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffffff",
+        "Default": "#ffffff"
+      }
+    },
+    {
+      "name": "icon/badge-text-dark",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#2c2c2c",
+        "Default": "#2c2c2c"
+      }
+    },
+    {
+      "name": "stroke/badge-error",
+      "type": "COLOR",
+      "values": {
+        "Rider Tools": "#ffc899",
+        "Default": "#bd5700"
+      }
+    }
+  ]
+}
