@@ -10,7 +10,7 @@ Read template files from this directory and merge them into the scaffolded proje
 
 1. **Compare** each scaffolded file (`package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, etc.) with the matching template.
 2. **Merge** template requirements into the scaffold:
-   - Add dependencies (see **Dependencies** below) and scripts (see **Scripts** below); prefer `npx expo install` for Expo/RN packages already partially present
+   - Add dependencies (see **Dependencies** below) and scripts (see **Scripts** below); prefer `bunx expo install` for Expo/RN packages already partially present
    - Merge `app.json` plugins, experiments, and platform settings
    - Extend `tsconfig.json` paths and strict mode without dropping Expo base config
    - Layer Uniwind/Storybook onto the existing Metro config
@@ -24,7 +24,7 @@ Read template files from this directory and merge them into the scaffolded proje
 
 ## Dependencies
 
-Install after scaffolding. Use `npx expo install` for Expo/React Native packages; `bun add` for everything else. Merge into the scaffolded `package.json` — do not replace the whole file.
+Install after scaffolding. Use `bunx expo install` for Expo/React Native packages; `bun add` for everything else. Merge into the scaffolded `package.json` — do not replace the whole file.
 
 **Required** (from `create-expo-app` plus):
 

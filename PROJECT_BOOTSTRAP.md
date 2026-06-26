@@ -46,10 +46,10 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - Restructure to match template conventions (move `app/` → `src/app/`, wire `@/` path aliases in `tsconfig.json`)
 3. **Install additional packages** per **Required stack** and **Optional capabilities**:
    - `bun add` for JS libraries (Uniwind, Tailwind, Biome, Zustand, MMKV, etc.)
-   - `npx expo install` for Expo / React Native packages so versions stay compatible with SDK 56
+   - `bunx expo install` for Expo / React Native packages so versions stay compatible with SDK 56
    - See `templates/README.md` for dependency groups per capability
 4. **Apply bootstrap templates** — read files from `templates/` and **adapt** them into the scaffolded project. **Do not bulk-copy** over `package.json`, `app.json`, `tsconfig.json`, or other files the Expo template already generated; **merge** template intent with what `create-expo-app` produced:
-   - **`package.json`:** merge dependencies and scripts from `templates/README.md`; keep Expo-scaffolded versions where `npx expo install` already pinned SDK 56–compatible packages
+   - **`package.json`:** merge dependencies and scripts from `templates/README.md`; keep Expo-scaffolded versions where `bunx expo install` already pinned SDK 56–compatible packages
    - **`app.json` / `expo` config:** merge plugins (`expo-router`, splash, `expo-localization`, `react-native-nano-icons`, etc.), `experiments`, and platform settings into the existing config; set `name` / `slug` / `scheme` from **New app name / slug**
    - **`tsconfig.json`:** extend `expo/tsconfig.base`; merge `paths` (`@/*`, `@/assets/*`) and `strict` with any Expo defaults already present
    - **`metro.config.js`:** start from the scaffolded Expo Metro config; layer Uniwind (`withUniwindConfig`) and Storybook (`withStorybook`) from templates
@@ -68,7 +68,7 @@ Then continue with design tokens, icons, and feature-specific work.
 ---
 
 ### Required stack
-- **Expo SDK 56** — scaffold with `bunx create-expo-app@latest … --template default@sdk-56`; use `npx expo install` for Expo libraries; read version-matched docs at https://docs.expo.dev/versions/v56.0.0/ (or `/versions/latest/` if newer) before writing code
+- **Expo SDK 56** — scaffold with `bunx create-expo-app@latest … --template default@sdk-56`; use `bunx expo install` for Expo libraries; read version-matched docs at https://docs.expo.dev/versions/v56.0.0/ (or `/versions/latest/` if newer) before writing code
 - **expo-router** — file-based routing in `src/app/`, typed routes; enable `experiments.typedRoutes` and `reactCompiler` in `app.json` (per templates)
 - **Uniwind + Tailwind CSS v4**
   - CSS entry: `src/theme/global.css`
