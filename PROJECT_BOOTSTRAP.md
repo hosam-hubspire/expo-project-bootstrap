@@ -55,10 +55,9 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - `assets/` (tab icons, placeholder icon SVGs — replace when Figma icons are in scope)
    - When Storybook is enabled: copy `optional/.rnstorybook/` → `.rnstorybook/` and merge `optional/src/stories/` into `src/stories/`
    - Adapt `app.json` name/slug/scheme; trim or replace sample Figma raw JSON when project Figma differs
-5. **Argent setup (for device smoke tests — do not copy from templates):** In the project root after templates are in place:
+5. **Argent setup (for device smoke tests):** In the project root after templates are in place:
    - If `command -v argent` fails, install the CLI: `npm i -g @swmansion/argent`
    - Run `npx @swmansion/argent init -y` (or `argent init -y` when the CLI is on PATH) to generate project config (`.cursor/rules/argent.md`, MCP entries, etc.)
-   - Do **not** copy Argent files from bootstrap templates — `argent init` is the source of truth
    - If the CLI cannot be installed in this environment, skip Argent setup and device verification; note that in the summary
 
 Then continue with design tokens, icons, and feature-specific work.

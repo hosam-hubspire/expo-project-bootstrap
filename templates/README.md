@@ -12,7 +12,7 @@ Canonical files for the Expo project bootstrap prompt. Copy into a new app **aft
 4. Adapt `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
 5. Replace sample Figma raw JSON under `src/theme/tokens/raw/` when a design file is provided; run `bun run tokens:generate`.
 6. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap via the Expo plugin (outputs `.ttf` and `.glyphmap.json` alongside SVGs in the same directory).
-7. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root — do not copy Argent config from templates.
+7. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
 
 ## Dependencies
 
@@ -48,9 +48,7 @@ Argent is **not** created by `create-expo-app`. During bootstrap:
 1. Install CLI if missing: `npm i -g @swmansion/argent`
 2. In the project root: `npx @swmansion/argent init -y`
 
-This generates `.cursor/rules/argent.md`, MCP config, and related files. Do not ship or copy Argent config from bootstrap templates.
-
-See [expo-photo-gallery `package.json`](https://github.com/hosam-hubspire/expo-photo-gallery/blob/main/package.json) for version pins compatible with SDK 56.
+This generates `.cursor/rules/argent.md`, MCP config, and related files.
 
 ## What is not included
 
