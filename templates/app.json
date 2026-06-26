@@ -37,8 +37,8 @@
         {
           "iconSets": [
             {
-              "inputDir": "./assets/icons/app-icons",
-              "outputDir": "./assets/icons/app-icons"
+              "inputDir": "./assets/icons",
+              "outputDir": "./assets/icons"
             }
           ]
         }

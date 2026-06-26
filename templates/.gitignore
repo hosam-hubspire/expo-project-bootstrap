@@ -50,3 +50,7 @@ example
 # generated native folders
 /ios
 /android
+
+# stray nano-icons output when CLI is run without --path ./assets/icons
+/app-icons.glyphmap.json
+/app-icons.ttf

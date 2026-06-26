@@ -37,7 +37,7 @@ Document non-obvious mappings in `scripts/generate-design-tokens.mjs`:
 
 - [ ] Raw JSON exported and persisted under `src/theme/tokens/raw/`
 - [ ] `bun run tokens:generate` run after export
-- [ ] Icons exported to `assets/icons/app-icons/` (if in scope)
+- [ ] Icons exported to `assets/icons/` (if in scope)
 - [ ] Icon font regenerated (if in scope)
 
 Notes:

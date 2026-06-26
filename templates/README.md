@@ -118,6 +118,7 @@ Merge these into the scaffolded `package.json` (keep Expo defaults like `start` 
 | `graphql:generate` | `graphql-codegen --config codegen.ts` |
 | `storybook` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start` |
 | `storybook-generate` | `sb-rn-get-stories` |
+| `icons:generate` | `react-native-nano-icons --path ./assets/icons` (when icon font pipeline is in scope) |
 
 ## GraphQL example
 
@@ -125,12 +126,14 @@ Templates include a sample `GalleryCharacters` operation against `https://rickan
 
 ## Icons
 
-`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons/app-icons`.
+`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons`. SVGs, `.nanoicons.json`, `.ttf`, and `.glyphmap.json` all live in that folder — not a nested `app-icons/` subfolder.
 
 | When | Regenerate `.ttf` + `.glyphmap.json` |
 |------|--------------------------------------|
 | **Expo prebuild / dev client build** | Expo config plugin (no `.nanoicons.json` required) |
-| **Bootstrap / CI before prebuild** | Copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` |
+| **Bootstrap / CI before prebuild** | Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`, then `bun run icons:generate` |
+
+**Never** run `react-native-nano-icons` without `--path ./assets/icons` (or the `icons:generate` script) — the default cwd is the project root and produces a stray root-level `app-icons.glyphmap.json`. Add `/app-icons.glyphmap.json` and `/app-icons.ttf` to `.gitignore` as a safety net.
 
 Merge the plugin block into the scaffolded `app.json`. Export and persist SVGs per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 

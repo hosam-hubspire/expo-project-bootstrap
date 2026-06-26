@@ -200,12 +200,12 @@ node scripts/persist-figma-export.mjs icons /tmp/icons-batch-2.json
 
 | Context | Command |
 |---------|---------|
-| **Bootstrap / CI before prebuild** | Copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` |
-| **Expo prebuild / dev client** | `react-native-nano-icons` Expo config plugin (`inputDir` / `outputDir` → `./assets/icons/app-icons`) |
+| **Bootstrap / CI before prebuild** | Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`, then `bun run icons:generate` |
+| **Expo prebuild / dev client** | `react-native-nano-icons` Expo config plugin (`inputDir` / `outputDir` → `./assets/icons`) |
 
 ### C5 — Icon gate (before commit)
 
-- [ ] `ls assets/icons/app-icons/*.svg | wc -l` equals inventory **N** from C1
+- [ ] `ls assets/icons/*.svg | wc -l` equals inventory **N** from C1
 - [ ] `.ttf` and `.glyphmap.json` regenerated after the last SVG batch
 - [ ] No template placeholder SVGs left unless icons were explicitly out of scope
 

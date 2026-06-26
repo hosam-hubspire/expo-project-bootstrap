@@ -88,8 +88,8 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
 1. `get_metadata` on the icons frame — inventory logical icon names and count **N**.
 2. Export SVGs in batches (~20–25 per `use_figma` call); persist each batch immediately:
    `node scripts/persist-figma-export.mjs icons /tmp/icons-batch-N.json`
-3. **Verify on disk:** `ls assets/icons/app-icons/*.svg | wc -l` equals **N** (deduplicated logical icons only).
-4. Copy `.nanoicons.json.example` → `.nanoicons.json`; run `bunx react-native-nano-icons --path ./assets/icons/app-icons`.
+3. **Verify on disk:** `ls assets/icons/*.svg | wc -l` equals **N** (deduplicated logical icons only).
+4. Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`; run `bun run icons:generate` (or `bunx react-native-nano-icons --path ./assets/icons`). **Never** run the CLI without `--path ./assets/icons` — default cwd writes stray `app-icons.glyphmap.json` to the project root.
 
 Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` from templates or direct writes to the paths in `templates/FIGMA_EXPORT.md`.
 
@@ -167,17 +167,17 @@ Run as **Phase C** only — after Phase A (and Phase B when a design-system URL 
    - When variants differ only by size or color, pick a single canonical source (prefer the default/neutral mode and a mid size such as 24px).
    - When variants differ by **shape** (e.g. outline vs solid, chevron-left vs chevron-right), export separate icons with distinct semantic names.
    - Normalize names to kebab-case filenames that match the glyph name (e.g. `home.svg`, `chevron-left.svg`) — never encode size or theme in the filename.
-3. Export SVGs into `assets/icons/app-icons/` via **`use_figma`** (`exportAsync({ format: 'SVG' })`) in batches (~20–25 icons per call) — see `templates/FIGMA_EXPORT.md`. **Persist each batch immediately** with `node scripts/persist-figma-export.mjs icons …`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
-4. **Icon gate:** verify `ls assets/icons/app-icons/*.svg | wc -l` equals inventory **N** before font regeneration.
+3. Export SVGs into `assets/icons/` via **`use_figma`** (`exportAsync({ format: 'SVG' })`) in batches (~20–25 icons per call) — see `templates/FIGMA_EXPORT.md`. **Persist each batch immediately** with `node scripts/persist-figma-export.mjs icons …`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
+4. **Icon gate:** verify `ls assets/icons/*.svg | wc -l` equals inventory **N** before font regeneration.
 5. Wire the icon font pipeline from templates:
-   - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons/app-icons` (`.ttf` + `.glyphmap.json` at runtime via prebuild)
-   - **Bootstrap / CI:** copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` to regenerate font/glyphmap before prebuild
+   - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons` (`.ttf` + `.glyphmap.json` at runtime via prebuild)
+   - **Bootstrap / CI:** copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`, then `bun run icons:generate` to regenerate font/glyphmap before prebuild. `.nanoicons.json` uses `inputDir` / `outputDir` `"."` relative to `--path ./assets/icons`.
    - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props
    - `IconFontLoader` in root layout when fonts are required
 6. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
 7. After adding or changing SVGs, regenerate the font/glyphmap and verify `Icon` renders a sample set at multiple sizes and color tokens.
 
-If the icons link is omitted, keep placeholder SVGs from templates or scaffold `assets/icons/app-icons/` empty only when I asked for the icon font pipeline in **Optional capabilities**.
+If the icons link is omitted, keep placeholder SVGs from templates or scaffold `assets/icons/` empty only when I asked for the icon font pipeline in **Optional capabilities**.
 
 ---
 
@@ -240,7 +240,7 @@ Templates ship a thin shell: Home + Settings tabs, theme/language toggles on Set
 ---
 
 ### Scripts (package.json)
-Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts** for commands. **Required:** `lint`, `lint:fix`, `lint:a11y`, `test`, `test:watch`, `tokens:generate` (when Figma is in scope). **Optional:** `graphql:generate`, Storybook scripts when those capabilities are enabled. Set `"packageManager": "bun@…"`.
+Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts** for commands. **Required:** `lint`, `lint:fix`, `lint:a11y`, `test`, `test:watch`, `tokens:generate` (when Figma is in scope). **Optional:** `graphql:generate`, `icons:generate` (when icon font pipeline is in scope), Storybook scripts when those capabilities are enabled. Set `"packageManager": "bun@…"`.
 
 ---
 
@@ -252,7 +252,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 5. Run and verify (Phase D):
    - `bun install`
    - `bun run tokens:generate` (when applicable)
-   - Regenerate icon font/glyphmap (when icon pipeline is in scope)
+   - Regenerate icon font/glyphmap with `bun run icons:generate` when icon pipeline is in scope
    - `bun run lint`
    - `bun run test`
    - `npx tsc --noEmit`

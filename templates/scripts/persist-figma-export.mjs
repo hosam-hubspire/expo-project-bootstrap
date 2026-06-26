@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const RAW_DIR = path.join(ROOT, "src/theme/tokens/raw");
-const ICONS_DIR = path.join(ROOT, "assets/icons/app-icons");
+const ICONS_DIR = path.join(ROOT, "assets/icons");
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -64,7 +64,7 @@ function persistIcons(sourcePath) {
     fs.writeFileSync(path.join(ICONS_DIR, fileName), icon.svg, "utf8");
     written++;
   }
-  console.log(`  ${written} SVGs → assets/icons/app-icons/`);
+  console.log(`  ${written} SVGs → assets/icons/`);
 }
 
 function usage() {
