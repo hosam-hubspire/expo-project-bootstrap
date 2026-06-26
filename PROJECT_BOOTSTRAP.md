@@ -49,7 +49,7 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - `npx expo install` for Expo / React Native packages so versions stay compatible with SDK 56
    - See `templates/README.md` for dependency groups per capability
 4. **Apply bootstrap templates** — read files from `templates/` and **adapt** them into the scaffolded project. **Do not bulk-copy** over `package.json`, `app.json`, `tsconfig.json`, or other files the Expo template already generated; **merge** template intent with what `create-expo-app` produced:
-   - **`package.json`:** add scripts and dependencies from templates/README.md; keep Expo-scaffolded versions where `npx expo install` already pinned SDK 56–compatible packages
+   - **`package.json`:** merge dependencies and scripts from `templates/README.md`; keep Expo-scaffolded versions where `npx expo install` already pinned SDK 56–compatible packages
    - **`app.json` / `expo` config:** merge plugins (`expo-router`, splash, `expo-localization`, `react-native-nano-icons`, etc.), `experiments`, and platform settings into the existing config; set `name` / `slug` / `scheme` from **New app name / slug**
    - **`tsconfig.json`:** extend `expo/tsconfig.base`; merge `paths` (`@/*`, `@/assets/*`) and `strict` with any Expo defaults already present
    - **`metro.config.js`:** start from the scaffolded Expo Metro config; layer Uniwind (`withUniwindConfig`) and Storybook (`withStorybook`) from templates
@@ -201,15 +201,7 @@ Templates ship a thin shell: Home + Settings tabs, theme/language toggles on Set
 ---
 
 ### Scripts (package.json)
-**Required:**
-- `start`, `ios`, `android`
-- `lint` (`biome check . && eslint .`), `lint:fix`, `lint:a11y`
-- `test`, `test:watch`
-- `tokens:generate` (when Figma pipeline is in scope)
-
-**When optional capabilities are enabled:**
-- GraphQL: `graphql:generate` (`codegen.ts` → `src/services/graphql/generated/`)
-- Storybook: `storybook`, `storybook:ios`, `storybook:android`, `storybook-generate`
+Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts** for commands. **Required:** `lint`, `lint:fix`, `lint:a11y`, `test`, `test:watch`, `tokens:generate` (when Figma is in scope). **Optional:** `graphql:generate`, Storybook scripts when those capabilities are enabled. Set `"packageManager": "bun@…"`.
 
 ---
 

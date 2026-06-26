@@ -10,7 +10,7 @@ Read template files from this directory and merge them into the scaffolded proje
 
 1. **Compare** each scaffolded file (`package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, etc.) with the matching template.
 2. **Merge** template requirements into the scaffold:
-   - Add scripts and dependencies (see **Dependencies** below); prefer `npx expo install` for Expo/RN packages already partially present
+   - Add dependencies (see **Dependencies** below) and scripts (see **Scripts** below); prefer `npx expo install` for Expo/RN packages already partially present
    - Merge `app.json` plugins, experiments, and platform settings
    - Extend `tsconfig.json` paths and strict mode without dropping Expo base config
    - Layer Uniwind/Storybook onto the existing Metro config
@@ -41,6 +41,33 @@ Install after scaffolding. Use `npx expo install` for Expo/React Native packages
 - Icons: `react-native-nano-icons`
 - Fonts (when Figma/brand requires): `expo-font`, font packages per design
 
+Also set `"packageManager": "bun@…"` to match the installed Bun version.
+
+## Scripts
+
+Merge these into the scaffolded `package.json` (keep Expo defaults like `start` / `ios` / `android` if already present):
+
+**Required:**
+
+| Script | Command |
+|--------|---------|
+| `lint` | `biome check . && eslint .` |
+| `lint:fix` | `biome check --write . && eslint . --fix` |
+| `lint:a11y` | `eslint .` |
+| `test` | `jest --ci` |
+| `test:watch` | `jest --watchAll` |
+| `tokens:generate` | `node scripts/generate-design-tokens.mjs` (when Figma pipeline is in scope) |
+
+**When optional capabilities are enabled:**
+
+| Script | Command |
+|--------|---------|
+| `graphql:generate` | `graphql-codegen --config codegen.ts` |
+| `storybook` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start` |
+| `storybook:ios` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --ios` |
+| `storybook:android` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --android` |
+| `storybook-generate` | `sb-rn-get-stories` |
+
 ## GraphQL example
 
 Templates include a sample `GalleryCharacters` operation against `https://rickandmortyapi.com/graphql` (default in `client.ts`, `codegen.ts`, and `prefetchQueries.ts`). Replace with project operations when GraphQL is enabled.
@@ -57,9 +84,3 @@ Argent is **not** created by `create-expo-app`. During bootstrap:
 2. In the project root: `npx @swmansion/argent init -y`
 
 This generates `.cursor/rules/argent.md`, MCP config, and related files.
-
-## What is not included
-
-- Demo gallery screens and photo viewer UI
-- Full project icon SVG sets (placeholder icons only; sample `GalleryCharacters` GraphQL operation is included as infrastructure example)
-- A complete `package.json` (merge dependencies and scripts manually per capability list above)
