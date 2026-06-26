@@ -89,7 +89,7 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
 2. Export SVGs in batches (~20–25 per `use_figma` call); persist each batch immediately:
    `node scripts/persist-figma-export.mjs icons /tmp/icons-batch-N.json`
 3. **Verify on disk:** `ls assets/icons/*.svg | wc -l` equals **N** (deduplicated logical icons only).
-4. Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`; run `bun run icons:generate` (or `bunx react-native-nano-icons --path ./assets/icons`). **Never** run the CLI without `--path ./assets/icons` — default cwd writes stray `app-icons.glyphmap.json` to the project root.
+4. Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`; run `bun run icons:generate` (or `bunx react-native-nano-icons --path ./assets/icons`). **Never** run the CLI without `--path ./assets/icons` — default cwd writes stray `nanoicons.glyphmap.json` to the project root.
 
 Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` from templates or direct writes to the paths in `templates/FIGMA_EXPORT.md`.
 

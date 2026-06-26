@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 
-import glyphMap from "@/assets/icons/app-icons.glyphmap.json";
+import glyphMap from "@/assets/icons/nanoicons.glyphmap.json";
 import { Icon, type IconName } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -13,7 +13,7 @@ function IconsShowcase() {
       <View className="gap-xs">
         <ThemedText variant="heading-app-section">Icons</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          Sample of {sampleIcons.length} icons from react-native-nano-icons (app-icons set)
+          Sample of {sampleIcons.length} icons from react-native-nano-icons (nanoicons set)
         </ThemedText>
       </View>
 

@@ -3,7 +3,7 @@
     {
       "inputDir": ".",
       "outputDir": ".",
-      "fontFamily": "app-icons"
+      "fontFamily": "nanoicons"
     }
   ]
 }

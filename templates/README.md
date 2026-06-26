@@ -126,7 +126,7 @@ Templates include a sample `GalleryCharacters` operation against `https://rickan
 
 ## Icons
 
-`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons`. SVGs, `.nanoicons.json`, `.ttf`, and `.glyphmap.json` all live in that folder — not a nested `app-icons/` subfolder.
+`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons`. SVGs, `.nanoicons.json`, `nanoicons.ttf`, and `nanoicons.glyphmap.json` all live in that folder — not a nested subfolder. Set `fontFamily` to `"nanoicons"` in `.nanoicons.json`.
 
 | When | Regenerate `.ttf` + `.glyphmap.json` |
 |------|--------------------------------------|
