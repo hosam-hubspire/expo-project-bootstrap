@@ -1,21 +1,53 @@
 # Expo project bootstrap
 
-Reusable agent prompt and **canonical templates** for scaffolding new Expo React Native apps (latest Expo SDK via `create-expo-app@latest`, Uniwind, Bun, Biome, design tokens, optional Storybook / GraphQL / icons).
+Reusable **agent skill**, prompt entry point, and **canonical templates** for scaffolding new Expo React Native apps (latest Expo SDK via `create-expo-app@latest`, Uniwind, Bun, Biome, design tokens, optional Storybook / GraphQL / icons).
 
-## Usage
+## Quick start
 
-1. Open [PROJECT_BOOTSTRAP.md](./PROJECT_BOOTSTRAP.md)
-2. Copy the prompt block into a new agent chat
-3. Fill in the placeholders (`<APP_NAME>`, Figma links, optional GitHub repo, etc.)
+**Cursor (recommended):**
 
-The agent scaffolds with `create-expo-app@latest`, then **refers to and adapts** files from [`templates/`](./templates/) into the new project (merging with Expo-generated config rather than bulk-copying).
+```
+use expo-project-bootstrap skill to bootstrap a project
+```
+
+**Install the skill:**
+
+```bash
+npx skills add hosam-hubspire/expo-project-bootstrap --skill expo-project-bootstrap -g -y
+```
+
+**Manual prompt:** see [PROJECT_BOOTSTRAP.md](./PROJECT_BOOTSTRAP.md).
 
 ## Repository layout
 
 | Path | Purpose |
 |------|---------|
-| `PROJECT_BOOTSTRAP.md` | Full agent prompt |
+| `skills/expo-project-bootstrap/` | Agent skill (`SKILL.md`, `bootstrap.md`, `addons.md`) — single source of truth for workflow |
 | `templates/` | Reference config, scripts, theme pipeline, minimal app shell, optional Storybook |
-| `templates/README.md` | Adaptation workflow and dependency groups |
-| `templates/FIGMA_EXPORT.md` | Figma MCP export workflow (`use_figma`), persistence, icon font regen |
-| `templates/TOKENS.md` | Template to copy when Figma export is pending |
+| `PROJECT_BOOTSTRAP.md` | Thin prompt wrapper — links to skill, no duplicated workflow |
+| `templates/README.md` | Adaptation workflow and one-package-per-install dependency list |
+| `templates/FIGMA_EXPORT.md` | Figma MCP export workflow |
+| `templates/TOKENS.md` | Copy to new projects when Figma export is pending |
+
+## How it fits together
+
+```
+skills/expo-project-bootstrap/   ← agent instructions (what to do)
+templates/                       ← files to merge into the new app
+```
+
+The agent scaffolds with `create-expo-app@latest`, then **adapts** `templates/` into the new project (merging with Expo-generated config — not bulk-copying).
+
+## Develop locally
+
+Clone this repo, then install the skill from your checkout:
+
+```bash
+npx skills add ./path/to/expo-project-bootstrap --skill expo-project-bootstrap -g -y
+```
+
+Verify discoverability:
+
+```bash
+npx skills add ./path/to/expo-project-bootstrap --list
+```
