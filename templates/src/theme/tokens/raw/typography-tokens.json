@@ -3,556 +3,109 @@
   "modes": ["lg+", "sm/md"],
   "variables": [
     {
-      "name": "heading/rider tools/page title/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/rider tools/page title/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 32,
-        "sm/md": 24
-      }
-    },
-    {
-      "name": "heading/rider tools/page title/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
-    },
-    {
       "name": "heading/rider tools/section/font-family",
       "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
     },
     {
       "name": "heading/rider tools/section/font-size",
       "type": "FLOAT",
-      "values": {
-        "lg+": 24,
-        "sm/md": 20
-      }
+      "values": { "lg+": 24, "sm/md": 20 }
     },
     {
       "name": "heading/rider tools/section/font-weight",
       "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
-    },
-    {
-      "name": "global/body/large/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/large/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Regular",
-        "sm/md": "Regular"
-      }
-    },
-    {
-      "name": "global/body/large/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 20,
-        "sm/md": 18
-      }
-    },
-    {
-      "name": "global/body/base/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/base/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 18,
-        "sm/md": 16
-      }
-    },
-    {
-      "name": "global/body/base/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Regular",
-        "sm/md": "Regular"
-      }
-    },
-    {
-      "name": "global/body/base bold/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/base bold/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 18,
-        "sm/md": 16
-      }
-    },
-    {
-      "name": "global/body/base bold/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
+      "values": { "lg+": "Bold", "sm/md": "Bold" }
     },
     {
       "name": "global/body/small/font-family",
       "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
     },
     {
       "name": "global/body/small/font-size",
       "type": "FLOAT",
-      "values": {
-        "lg+": 16,
-        "sm/md": 14
-      }
+      "values": { "lg+": 16, "sm/md": 14 }
     },
     {
       "name": "global/body/small/font-weight",
       "type": "STRING",
-      "values": {
-        "lg+": "Regular",
-        "sm/md": "Regular"
-      }
-    },
-    {
-      "name": "global/underlined links/large link/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/underlined links/large link/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 20,
-        "sm/md": 18
-      }
-    },
-    {
-      "name": "global/underlined links/large link/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
-    },
-    {
-      "name": "global/underlined links/base link/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/underlined links/base link/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 18,
-        "sm/md": 16
-      }
-    },
-    {
-      "name": "global/underlined links/base link/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
-    },
-    {
-      "name": "global/underlined links/small link/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/underlined links/small link/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 16,
-        "sm/md": 14
-      }
-    },
-    {
-      "name": "global/underlined links/small link/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "global/body/large bold/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/large bold/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 20,
-        "sm/md": 18
-      }
-    },
-    {
-      "name": "global/body/large bold/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
+      "values": { "lg+": "Regular", "sm/md": "Regular" }
     },
     {
       "name": "global/body/small bold/font-family",
       "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
     },
     {
       "name": "global/body/small bold/font-size",
       "type": "FLOAT",
-      "values": {
-        "lg+": 16,
-        "sm/md": 14
-      }
+      "values": { "lg+": 16, "sm/md": 14 }
     },
     {
       "name": "global/body/small bold/font-weight",
       "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "global/body/xs/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/xs/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 14,
-        "sm/md": 12
-      }
-    },
-    {
-      "name": "global/body/xs/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Regular",
-        "sm/md": "Regular"
-      }
-    },
-    {
-      "name": "global/body/xs bold/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/xs bold/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 14,
-        "sm/md": 12
-      }
-    },
-    {
-      "name": "global/body/xs bold/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "heading/rider tools/arrival time/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/rider tools/arrival time/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 32,
-        "sm/md": 24
-      }
-    },
-    {
-      "name": "heading/rider tools/arrival time/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Bold",
-        "sm/md": "Bold"
-      }
-    },
-    {
-      "name": "heading/web/page title/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/web/page title/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 72,
-        "sm/md": 48
-      }
-    },
-    {
-      "name": "heading/web/page title/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "heading/web/section/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/web/section/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 40,
-        "sm/md": 32
-      }
-    },
-    {
-      "name": "heading/web/section/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "heading/web/subsection/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/web/subsection/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 32,
-        "sm/md": 24
-      }
-    },
-    {
-      "name": "heading/web/subsection/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "heading/web/tile/default/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/web/tile/default/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 24,
-        "sm/md": 20
-      }
-    },
-    {
-      "name": "heading/web/tile/default/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "heading/web/tile/large/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/web/tile/large/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 32,
-        "sm/md": 24
-      }
-    },
-    {
-      "name": "heading/web/tile/large/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "heading/web/tile/featured/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "heading/web/tile/featured/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 40,
-        "sm/md": 32
-      }
-    },
-    {
-      "name": "heading/web/tile/featured/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
-    },
-    {
-      "name": "global/body/xxs bold/font-family",
-      "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
-    },
-    {
-      "name": "global/body/xxs bold/font-size",
-      "type": "FLOAT",
-      "values": {
-        "lg+": 12,
-        "sm/md": 10
-      }
-    },
-    {
-      "name": "global/body/xxs bold/font-weight",
-      "type": "STRING",
-      "values": {
-        "lg+": "Medium",
-        "sm/md": "Medium"
-      }
+      "values": { "lg+": "Medium", "sm/md": "Medium" }
     },
     {
       "name": "global/body/xxs/font-family",
       "type": "STRING",
-      "values": {
-        "lg+": "Helvetica Neue",
-        "sm/md": "Helvetica Neue"
-      }
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
     },
     {
       "name": "global/body/xxs/font-size",
       "type": "FLOAT",
-      "values": {
-        "lg+": 12,
-        "sm/md": 10
-      }
+      "values": { "lg+": 12, "sm/md": 10 }
     },
     {
       "name": "global/body/xxs/font-weight",
       "type": "STRING",
-      "values": {
-        "lg+": "Regular",
-        "sm/md": "Regular"
-      }
+      "values": { "lg+": "Regular", "sm/md": "Regular" }
     },
     {
-      "name": "global/body/base code/font-family",
+      "name": "global/body/xxs bold/font-family",
       "type": "STRING",
-      "values": {
-        "lg+": "IBM Plex Mono",
-        "sm/md": "IBM Plex Mono"
-      }
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
     },
     {
-      "name": "global/body/base code/font-size",
+      "name": "global/body/xxs bold/font-size",
       "type": "FLOAT",
-      "values": {
-        "lg+": 18,
-        "sm/md": 16
-      }
+      "values": { "lg+": 12, "sm/md": 10 }
     },
     {
-      "name": "global/body/base code/font-weight",
+      "name": "global/body/xxs bold/font-weight",
       "type": "STRING",
-      "values": {
-        "lg+": "Regular",
-        "sm/md": "Regular"
-      }
+      "values": { "lg+": "Medium", "sm/md": "Medium" }
+    },
+    {
+      "name": "global/body/base/font-family",
+      "type": "STRING",
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+    },
+    {
+      "name": "global/body/base/font-size",
+      "type": "FLOAT",
+      "values": { "lg+": 18, "sm/md": 16 }
+    },
+    {
+      "name": "global/body/base/font-weight",
+      "type": "STRING",
+      "values": { "lg+": "Regular", "sm/md": "Regular" }
+    },
+    {
+      "name": "global/underlined links/base link/font-family",
+      "type": "STRING",
+      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+    },
+    {
+      "name": "global/underlined links/base link/font-size",
+      "type": "FLOAT",
+      "values": { "lg+": 18, "sm/md": 16 }
+    },
+    {
+      "name": "global/underlined links/base link/font-weight",
+      "type": "STRING",
+      "values": { "lg+": "Bold", "sm/md": "Bold" }
     }
   ]
 }

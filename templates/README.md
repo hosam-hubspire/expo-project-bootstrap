@@ -18,7 +18,7 @@ Read template files from this directory and merge them into the scaffolded proje
 4. **Replace** demo routes/components removed during scaffold cleanup with the minimal shell from templates (`src/app/`, core components, theme pipeline).
 5. When **Storybook** is enabled, adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project.
 6. Set `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
-7. Replace sample Figma raw JSON under `src/theme/tokens/raw/` when a design file is provided; run `bun run tokens:generate`.
+7. **Design tokens:** `src/theme/tokens/raw/` ships **one example per collection type** (semantic colors, primitives, spacing, typography, text styles) so the generator and shell compile — not a full Figma export. Replace with this project's exports when a design file is provided; run `bun run tokens:generate`.
 8. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap via the Expo plugin (outputs `.ttf` and `.glyphmap.json` alongside SVGs in the same directory).
 9. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
 

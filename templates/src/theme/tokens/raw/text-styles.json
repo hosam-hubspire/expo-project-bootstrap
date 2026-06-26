@@ -1,153 +1,33 @@
 [
   {
-    "name": "Web/Heading/Page Title",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 72,
-    "lineHeight": { "unit": "PERCENT", "value": 110.00000238418579 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Web/Heading/Section",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 40,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Web/Heading/Subsection",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 32,
-    "lineHeight": { "unit": "PERCENT", "value": 120.00000476837158 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Web/Heading/Tiles/Featured",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 40,
-    "lineHeight": { "unit": "PERCENT", "value": 120.00000476837158 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Web/Heading/Tiles/Large",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 32,
-    "lineHeight": { "unit": "PERCENT", "value": 120.00000476837158 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Web/Heading/Tiles/Default",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 24,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Rider Tools/Heading/Page title",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Bold",
-    "fontSize": 32,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Rider Tools/Heading/Arrival time",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Bold",
-    "fontSize": 32,
-    "lineHeight": { "unit": "PERCENT", "value": 100 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
     "name": "Rider Tools/Heading/Section",
     "fontFamily": "Helvetica Neue",
     "fontStyle": "Bold",
-    "fontSize": 24,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/Large",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Regular",
     "fontSize": 20,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/Large Bold",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Bold",
-    "fontSize": 20,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/Base",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Regular",
-    "fontSize": 18,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/Base Bold",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Bold",
-    "fontSize": 18,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/Base Code",
-    "fontFamily": "IBM Plex Mono",
-    "fontStyle": "Regular",
-    "fontSize": 18,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
+    "lineHeight": { "unit": "PERCENT", "value": 130 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   },
   {
     "name": "Global/Body/Small",
     "fontFamily": "Helvetica Neue",
     "fontStyle": "Regular",
-    "fontSize": 16,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
+    "fontSize": 14,
+    "lineHeight": { "unit": "PERCENT", "value": 129 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   },
   {
     "name": "Global/Body/Small Bold",
     "fontFamily": "Helvetica Neue",
     "fontStyle": "Medium",
-    "fontSize": 16,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/XS",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Regular",
     "fontSize": 14,
-    "lineHeight": { "unit": "PERCENT", "value": 100 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Body/XS Bold",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
-    "fontSize": 14,
-    "lineHeight": { "unit": "PERCENT", "value": 100 },
+    "lineHeight": { "unit": "PERCENT", "value": 129 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   },
   {
     "name": "Global/Body/XXS",
     "fontFamily": "Helvetica Neue",
     "fontStyle": "Regular",
-    "fontSize": 12,
+    "fontSize": 10,
     "lineHeight": { "unit": "PERCENT", "value": 100 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   },
@@ -155,40 +35,24 @@
     "name": "Global/Body/XXS Bold",
     "fontFamily": "Helvetica Neue",
     "fontStyle": "Medium",
-    "fontSize": 12,
+    "fontSize": 10,
     "lineHeight": { "unit": "PERCENT", "value": 100 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   },
   {
-    "name": "Global/Underlined Links/Large Link",
+    "name": "Global/Body/Base",
     "fontFamily": "Helvetica Neue",
-    "fontStyle": "Bold",
-    "fontSize": 20,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
+    "fontStyle": "Regular",
+    "fontSize": 16,
+    "lineHeight": { "unit": "PERCENT", "value": 137.5 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   },
   {
     "name": "Global/Underlined Links/Base Link",
     "fontFamily": "Helvetica Neue",
     "fontStyle": "Bold",
-    "fontSize": 18,
-    "lineHeight": { "unit": "PERCENT", "value": 139.9999976158142 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": "Global/Underlined Links/Small Link",
-    "fontFamily": "Helvetica Neue",
-    "fontStyle": "Medium",
     "fontSize": 16,
-    "lineHeight": { "unit": "PERCENT", "value": 129.99999523162842 },
-    "letterSpacing": { "unit": "PERCENT", "value": 0 }
-  },
-  {
-    "name": ".Utility/Base",
-    "fontFamily": "Roboto Mono",
-    "fontStyle": "Regular",
-    "fontSize": 16,
-    "lineHeight": { "unit": "AUTO" },
+    "lineHeight": { "unit": "PERCENT", "value": 137.5 },
     "letterSpacing": { "unit": "PERCENT", "value": 0 }
   }
 ]

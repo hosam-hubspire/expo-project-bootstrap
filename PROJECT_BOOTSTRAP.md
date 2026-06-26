@@ -103,7 +103,7 @@ Then continue with design tokens, icons, and feature-specific work.
 
 ### Design token pipeline (when Figma is provided)
 1. Inspect the Figma file and inventory variable collections: colors, typography, spacing/sizing, radius, shadows, etc. **Not every project has everything** — some have no dark mode, no breakpoint modes, no primitives, or different mode names.
-2. Export raw JSON (Figma MCP, Variables export, or manual extraction) into `src/theme/tokens/raw/`. **Filenames and collections are project-specific** — map them in `scripts/generate-design-tokens.mjs` under `RAW_FILES`.
+2. Export raw JSON (Figma MCP, Variables export, or manual extraction) into `src/theme/tokens/raw/`. Templates ship **format examples only** (one entry per collection type) — replace entirely with this project's Figma variables. **Filenames and collections are project-specific** — map them in `scripts/generate-design-tokens.mjs` under `RAW_FILES`.
 3. **Adapt the generator per project** (templates ship a sample Figma structure — reconfigure, do not assume every project matches):
    - Configure `RAW_FILES`, mode names (`LIGHT_MODE`, `DARK_MODE`, typography/size modes), and breakpoints
    - Detect which modes exist and fall back gracefully:

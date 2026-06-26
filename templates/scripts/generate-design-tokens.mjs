@@ -14,11 +14,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const RAW_DIR = path.join(ROOT, "src/theme/tokens/raw");
 const OUT_DIR = path.join(ROOT, "src/theme/tokens/generated");
-const STORY_DEFS = path.join(ROOT, "src/stories/design-tokens/token-definitions.ts");
+/** Storybook metadata — written only when a design-tokens story dir exists. */
+function resolveStoryDefsPath() {
+  const candidates = [
+    path.join(ROOT, "src/stories/design-tokens/token-definitions.ts"),
+    path.join(ROOT, "optional/src/stories/design-tokens/token-definitions.ts"),
+  ];
+  return candidates.find((candidate) => fs.existsSync(path.dirname(candidate))) ?? candidates[0];
+}
 
 /** Figma mode names — preferred labels; generator falls back when a mode is missing. Set to null to skip. */
 const LIGHT_MODE = "Default";
-const DARK_MODE = "Rider Tools";
+const DARK_MODE = "Dark";
 const SIZE_MODE_LG = "lg+";
 const SIZE_MODE_MD = "md";
 const SIZE_MODE_SM = "sm";
@@ -859,23 +866,36 @@ function main() {
     path.join(OUT_DIR, "typography-primitives.ts"),
     generateTypographyPrimitivesTs(typographyPrimitives),
   );
-  writeFile(
-    STORY_DEFS,
-    generateTokenDefinitionsClean(
-      colorTokens,
-      colorPrimitives,
-      sizeTokens,
-      typographyTokens,
-      sizePrimitives,
-      typographyPrimitives,
-      typographySm,
-      typographyMd,
-      typographyLg,
-      colorModes,
-      sizeModes,
-      typoModes,
-    ),
-  );
+  const storyDefsPath = resolveStoryDefsPath();
+  if (fs.existsSync(path.dirname(storyDefsPath))) {
+    writeFile(
+      storyDefsPath,
+      generateTokenDefinitionsClean(
+        colorTokens,
+        colorPrimitives,
+        sizeTokens,
+        typographyTokens,
+        sizePrimitives,
+        typographyPrimitives,
+        typographySm,
+        typographyMd,
+        typographyLg,
+        colorModes,
+        sizeModes,
+        typoModes,
+      ),
+    );
+  } else {
+    console.log(`  skip Storybook metadata: no design-tokens story dir`);
+  }
+
+  const totalTokens =
+    colorTokens.variables.length +
+    colorPrimitives.variables.length +
+    sizeTokens.variables.length +
+    sizePrimitives.variables.length +
+    typographyTokens.variables.length +
+    typographyPrimitives.variables.length;
 
   console.log("\nToken counts:");
   console.log(`  Color Tokens:           ${colorTokens.variables.length}`);
@@ -884,16 +904,7 @@ function main() {
   console.log(`  Size Primitives:        ${sizePrimitives.variables.length}`);
   console.log(`  Typography Tokens:      ${typographyTokens.variables.length}`);
   console.log(`  Typography Primitives:  ${typographyPrimitives.variables.length}`);
-  console.log(
-    `  Total in code:          ${
-      colorTokens.variables.length +
-      colorPrimitives.variables.length +
-      sizeTokens.variables.length +
-      sizePrimitives.variables.length +
-      typographyTokens.variables.length +
-      typographyPrimitives.variables.length
-    } (332; Phases collection skipped: 2)`,
-  );
+  console.log(`  Total in code:          ${totalTokens}`);
   console.log("\nDone.");
 }
 
