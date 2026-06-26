@@ -97,7 +97,7 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
 
 Do not add ad-hoc export scripts (`save-figma-*.mjs`, `save-json.mjs`, `flush-*`, icon manifests, batch importers, etc.). **Never** add project scripts to bridge MCP → disk — write payloads to `/tmp` and call `scripts/persist-figma-export.mjs` from templates. See `templates/FIGMA_EXPORT.md`.
 
-**STRICT agent rule (tokens):** If token export feels slow or JSON is large, still use `/tmp` + `persist-figma-export.mjs`. Do not invent helpers. A chat-only `use_figma` success is not export complete until persist + gate pass. **Icons:** follow **figma-icons-sync** (parallel slice Task workers allowed when **N > 20**).
+**STRICT agent rule (tokens):** If token export feels slow or JSON is large, still use `/tmp` + `persist-figma-export.mjs`. Do not invent helpers. A chat-only `use_figma` success is not export complete until persist + gate pass. **Icons:** follow **figma-icons-sync** (parallel slice Task workers when **N > 50**).
 
 Then continue with feature-specific work and Phase D verification.
 
@@ -168,7 +168,7 @@ If Figma JSON is not available yet, scaffold the theme folder and generator conf
 
 Run as **Phase C** only — after Phase A (and Phase B when a design-system URL was provided). Requires successful `bun install` including `react-native-nano-icons`.
 
-**Export and persist:** read and follow **[figma-icons-sync](../figma-icons-sync/SKILL.md)** (inventory, batched raw JSON to `/tmp`, parallel slices when **N > 20**, persist, icon gate). See also `templates/FIGMA_EXPORT.md` Phase C.
+**Export and persist:** read and follow **[figma-icons-sync](../figma-icons-sync/SKILL.md)** (inventory, batched raw JSON to `/tmp`, parallel slices when **N > 50**, persist, icon gate). See also `templates/FIGMA_EXPORT.md` Phase C.
 
 **After the icon gate passes**, wire from templates:
    - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons` (`.ttf` + `.glyphmap.json` at runtime via prebuild)

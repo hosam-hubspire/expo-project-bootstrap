@@ -180,7 +180,7 @@ Deduplication rules:
 
 ### C2 — Export in batches
 
-Default **10** icons per `use_figma` call (use **5** if responses truncate). **No base64.** Parallel slice workers when **N > 20** — see **figma-icons-sync**.
+Default **10** icons per `use_figma` call (use **5** if responses truncate). **No base64.** Parallel slice workers when **N > 50** — see **figma-icons-sync**.
 
 ```javascript
 function normalizeSvg(svg) {

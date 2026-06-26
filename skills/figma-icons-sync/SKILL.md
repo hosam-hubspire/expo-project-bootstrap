@@ -47,6 +47,23 @@ node scripts/persist-figma-export.mjs icons /tmp/icons-sN.json
 ls -1 assets/icons/*.svg | wc -l
 ```
 
+### Writing MCP JSON to disk
+
+`use_figma` returns JSON to the agent only — persist will not run until that array is on disk.
+
+| Method | When |
+|--------|------|
+| **Write tool** → `/tmp/icons-sN.json` | Default — one file per slice |
+| **`/tmp` helper (outside repo)** | When piping is easier — e.g. `/tmp/write-and-persist.mjs` reads stdin JSON, writes the file, runs persist |
+
+Allowed `/tmp` helper pattern (do **not** add under project `scripts/`):
+
+```bash
+node /tmp/write-and-persist.mjs /tmp/icons-s0.json "<PROJECT_ROOT>" < /tmp/incoming.json
+```
+
+Do **not** inline large JSON in shell `node -e` or argv — it fails silently or truncates.
+
 ---
 
 ## Step 1 — Inventory
@@ -94,28 +111,34 @@ If any slice response truncates, halve **B** for remaining slices only and re-ex
 
 ---
 
-## Step 3 — Export (parallel when N > 20)
+## Step 3 — Export
 
-### Coordinator (parent agent)
+**Default:** export slices **sequentially in one agent** when **N ≤ 50**.
 
-1. Complete Step 1–2.
-2. Choose parallelism **P** = min(4, sliceCount) when **N > 20**; otherwise export sequentially in one agent.
-3. Assign disjoint slice ranges to workers (see assignment table below).
-4. After all slices finish, run Step 4 gate once.
+**Parallel:** use Task workers only when **N > 50** or the user explicitly asks. Parallelism **P** = min(4, sliceCount).
+
+### Coordinator rules (parallel runs)
+
+1. Complete Step 1–2 and build the slice checklist **before** launching workers.
+2. **Skip slices already done** — if `/tmp/icons-sN.json` exists, parses as a valid `[{ name, svg }]` array, and `length` matches the slice range, persist it (if not yet on disk) and mark the slice complete; do not re-export from Figma.
+3. Assign **disjoint** slice ranges and unique `/tmp/icons-sN.json` paths (see assignment table below).
+4. Launch workers in one message (multiple Task calls) or run sequentially — never overlapping ranges.
+5. Workers report **`{ slice, iconsWritten }` only** — do **not** report total `ls assets/icons/*.svg | wc -l` mid-run (other workers are still writing; counts are misleading).
+6. After **all** slices are marked complete, run **Step 4 gate once**.
+7. If the gate passes (count === **N**), **stop** — do not launch a second full export pass or duplicate completion agent.
 
 ### Worker (same agent or Task subagent)
 
 For each assigned slice:
 
-1. **`use_figma`** with the export snippet (Step 5) — set `NODE_ID`, `START`, `END`.
-2. **Write** the returned JSON array to the assigned `/tmp/icons-sN.json` (Write tool preferred; no base64).
+1. **`use_figma`** with the export snippet (Step 5) — set `NODE_ID`, `START`, `END`. When the prompt already includes the snippet, **do not** re-read figma-use docs first.
+2. **Write** the returned JSON array to the assigned `/tmp/icons-sN.json` (Write tool or `/tmp` helper — no base64).
 3. **Persist immediately:**
    ```bash
+   cd "<PROJECT_ROOT>"
    node scripts/persist-figma-export.mjs icons /tmp/icons-sN.json
    ```
-4. Report: slice id, icons written, current `ls assets/icons/*.svg | wc -l`.
-
-**Parallel launch:** send one message with multiple Task tool calls — one worker per slice group, non-overlapping ranges only.
+4. Report: `{ slice: "sN", iconsWritten: <count> }`.
 
 Example assignment (**N=107**, **B=10**, **P=4**):
 
@@ -210,6 +233,8 @@ Expected persist shape:
 - Marking Phase C complete without disk count === N
 - Adding project scripts to bridge MCP → disk
 - `download_assets` per icon (107 calls) unless exporting a single asset
+- Reporting mid-run total SVG counts during parallel export (misleading)
+- Launching a second full export pass when the gate already passes
 
 ---
 
