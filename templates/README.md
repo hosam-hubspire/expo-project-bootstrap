@@ -18,9 +18,8 @@ Read template files from this directory and merge them into the scaffolded proje
 4. **Replace** demo routes/components removed during scaffold cleanup with the minimal shell from templates (`src/app/`, core components, theme pipeline).
 5. When **Storybook** is enabled, adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project.
 6. Set `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
-7. **Design tokens:** `src/theme/tokens/raw/` ships **illustrative samples** so the generator and shell compile — not a full Figma export. When a design file is provided, export via MCP (`templates/FIGMA_EXPORT.md`), persist with `scripts/persist-figma-export.mjs`, replace raw JSON, configure mode names in `generate-design-tokens.mjs`, then run `bun run tokens:generate`.
-8. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap — Expo plugin at prebuild, or CLI during bootstrap (see **Icons** below and `FIGMA_EXPORT.md`).
-9. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
+7. **Figma export (when a design file is provided):** run **Phase B (tokens)** and **Phase C (icons)** as separate gated steps after `bun install` — see [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md). MCP fetch alone is not export; persist each payload with `scripts/persist-figma-export.mjs` and verify counts on disk before `tokens:generate` or icon font regeneration.
+8. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
 
 ## Dependencies
 

@@ -1,34 +1,49 @@
 # Figma export (MCP)
 
-How to move design tokens and icons from a Figma file into this project during bootstrap or when syncing tokens later.
+How to move design tokens and icons from a Figma file into this project during bootstrap or when syncing later.
+
+**Run design tokens (Phase B) and icons (Phase C) as separate phases** — different payload sizes, checkpoints, and tooling. Do not bundle them with scaffold or with each other.
+
+## Critical rule: MCP ≠ export
+
+`use_figma` returns JSON to the agent. **Nothing is written to disk automatically.** A successful MCP response in chat does **not** mean export is done.
+
+After **every** MCP call:
+
+1. Write the payload to a temp file (e.g. `/tmp/color-tokens.json`) if the agent cannot pass it inline.
+2. Run `scripts/persist-figma-export.mjs` immediately.
+3. Verify the target path on disk (variable count, mode names, or SVG count) before the next MCP call.
+
+Large combined responses **truncate** (~20KB). Export **one variable collection per** `use_figma` call; export icons in batches of ~20–25 SVGs.
+
+## Phases overview
+
+| Phase | Scope | Prerequisite | Gate |
+|-------|--------|--------------|------|
+| **A — Scaffold** | Templates, `bun install` | — | `bun install` exit 0 |
+| **B — Design tokens** | Raw JSON under `src/theme/tokens/raw/` | Phase A; design-system URL | Counts + modes on disk; `tokens:generate` log |
+| **C — Icons** | SVGs + font/glyphmap | Phase A; icons URL; `react-native-nano-icons` installed | SVG count = inventory; `.ttf` + `.glyphmap.json` regenerated |
+| **D — Verify** | lint, test, tsc, device | Applicable phases complete | CI checks pass |
+
+Phase C may run after Phase B, or after Phase A only when no design-system URL was provided.
 
 ## Which Figma MCP tool to use
 
 | Tool | Use for |
 |------|---------|
 | **`use_figma`** (Plugin API) | **Primary.** List variable collections, export collection JSON, export text styles, export icon SVGs from a frame |
-| `get_metadata` | Structure inventory (node IDs, layer names) — useful to find the icons frame before export |
+| `get_metadata` | Structure inventory (node IDs, layer names) — use before Phase C to count icons |
 | `download_assets` | Single-node SVG/PNG when you only need one asset |
 
-**Avoid for variable export:** `get_variable_defs`, `get_design_context`, and `search_design_system` (variables) — they often return empty or require a selected layer in the Figma desktop app. They are not a substitute for `use_figma`.
-
-MCP returns data to the agent; **nothing is written to disk automatically.** Persist exports before running `tokens:generate` or continuing scaffold work.
-
-## Checkpoint (before commit)
-
-When Figma is in scope, verify on disk:
-
-- [ ] All required raw JSON files exist under `src/theme/tokens/raw/` (see mapping below)
-- [ ] Mode names in exports match `LIGHT_MODE`, `DARK_MODE`, and typography/size constants in `scripts/generate-design-tokens.mjs`
-- [ ] `bun run tokens:generate` logs the expected collection modes and token counts (not stub sample counts)
-- [ ] Icon SVG count matches the Figma inventory (when icons are in scope)
-- [ ] `.ttf` and `.glyphmap.json` regenerated after SVG export (when icons are in scope)
+**Avoid for variable export:** `get_variable_defs`, `get_design_context`, and `search_design_system` (variables) — they often return empty or require a selected layer in the Figma desktop app.
 
 Do not add one-off scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` or direct writes to the paths below.
 
-## Variable collections → raw files
+---
 
-Discover collections first:
+## Phase B — Design tokens
+
+### B1 — Discover (before exporting)
 
 ```javascript
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
@@ -39,7 +54,13 @@ return collections.map((c) => ({
 }));
 ```
 
-Map each Figma collection to a file under `src/theme/tokens/raw/` (adjust `RAW_FILES` in `generate-design-tokens.mjs` if your names differ):
+Record **expected** mode names and variable counts per collection. Update `scripts/generate-design-tokens.mjs` (`LIGHT_MODE`, `DARK_MODE`, size/typography modes) from this inventory — not from template stub files.
+
+Template raw JSON under `src/theme/tokens/raw/` is **illustrative only** (small counts, sample mode names like `Dark` / `Default`). Replace entirely during Phase B.
+
+### B2 — Export one collection per MCP call
+
+Map each Figma collection to a raw file (adjust `RAW_FILES` in `generate-design-tokens.mjs` when names differ):
 
 | Typical Figma collection | Raw file |
 |--------------------------|----------|
@@ -49,9 +70,9 @@ Map each Figma collection to a file under `src/theme/tokens/raw/` (adjust `RAW_F
 | Size primitives | `size-primitives.json` |
 | Typography tokens | `typography-tokens.json` |
 | Typography primitives | `typography-primitives.json` |
-| Text styles (from `getLocalTextStylesAsync`) | `text-styles.json` |
+| Text styles (`getLocalTextStylesAsync`) | `text-styles.json` |
 
-### Export helper (run inside `use_figma`)
+Export helper (run inside `use_figma` — **one collection name per call**):
 
 ```javascript
 async function resolveValue(v, modeId) {
@@ -99,26 +120,53 @@ async function exportCollection(collectionName) {
 // Example: return await exportCollection("Color Tokens");
 ```
 
-After each MCP call, persist immediately:
+Text styles — separate MCP call:
+
+```javascript
+const textStyles = await figma.getLocalTextStylesAsync();
+// map to { name, fontFamily, fontStyle, fontSize, lineHeight, letterSpacing, ... }
+return textStyles;
+```
+
+### B3 — Persist after each call
 
 ```bash
 node scripts/persist-figma-export.mjs token color-tokens.json /tmp/color-tokens.json
+node scripts/persist-figma-export.mjs text-styles /tmp/text-styles.json
 ```
 
-### Configure generator mode names
+### B4 — Token gate (before Phase C or commit)
 
-Read `modes` from each exported JSON, then set in `scripts/generate-design-tokens.mjs`:
+- [ ] Each raw file exists and `variables.length` (or text style count) matches B1 inventory
+- [ ] `modes` in each JSON match constants in `generate-design-tokens.mjs`
+- [ ] `bun run tokens:generate` logs this project's mode names and counts — **not** stub sample counts
 
-- `LIGHT_MODE` / `DARK_MODE` — semantic color modes (dark may be named `Dark`, a product theme, etc.; set `DARK_MODE = null` when there is no second mode)
-- `SIZE_MODE_SM` / `SIZE_MODE_MD` / `SIZE_MODE_LG` — spacing/size breakpoint modes
-- `TYPO_MODE_SM`, `TYPO_MODE_MD`, `TYPO_MODE_SM_MD`, `TYPO_MODE_LG` — typography breakpoint modes (some files use a combined `sm/md` mode)
+Quick disk check (example):
 
-Run `bun run tokens:generate` and confirm the “Resolved Figma modes” log matches the file.
+```bash
+node -e "const d=require('./src/theme/tokens/raw/color-tokens.json'); console.log(d.modes, d.variables.length)"
+```
 
-## Icons → SVGs
+---
 
-1. Use `get_metadata` on the icons URL to list `COMPONENT` children and deduplicate logical icons (one SVG per name; size and color are `Icon` props).
-2. Export in batches if the MCP response is large (e.g. 25–30 icons per `use_figma` call):
+## Phase C — Icons
+
+Run only after Phase A succeeds and Phase B passes when a design-system URL was provided.
+
+### C1 — Inventory
+
+Use `get_metadata` on the icons frame URL. List `COMPONENT` children; deduplicate logical icons (one name per glyph). Record total **N**.
+
+Deduplication rules:
+
+- Size variants (16, 20, 24, …) → same icon (`size` prop on `Icon`)
+- Light/dark or fill variants → same icon (`color` / `colorToken` props)
+- Different shapes (outline vs solid, chevron-left vs chevron-right) → separate icons
+- Filenames: kebab-case, no size or theme in the name (`home.svg`, not `home-24-dark.svg`)
+
+### C2 — Export in batches
+
+~20–25 icons per `use_figma` call:
 
 ```javascript
 function normalizeSvg(svg) {
@@ -140,21 +188,29 @@ for (const child of slice) {
 return icons;
 ```
 
-3. Persist:
+### C3 — Persist each batch immediately
 
 ```bash
 node scripts/persist-figma-export.mjs icons /tmp/icons-batch-1.json
+node scripts/persist-figma-export.mjs icons /tmp/icons-batch-2.json
+# …
 ```
 
-## Icon font regeneration
+### C4 — Regenerate font
 
-| Context | How to regenerate `.ttf` + `.glyphmap.json` |
-|---------|-----------------------------------------------|
-| **Expo app runtime / prebuild** | `react-native-nano-icons` Expo config plugin in `app.json` (`inputDir` / `outputDir` → `./assets/icons/app-icons`) |
-| **Bootstrap / CI before prebuild** | Copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then from project root: `bunx react-native-nano-icons --path ./assets/icons/app-icons` |
+| Context | Command |
+|---------|---------|
+| **Bootstrap / CI before prebuild** | Copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` |
+| **Expo prebuild / dev client** | `react-native-nano-icons` Expo config plugin (`inputDir` / `outputDir` → `./assets/icons/app-icons`) |
 
-The Expo plugin path does not require `.nanoicons.json` at runtime; the CLI step during bootstrap does.
+### C5 — Icon gate (before commit)
+
+- [ ] `ls assets/icons/app-icons/*.svg | wc -l` equals inventory **N** from C1
+- [ ] `.ttf` and `.glyphmap.json` regenerated after the last SVG batch
+- [ ] No template placeholder SVGs left unless icons were explicitly out of scope
+
+---
 
 ## If export is blocked
 
-Scaffold with template sample raw JSON so CI passes, copy `templates/TOKENS.md` to the project root, and document what remains (file key, collection names, mode map, pending icons).
+Scaffold with template sample raw JSON so CI passes, copy `templates/TOKENS.md` to the project root, and document what remains (file key, collection names, mode map, icon inventory, completed phases). **Do not** mark Phase B or C complete in the bootstrap summary.

@@ -58,22 +58,40 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
    - **`scripts/generate-design-tokens.mjs`, `scripts/persist-figma-export.mjs`, `.github/workflows/ci.yml`:** add as new files (or merge CI steps if a workflow already exists)
    - **`src/`, `assets/`:** add template modules (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL example) at the paths templates define; replace demo routes/components removed in step 2 — do not overwrite unrelated scaffold files blindly
    - **Storybook (when enabled):** adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project; wire Metro and env flags per templates
-   - **Figma tokens / icons:** when Figma URLs are provided, export via MCP **before** treating bootstrap as complete — see **Figma export (MCP)** below and `templates/FIGMA_EXPORT.md`; persist raw JSON and SVGs, then run `bun run tokens:generate` and regenerate icon font as needed
+   - **Figma (when URLs are provided):** run **after** scaffold + successful `bun install` — see **Figma export phases** below. Do **not** bundle token and icon export with template application; complete each phase and its gate before the next.
 5. **Argent setup (for device smoke tests):** In the project root after templates are in place:
    - If `command -v argent` fails, install the CLI: `npm i -g @swmansion/argent`
    - Run `npx @swmansion/argent init -y` (or `argent init -y` when the CLI is on PATH) to generate project config (`.cursor/rules/argent.md`, MCP entries, etc.)
    - If the CLI cannot be installed in this environment, skip Argent setup and device verification; note that in the summary
 
-Then continue with design tokens, icons, and feature-specific work.
+**Figma export phases (when Figma URLs are provided):** MCP fetch alone is **not** export — data must be persisted to disk with `scripts/persist-figma-export.mjs` before moving on. Run tokens and icons as **separate phases** (see `templates/FIGMA_EXPORT.md`). Do not commit until every applicable gate passes.
 
-**Figma export checkpoint (when Figma URLs are provided):** Do not commit until all of the following pass:
+| Phase | When | Gate (all must pass before next phase / commit) |
+|-------|------|--------------------------------------------------|
+| **A — Scaffold** | Always first | Templates applied; `bun install` exit 0 |
+| **B — Design tokens** | **Figma design system** URL provided | Raw JSON on disk matches Figma inventory (counts + mode names); generator constants updated; `bun run tokens:generate` log matches file |
+| **C — Icons** | **Figma icons section** URL provided | SVG count on disk matches inventory; font/glyphmap regenerated via nano-icons CLI |
+| **D — Verify** | Before commit | lint, test, tsc; Argent smoke tests when available |
 
-- Raw JSON files are written under `src/theme/tokens/raw/` (not template stubs — verify variable counts and mode names on disk)
-- `LIGHT_MODE`, `DARK_MODE`, and typography/size mode constants in `scripts/generate-design-tokens.mjs` match the exported collections
-- `bun run tokens:generate` logs the project's mode names and token counts
-- Icon SVG count matches the Figma inventory (when icons are in scope); `.ttf` and `.glyphmap.json` regenerated (when icons are in scope)
+**Phase B — Design tokens (token gate):**
+1. List collections (`getLocalVariableCollectionsAsync`) — record mode names and variable counts.
+2. Update `LIGHT_MODE`, `DARK_MODE`, and typography/size constants in `scripts/generate-design-tokens.mjs` from discovered modes (do not assume `Dark` / `Default` from template stubs).
+3. Export **one collection per** `use_figma` call (bulk multi-collection responses truncate). Write each payload to `/tmp`, then immediately:
+   `node scripts/persist-figma-export.mjs token <raw-file.json> /tmp/<raw-file.json>`
+4. Export text styles in a separate call; persist with `node scripts/persist-figma-export.mjs text-styles /tmp/text-styles.json`
+5. **Verify on disk** — template stubs are invalid (e.g. ~8 color tokens). Re-export if counts or mode names do not match step 1.
+6. `bun run tokens:generate` — confirm log shows this project's modes and counts.
+
+**Phase C — Icons (icon gate):** Only after Phase B passes (or when no design-system URL — then after Phase A). Requires `react-native-nano-icons` installed.
+1. `get_metadata` on the icons frame — inventory logical icon names and count **N**.
+2. Export SVGs in batches (~20–25 per `use_figma` call); persist each batch immediately:
+   `node scripts/persist-figma-export.mjs icons /tmp/icons-batch-N.json`
+3. **Verify on disk:** `ls assets/icons/app-icons/*.svg | wc -l` equals **N** (deduplicated logical icons only).
+4. Copy `.nanoicons.json.example` → `.nanoicons.json`; run `bunx react-native-nano-icons --path ./assets/icons/app-icons`.
 
 Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` from templates or direct writes to the paths in `templates/FIGMA_EXPORT.md`.
+
+Then continue with feature-specific work and Phase D verification.
 
 ---
 
@@ -111,10 +129,13 @@ Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use
 
 ---
 
-### Design token pipeline (when Figma is provided)
-1. Inspect the Figma file and inventory variable collections: colors, typography, spacing/sizing, radius, shadows, etc. **Not every project has everything** — some have no dark mode, no breakpoint modes, no primitives, or different mode names.
-2. **Export via Figma MCP `use_figma`** (Plugin API) — see `templates/FIGMA_EXPORT.md`. List collections with `figma.variables.getLocalVariableCollectionsAsync()`, export each collection to the raw JSON schema, and export text styles with `figma.getLocalTextStylesAsync()`. **Do not rely on** `get_variable_defs`, `get_design_context`, or variable search alone — they often fail or return empty without a selected layer.
-3. **Persist immediately** into `src/theme/tokens/raw/` using `node scripts/persist-figma-export.mjs token …` (or equivalent writes). Templates ship **format examples only** — replace entirely with this project's exports. Map collections in `scripts/generate-design-tokens.mjs` under `RAW_FILES` when filenames differ.
+### Design token pipeline (when Figma design system URL is provided)
+
+Run as **Phase B** only — after scaffold + `bun install`. See `templates/FIGMA_EXPORT.md` **Phase B**.
+
+1. Inspect the Figma file and inventory variable collections: colors, typography, spacing/sizing, radius, shadows, etc. **Not every project has everything** — some have no dark mode, no breakpoint modes, no primitives, or different mode names. Record **expected counts and mode names** before exporting.
+2. **Export via Figma MCP `use_figma`** (Plugin API) — **one collection per call**. List collections with `figma.variables.getLocalVariableCollectionsAsync()`, export each collection to the raw JSON schema, and export text styles with `figma.getLocalTextStylesAsync()` in a separate call. **Do not rely on** `get_variable_defs`, `get_design_context`, or variable search alone — they often fail or return empty without a selected layer. **Do not** export all collections in one MCP call (responses truncate).
+3. **Persist immediately** after each MCP call into `src/theme/tokens/raw/` using `node scripts/persist-figma-export.mjs token …` or `text-styles …`. Templates ship **format examples only** — replace entirely with this project's exports. Map collections in `scripts/generate-design-tokens.mjs` under `RAW_FILES` when filenames differ.
 4. **Adapt the generator per project** (templates ship a sample Figma structure — reconfigure, do not assume every project matches):
    - Set `RAW_FILES`, mode names (`LIGHT_MODE`, `DARK_MODE`, typography/size modes), and breakpoints from **discovered** collection modes — do not assume mode names like `Dark` until the export confirms them
    - Detect which modes exist and fall back gracefully:
@@ -124,31 +145,35 @@ Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use
    - Emit only what the project needs — typically semantic colors, spacing, and typography as Uniwind CSS variables
    - Emit Storybook metadata only when Storybook is enabled
 5. Wire `src/theme/global.css` to import generated CSS and register Uniwind breakpoints when responsive tokens exist.
-6. Run `bun run tokens:generate` and commit generated output.
+6. Run `bun run tokens:generate` and commit generated output. **Token gate:** log must show discovered mode names and full token counts — not stub sample counts.
 7. **Never hand-edit** `src/theme/tokens/generated/*` or auto-generated story metadata files.
 
 The template generator (`scripts/generate-design-tokens.mjs`) is a **starting point**, not a fixed spec. Trim or extend it to match this project's Figma file and goals.
 
-If Figma JSON is not available yet, scaffold the theme folder and generator config, stub minimal tokens if needed for CI, and copy `templates/TOKENS.md` to the project root to document what remains.
+If Figma JSON is not available yet, scaffold the theme folder and generator config, stub minimal tokens if needed for CI, and copy `templates/TOKENS.md` to the project root to document what remains. **Do not** claim Phase B is complete while stubs remain.
 
 ---
 
-### Icon pipeline (when Figma icons section is provided)
-1. Open the linked section (frame, page, or component set) and inventory every distinct **logical** icon — not every layer variant.
+### Icon pipeline (when Figma icons section URL is provided)
+
+Run as **Phase C** only — after Phase A (and Phase B when a design-system URL was provided). See `templates/FIGMA_EXPORT.md` **Phase C**. Requires successful `bun install` including `react-native-nano-icons`.
+
+1. Open the linked section (frame, page, or component set) and inventory every distinct **logical** icon — not every layer variant. Record total count **N**.
 2. **Deduplicate before export.** The source section may repeat the same icon at multiple sizes and in light/dark (or other) modes. Export **one SVG per logical icon** only:
    - Treat size variants (16, 20, 24, 32, …) as the same icon — `size` is a prop on `Icon`.
    - Treat light/dark (or filled/tinted) color variants as the same icon — `color` / `colorToken` are props on `Icon`.
    - When variants differ only by size or color, pick a single canonical source (prefer the default/neutral mode and a mid size such as 24px).
    - When variants differ by **shape** (e.g. outline vs solid, chevron-left vs chevron-right), export separate icons with distinct semantic names.
    - Normalize names to kebab-case filenames that match the glyph name (e.g. `home.svg`, `chevron-left.svg`) — never encode size or theme in the filename.
-3. Export SVGs into `assets/icons/app-icons/` via **`use_figma`** (`exportAsync({ format: 'SVG' })`) in batches if needed — see `templates/FIGMA_EXPORT.md`. Persist with `node scripts/persist-figma-export.mjs icons …`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
-4. Wire the icon font pipeline from templates:
+3. Export SVGs into `assets/icons/app-icons/` via **`use_figma`** (`exportAsync({ format: 'SVG' })`) in batches (~20–25 icons per call) — see `templates/FIGMA_EXPORT.md`. **Persist each batch immediately** with `node scripts/persist-figma-export.mjs icons …`. Strip hardcoded `fill` / `stroke` colors where possible so icons tint via the `Icon` component; keep viewBox/geometry intact.
+4. **Icon gate:** verify `ls assets/icons/app-icons/*.svg | wc -l` equals inventory **N** before font regeneration.
+5. Wire the icon font pipeline from templates:
    - `react-native-nano-icons` Expo config plugin with `inputDir` and `outputDir` both `./assets/icons/app-icons` (`.ttf` + `.glyphmap.json` at runtime via prebuild)
    - **Bootstrap / CI:** copy `assets/icons/app-icons/.nanoicons.json.example` → `.nanoicons.json`, then `bunx react-native-nano-icons --path ./assets/icons/app-icons` to regenerate font/glyphmap before prebuild
    - `Icon` wrapper in `src/components/Icon/` with typed `name`, `size`, and `color` / `colorToken` props
    - `IconFontLoader` in root layout when fonts are required
-5. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
-6. After adding or changing SVGs, regenerate the font/glyphmap and verify `Icon` renders a sample set at multiple sizes and color tokens.
+6. Exclude `assets/icons/**` from Biome/ESLint per templates; add a design-token Storybook grid under `src/stories/design-tokens/Icons.stories.tsx` when Storybook is enabled.
+7. After adding or changing SVGs, regenerate the font/glyphmap and verify `Icon` renders a sample set at multiple sizes and color tokens.
 
 If the icons link is omitted, keep placeholder SVGs from templates or scaffold `assets/icons/app-icons/` empty only when I asked for the icon font pipeline in **Optional capabilities**.
 
@@ -220,30 +245,32 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 ### Git deliverable
 1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory and `git init` with `main` as the default branch.
 2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default`, remove template cruft, install packages, adapt bootstrap templates into the project).
-3. Implement per Inputs and remaining sections above.
-4. Run and verify:
+3. **Figma Phase B** (design tokens) and **Phase C** (icons) when URLs are provided — complete each gate before the next phase.
+4. Implement per Inputs and remaining sections above.
+5. Run and verify (Phase D):
    - `bun install`
    - `bun run tokens:generate` (when applicable)
    - Regenerate icon font/glyphmap (when icon pipeline is in scope)
    - `bun run lint`
    - `bun run test`
    - `npx tsc --noEmit`
-5. **Device smoke test (before commit/push, when Argent is available):** confirm Argent is installed (`command -v argent` or `mcp__argent__*` tools present). Project config should already exist from **Project scaffold** step 5 (`argent init`). If yes, run the app on **both iOS and Android devices** (simulator, emulator, or connected hardware) and verify there are no issues before pushing:
+6. **Device smoke test (before commit/push, when Argent is available):** confirm Argent is installed (`command -v argent` or `mcp__argent__*` tools present). Project config should already exist from **Project scaffold** step 5 (`argent init`). If yes, run the app on **both iOS and Android devices** (simulator, emulator, or connected hardware) and verify there are no issues before pushing:
    - Boot or use a running iOS simulator and Android emulator (`list-devices` → prefer already-booted targets)
    - Start Metro if needed, then launch the app on each platform (`launch-app` / Expo dev client workflow)
    - Smoke-test the initial shell: app launches without redbox/crash, root layout and placeholder screen(s) render, theme/icons/fonts load if in scope, and basic navigation works when multiple screens exist
    - Use Argent discovery tools (`describe`, `debugger-component-tree`) before interactions — do not guess tap coordinates from screenshots
    - Fix any launch, runtime, or visible UI issues found; re-run lint/tests after fixes
    - If Argent is **not** installed, skip device verification, note that in the summary, and still complete static checks above
-6. One initial commit on `main` (or ask if the repo is not empty).
-7. **Push (only when New project GitHub repo is provided):** add `origin` if needed, then push to the remote. If no GitHub repo was given, stop after the local commit and report the local path.
-8. Reply with: local project path, remote repo URL (if pushed), commit SHA, what was enabled vs omitted, Figma file key (if any), mode names and raw files used, icon count exported (and how duplicates were collapsed, if any), **device verification results on iOS and Android (or that Argent was unavailable)**, and any custom Figma → code mappings.
+7. One initial commit on `main` (or ask if the repo is not empty).
+8. **Push (only when New project GitHub repo is provided):** add `origin` if needed, then push to the remote. If no GitHub repo was given, stop after the local commit and report the local path.
+9. Reply with: local project path, remote repo URL (if pushed), commit SHA, what was enabled vs omitted, Figma file key (if any), **token gate:** mode names, raw files, and variable counts on disk, **icon gate:** icon count exported (and how duplicates were collapsed, if any), **device verification results on iOS and Android (or that Argent was unavailable)**, and any custom Figma → code mappings.
 
 ---
 
 ### Constraints
 - Start from `bunx create-expo-app@latest … --template default` — do not pin an SDK version (`@sdk-NN`) or skip the official template; do not clone a sample app as the project base
 - Install bootstrap dependencies with `bun add` / `bunx expo install` — do not invent version ranges in `package.json`; `bun install` must succeed before Figma export, token generation, lint, or commit
+- Run Figma **Phase B (tokens)** and **Phase C (icons)** separately — persist each MCP payload to disk before the next call; MCP success in chat is not export complete
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
 - Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`
@@ -275,12 +302,12 @@ Enable on-device Storybook. Before pushing, confirm tokens render for each theme
 
 **Figma / tokens only**
 ```
-Light-only or single-breakpoint projects are valid — do not add dark or responsive output the Figma file does not define.
+Run Phase B only (design tokens). One collection per use_figma call; persist immediately; token gate must pass before commit. Light-only or single-breakpoint projects are valid — do not add dark or responsive output the Figma file does not define.
 ```
 
 **Figma icons only**
 ```
-Export icons from <FIGMA_ICONS_URL>. Deduplicate size and light/dark variants — one SVG per logical icon; size and color are Icon props. Document any ambiguous variants (same name, different shape) in the bootstrap summary.
+Run Phase C only (icons) after scaffold + bun install. Export from <FIGMA_ICONS_URL> in batches; persist each batch before the next. Deduplicate size and light/dark variants — one SVG per logical icon; size and color are Icon props. Icon gate: SVG count on disk must match inventory. Document any ambiguous variants (same name, different shape) in the bootstrap summary.
 ```
 
 **Device verification (Argent)**
