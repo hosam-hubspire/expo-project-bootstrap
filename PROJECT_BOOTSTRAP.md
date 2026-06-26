@@ -37,6 +37,7 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
    - **New local directory (preferred):** `bunx create-expo-app@latest <APP_NAME> --template default` — do **not** `git init` first; `create-expo-app` initializes git. Run `git branch -M main` afterward if the default branch is not `main`.
    - **Empty git checkout or existing `.git`:** `cd` into the repo root and run `CI=true bunx create-expo-app@latest . --template default`. Never run `git init` before `create-expo-app .` without `CI=true`.
    - Set `name` / `slug` in `app.json` to match **New app name / slug** when they differ from the folder name.
+   - **Cursor agents:** do **not** call `move_agent_to_root` during bootstrap — it is optional and can block for minutes. Use absolute paths in shell commands until scaffold + commit are done.
 2. **Remove unnecessary default template files** before layering bootstrap architecture:
    - Demo routes and screens (e.g. tab explore/demo flows, sample modals) — replace with the minimal placeholder shell from templates
    - Template-only components (`components/ui/*`, parallax/demo helpers, stock `ThemedText` / `ThemedView` when superseded)
