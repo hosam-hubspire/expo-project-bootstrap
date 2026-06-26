@@ -24,22 +24,33 @@ Read template files from this directory and merge them into the scaffolded proje
 
 ## Dependencies
 
-Install after scaffolding. Use `bunx expo install` for Expo/React Native packages; `bun add` for everything else. Merge into the scaffolded `package.json` — do not replace the whole file.
+Install after scaffolding. Merge into the scaffolded `package.json` — do not replace the whole file.
 
-**Required** (from `create-expo-app` plus):
+- **`bunx expo install`** — Expo and React Native packages (including packages the scaffold already partially lists)
+- **`bun add`** — runtime JS libraries
+- **`bun add -d`** — devDependencies (lint, test, codegen, Storybook)
+
+### `dependencies` (required, beyond `create-expo-app`)
 
 - `uniwind`, `tailwindcss`
 - `zustand`, `react-native-mmkv`, `react-native-nitro-modules`
+
+### `devDependencies` (required)
+
 - `@biomejs/biome`, `eslint`, `eslint-plugin-react-native-a11y`, `typescript-eslint`
-- `jest-expo`, `@testing-library/react-native`, `@types/jest`
+- `jest`, `jest-expo`, `@testing-library/react-native`, `@types/jest`
 
-**When optional capabilities are enabled:**
+### Optional — `dependencies`
 
-- Storybook: `@storybook/react-native`, `storybook`, on-device addons, `sb-rn-get-stories`
-- i18n: `i18next`, `react-i18next`, `expo-localization`
-- GraphQL: `@apollo/client`, `graphql`, `graphql-ws`, `apollo3-cache-persist`, `@graphql-codegen/cli`, `@graphql-codegen/client-preset`, `@graphql-typed-document-node/core`
+- i18n: `i18next`, `react-i18next` + `bunx expo install expo-localization`
+- GraphQL: `@apollo/client`, `graphql`, `graphql-ws`, `apollo3-cache-persist`, `@graphql-typed-document-node/core`
 - Icons: `react-native-nano-icons`
-- Fonts (when Figma/brand requires): `expo-font`, font packages per design
+- Fonts (when Figma/brand requires): `bunx expo install expo-font` + font packages per design
+
+### Optional — `devDependencies`
+
+- Storybook: `storybook`, `@storybook/react-native`, `@storybook/addon-ondevice-actions`, `@storybook/addon-ondevice-backgrounds`, `@storybook/addon-ondevice-controls`, `@storybook/addon-ondevice-notes`
+- GraphQL codegen: `@graphql-codegen/cli`, `@graphql-codegen/client-preset`
 
 Also set `"packageManager": "bun@…"` to match the installed Bun version.
 
@@ -64,8 +75,6 @@ Merge these into the scaffolded `package.json` (keep Expo defaults like `start` 
 |--------|---------|
 | `graphql:generate` | `graphql-codegen --config codegen.ts` |
 | `storybook` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start` |
-| `storybook:ios` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --ios` |
-| `storybook:android` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --android` |
 | `storybook-generate` | `sb-rn-get-stories` |
 
 ## GraphQL example
