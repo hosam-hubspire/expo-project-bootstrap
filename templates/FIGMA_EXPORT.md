@@ -37,7 +37,19 @@ Phase C may run after Phase B, or after Phase A only when no design-system URL w
 
 **Avoid for variable export:** `get_variable_defs`, `get_design_context`, and `search_design_system` (variables) — they often return empty or require a selected layer in the Figma desktop app.
 
-Do not add one-off scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` or direct writes to the paths below.
+Do not add one-off scripts (`save-figma-*.mjs`, `save-json.mjs`, `flush-*`, icon manifests, batch importers, etc.). Use `scripts/persist-figma-export.mjs` only. Write each MCP payload to `/tmp` (Write tool or shell), then persist — **never** add bridge scripts under `scripts/` in the project.
+
+## STRICT — agent compliance
+
+Agents **must** follow this loop with no substitutions:
+
+1. `use_figma` (one collection / text-styles / icon batch)
+2. Write JSON to `/tmp/<file>.json`
+3. `node scripts/persist-figma-export.mjs …`
+4. Verify on disk (counts, modes, or SVG total)
+5. Only then — next `use_figma` call or next phase
+
+**Violations (do not do):** inventing `scripts/save-*.mjs` or similar; delegating export to a Task/subagent; skipping persist because JSON is large; marking Phase B/C complete while stub files remain.
 
 ---
 

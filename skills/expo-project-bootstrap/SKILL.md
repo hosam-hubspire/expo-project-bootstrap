@@ -14,9 +14,21 @@ Scaffold a new Expo app using templates from this repository (`templates/` on `m
 
 **Repository:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
-## Before you start
+## Before you start (STRICT — always ask first)
 
-Collect inputs. Use AskQuestion when available; otherwise ask conversationally. Do not begin scaffold until **app name** is known.
+**Always run an intake step before any scaffold work** — even when the user's first message already includes app name, GitHub URL, Figma links, or optional features.
+
+Do **not** infer missing inputs, skip questions, or start Phase A until intake is complete.
+
+### Intake rules
+
+1. **Use AskQuestion** when the tool is available — one form covering all inputs below.
+2. **Pre-fill** options from the user's first message where they already stated a value (e.g. mark the suggested app name, repo, or Figma URLs as the recommended/default option).
+3. **Still ask every field** — required and optional — so the user can confirm, change, or explicitly omit each one.
+4. If AskQuestion is unavailable, ask the same fields conversationally in one message before proceeding.
+5. **Do not** clone repos, run `create-expo-app`, install packages, or call Figma MCP until the user has answered.
+
+### Inputs to collect
 
 | Input | Required | Notes |
 |-------|----------|-------|
@@ -24,15 +36,26 @@ Collect inputs. Use AskQuestion when available; otherwise ask conversationally. 
 | **GitHub repo URL** | No | Omit for local-only; push when provided |
 | **Figma design system URL** | No | Enables Phase B (tokens) |
 | **Figma icons section URL** | No | Enables Phase C (icons); auto-enables icon font pipeline |
-| **Optional capabilities** | No | Storybook, i18n, GraphQL subscriptions — enable only what the user lists |
+| **Optional capabilities** | No | Storybook, i18n, GraphQL subscriptions — enable only what the user selects |
 
-Record resolved values, then follow [bootstrap.md](bootstrap.md) in full.
+### AskQuestion shape (when available)
+
+Use a single intake form with separate questions for:
+
+1. **App name / slug** — text or options; pre-select if user already named the app
+2. **GitHub repo** — include "Local only (no remote)" as an explicit option
+3. **Figma design tokens** — include "Skip / not yet" as an explicit option
+4. **Figma icons** — include "Skip / not yet" as an explicit option
+5. **Optional capabilities** — `allow_multiple: true`; list Storybook, i18n, GraphQL subscriptions; include "None" or omit selections = none enabled
+
+After answers are in, **record resolved values** (what was confirmed vs omitted), then follow [bootstrap.md](bootstrap.md) in full.
 
 ## Phase checklist
 
 Track progress; do not skip gates:
 
 ```
+- [ ] 0 — Intake: AskQuestion (or conversational) for all inputs; pre-fill from first message but confirm every field
 - [ ] A — Scaffold: create-expo-app, remove cruft, install deps, apply templates, bun install exit 0
 - [ ] B — Design tokens (if Figma design system URL): persist exports, token gate passes
 - [ ] C — Icons (if Figma icons URL): persist SVGs, icon gate passes
@@ -43,11 +66,42 @@ Track progress; do not skip gates:
 ## Quick rules (do not skip)
 
 - `bunx create-expo-app@latest` with `--template default` — never hand-roll `package.json` or clone a sample app as the base
+- **Always ask first** — run intake (AskQuestion) for all inputs before Phase A, even when the user pre-filled some in the first message
 - **Do not** call `move_agent_to_root` during bootstrap — use absolute paths until scaffold + commit are done
 - **One package per install** — never `bun add pkg1 pkg2 …`. Each package gets its own **foreground** shell step so Bun’s live output (`Resolving dependencies`, installs, warnings) streams in the UI while it runs; never background installs, chain with `&&`, or wrap commands in `echo`
 - Figma: one collection per MCP call; persist each payload with `scripts/persist-figma-export.mjs` before the next call
 - iOS and Android only — no web artifacts
 - Bun only — no npm/yarn lockfiles
+
+## Figma export (STRICT — no exceptions)
+
+This is the **only** allowed Figma → disk pipeline. Do not invent alternatives when payloads are large or persistence is awkward.
+
+**Allowed loop (repeat per collection / batch):**
+
+1. `use_figma` — **one** variable collection, text-styles call, or ~20–25 icon batch
+2. Write the MCP JSON to `/tmp/<name>.json` (Write tool or shell — **not** a new project script)
+3. Run `node scripts/persist-figma-export.mjs …` **immediately** (see `templates/FIGMA_EXPORT.md`)
+4. Verify counts/modes on disk **before** the next `use_figma` call
+
+**Forbidden — never do these:**
+
+- Add project scripts to bridge Figma export (`save-figma-*.mjs`, `save-json.mjs`, `flush-*`, batch importers, icon manifests, etc.)
+- Delegate Figma export to a subagent/Task instead of running the loop yourself
+- Treat a successful `use_figma` response in chat as export complete without `persist-figma-export.mjs`
+- Export multiple collections in one `use_figma` call
+- Proceed to the next phase or commit while template stub token/icon counts remain on disk
+
+**When MCP JSON is large:** write it to `/tmp` and call `persist-figma-export.mjs`. That is the designed path — do not add helper scripts to the repo.
+
+**Token example (one collection):**
+
+```bash
+node scripts/persist-figma-export.mjs token color-tokens.json /tmp/color-tokens.json
+node -e "const d=require('./src/theme/tokens/raw/color-tokens.json'); console.log(d.modes, d.variables.length)"
+```
+
+Full phase gates and export helpers: `templates/FIGMA_EXPORT.md` and **Phase B / C** in [bootstrap.md](bootstrap.md).
 
 ## Optional add-ons
 

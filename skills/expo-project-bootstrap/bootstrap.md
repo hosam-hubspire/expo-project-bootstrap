@@ -4,7 +4,9 @@ Bootstrap a new Expo React Native app using the architectural templates in the e
 
 ### Inputs
 
-Resolve from the user before starting (see SKILL.md). Placeholders below:
+**STRICT — always ask first.** Agents must run an intake step (AskQuestion when available) and collect **every** field below before any scaffold work — **even when the user's first message already supplied some values**. Pre-fill suggested options from the first message; still ask all fields so the user can confirm, change, or explicitly omit each one. Do not clone, `create-expo-app`, install, or export from Figma until intake is complete.
+
+Resolve and record before starting (see SKILL.md **Before you start**). Placeholders below:
 
 - **Bootstrap templates:** `templates/` in this repository — https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
 - **New project GitHub repo:** `<GITHUB_REPO_URL>` (optional — omit to scaffold locally only; push when provided)
@@ -97,7 +99,9 @@ Always bootstrap from the official Expo default template for the **latest SDK** 
 3. **Verify on disk:** `ls assets/icons/*.svg | wc -l` equals **N** (deduplicated logical icons only).
 4. Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`; run `bun run icons:generate` (or `bunx react-native-nano-icons --path ./assets/icons`). **Never** run the CLI without `--path ./assets/icons` — default cwd writes stray `nanoicons.glyphmap.json` to the project root.
 
-Do not add ad-hoc export scripts (`save-figma-*.mjs`, icon manifests, etc.). Use `scripts/persist-figma-export.mjs` from templates or direct writes to the paths in `templates/FIGMA_EXPORT.md`.
+Do not add ad-hoc export scripts (`save-figma-*.mjs`, `save-json.mjs`, `flush-*`, icon manifests, batch importers, etc.). **Never** add project scripts to bridge MCP → disk — write payloads to `/tmp` and call `scripts/persist-figma-export.mjs` from templates. See `templates/FIGMA_EXPORT.md`.
+
+**STRICT agent rule:** If export feels slow or JSON is large, still use `/tmp` + `persist-figma-export.mjs`. Do not delegate to subagents or invent helpers. A chat-only `use_figma` success is not export complete until persist + gate pass.
 
 Then continue with feature-specific work and Phase D verification.
 
@@ -292,7 +296,8 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 - Install bootstrap dependencies with `bun add` / `bunx expo install` — do not invent version ranges in `package.json`; **one package per foreground shell command** with visible logs (see `templates/README.md` **Installing dependencies**); never batch packages in a single `bun add`; `bun install` must succeed before Figma export, token generation, lint, or commit
 - Run Figma **Phase B (tokens)** and **Phase C (icons)** separately — persist each MCP payload to disk before the next call; MCP success in chat is not export complete
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
-- Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates
+- Do not add one-off Figma export helper scripts — use `scripts/persist-figma-export.mjs` from templates; write MCP payloads to `/tmp` only (never `scripts/save-*.mjs`, `flush-*.mjs`, or similar in the project)
+- Do not delegate Figma export to subagents — run the `use_figma` → `/tmp` → `persist-figma-export.mjs` loop yourself, one collection/batch at a time
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`
 - Biome for formatting/general lint; ESLint only for `eslint-plugin-react-native-a11y`
 - Bun only (no npm/yarn)
