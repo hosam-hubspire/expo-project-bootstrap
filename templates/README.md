@@ -29,19 +29,44 @@ Install after scaffolding. The lists below are a **package checklist only** — 
 - **`bun add <pkg> …`** — runtime JS libraries
 - **`bun add -d <pkg> …`** — devDependencies (lint, test, codegen, Storybook)
 
-### Installing dependencies (required)
+### Installing dependencies
 
 1. Read the checklist sections below for **which** packages to add (required + enabled optional capabilities).
-2. Install each package with the CLI — **never** type `"name": "^x.y.z"` into `package.json` by hand:
-   ```bash
-   bunx expo install expo-localization expo-font
-   bun add uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules
-   bun add react-native-nano-icons
-   bun add -d @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint jest jest-expo @testing-library/react-native @types/jest
-   ```
-3. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
-4. Run `bun install` (or `bun install --frozen-lockfile` after the lockfile exists) and **stop if it fails** — do not proceed to Figma export, `tokens:generate`, lint, or commit until install succeeds.
-5. To verify a version before pinning a nightly or override: `npm view <pkg> version` or `npm view <pkg> dist-tags`.
+2. Install with the CLI — **never** type `"name": "^x.y.z"` into `package.json` by hand.
+3. **Run each command separately** — do not chain multiple `bun add` / `bun add -d` calls with `&&`. Large combined devDependency installs (especially Storybook + GraphQL codegen in one batch) can hang on `Resolving dependencies`.
+4. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
+5. Run `bun install` (or `bun install --frozen-lockfile` after the lockfile exists) and **stop if it fails** — do not proceed to Figma export, `tokens:generate`, lint, or commit until install succeeds.
+6. To verify a version before pinning a nightly or override: `npm view <pkg> version` or `npm view <pkg> dist-tags`.
+
+**Required — run in order (one command per line):**
+
+```bash
+bunx expo install expo-localization
+bun add uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules
+bun add react-native-nano-icons
+bun add -d @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint jest jest-expo @testing-library/react-native @types/jest
+```
+
+**Optional — add only enabled capabilities (one command per line):**
+
+```bash
+# i18n (runtime)
+bun add i18next react-i18next
+
+# GraphQL (runtime)
+bun add @apollo/client graphql graphql-ws apollo3-cache-persist @graphql-typed-document-node/core
+
+# Storybook (dev)
+bun add -d storybook @storybook/react-native @storybook/addon-ondevice-actions @storybook/addon-ondevice-backgrounds @storybook/addon-ondevice-controls @storybook/addon-ondevice-notes
+
+# GraphQL codegen (dev)
+bun add -d @graphql-codegen/cli @graphql-codegen/client-preset
+
+# Fonts (when Figma/brand requires)
+bunx expo install expo-font
+```
+
+After all applicable commands finish, run `bun install` once to confirm the lockfile is consistent.
 
 ### `dependencies` (required, beyond `create-expo-app`)
 
