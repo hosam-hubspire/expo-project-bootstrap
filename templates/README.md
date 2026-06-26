@@ -2,6 +2,8 @@
 
 Reference implementation for the Expo project bootstrap prompt. **Adapt** into a new app **after** `bunx create-expo-app@latest … --template default` and removing default template cruft.
 
+**Non-interactive scaffold:** use `bunx create-expo-app@latest <APP_NAME> …` for a new folder (no prior `git init`). When `.git` already exists, run `CI=true bunx create-expo-app@latest . …`.
+
 **Source repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
 ## Adaptation workflow

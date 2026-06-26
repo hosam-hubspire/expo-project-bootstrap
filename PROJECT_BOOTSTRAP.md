@@ -33,9 +33,9 @@ Do not copy demo gallery screens, photo flows, or domain APIs from sample repos.
 ### Project scaffold
 Always bootstrap from the official Expo default template for the **latest SDK** — **do not** hand-roll `package.json` or clone a sample app repo as the project base.
 
-1. **Create the Expo app** with `create-expo-app@latest` in the project root (no SDK pin — `@latest` + `--template default` installs the current Expo SDK):
-   - New local directory: `bunx create-expo-app@latest <APP_NAME> --template default`
-   - Empty git checkout: `cd` into the repo root and run `bunx create-expo-app@latest . --template default`
+1. **Create the Expo app** with `create-expo-app@latest` in the project root (no SDK pin — `@latest` + `--template default` installs the current Expo SDK). **Non-interactive only** — agents must not wait on prompts:
+   - **New local directory (preferred):** `bunx create-expo-app@latest <APP_NAME> --template default` — do **not** `git init` first; `create-expo-app` initializes git. Run `git branch -M main` afterward if the default branch is not `main`.
+   - **Empty git checkout or existing `.git`:** `cd` into the repo root and run `CI=true bunx create-expo-app@latest . --template default`. Never run `git init` before `create-expo-app .` without `CI=true`.
    - Set `name` / `slug` in `app.json` to match **New app name / slug** when they differ from the folder name.
 2. **Remove unnecessary default template files** before layering bootstrap architecture:
    - Demo routes and screens (e.g. tab explore/demo flows, sample modals) — replace with the minimal placeholder shell from templates
@@ -244,8 +244,8 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 ---
 
 ### Git deliverable
-1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory and `git init` with `main` as the default branch.
-2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default`, remove template cruft, install packages, adapt bootstrap templates into the project).
+1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory only — **do not** `git init` before `create-expo-app` (see **Project scaffold** step 1).
+2. **Scaffold** per **Project scaffold** above (`CI=true bunx create-expo-app@latest . …` when `.git` already exists; otherwise `bunx create-expo-app@latest <APP_NAME> …`), remove template cruft, install packages, adapt bootstrap templates into the project. Ensure `main` is the default branch (`git branch -M main` when needed).
 3. **Figma Phase B** (design tokens) and **Phase C** (icons) when URLs are provided — complete each gate before the next phase.
 4. Implement per Inputs and remaining sections above.
 5. Run and verify (Phase D):
@@ -269,7 +269,7 @@ Merge into the scaffolded `package.json` — see `templates/README.md` **Scripts
 ---
 
 ### Constraints
-- Start from `bunx create-expo-app@latest … --template default` — do not pin an SDK version (`@sdk-NN`) or skip the official template; do not clone a sample app as the project base
+- Start from `bunx create-expo-app@latest … --template default` — do not pin an SDK version (`@sdk-NN`) or skip the official template; do not clone a sample app as the project base. When scaffolding into `.` inside an existing git repo, prefix with `CI=true` so the git-init prompt does not block non-interactive runs
 - Install bootstrap dependencies with `bun add` / `bunx expo install` — do not invent version ranges in `package.json`; run each install command separately (see `templates/README.md` **Installing dependencies**); `bun install` must succeed before Figma export, token generation, lint, or commit
 - Run Figma **Phase B (tokens)** and **Phase C (icons)** separately — persist each MCP payload to disk before the next call; MCP success in chat is not export complete
 - Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
