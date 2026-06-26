@@ -1,22 +1,30 @@
 # Bootstrap templates
 
-Canonical files for the Expo project bootstrap prompt. Copy into a new app **after** `bunx create-expo-app@latest … --template default@sdk-56` and removing default template cruft.
+Reference implementation for the Expo project bootstrap prompt. **Adapt** into a new app **after** `bunx create-expo-app@latest … --template default@sdk-56` and removing default template cruft.
 
 **Source repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
-## Copy order
+## Adaptation workflow
 
-1. Copy root config files into the project root (`biome.json`, `eslint.config.mjs`, `metro.config.js`, `jest.config.js`, `tsconfig.json`, `app.json`, `.gitignore`, `codegen.ts`).
-2. Copy `scripts/`, `.github/`, `src/`, and `assets/` preserving paths.
-3. When **Storybook** is enabled, copy `optional/.rnstorybook/` → `.rnstorybook/` and merge `optional/src/stories/` into `src/stories/`.
-4. Adapt `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
-5. Replace sample Figma raw JSON under `src/theme/tokens/raw/` when a design file is provided; run `bun run tokens:generate`.
-6. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap via the Expo plugin (outputs `.ttf` and `.glyphmap.json` alongside SVGs in the same directory).
-7. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
+Read template files from this directory and merge them into the scaffolded project. **Do not bulk-copy** over Expo-generated config — `create-expo-app` may already define dependencies, plugins, or lines that must be preserved.
+
+1. **Compare** each scaffolded file (`package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, etc.) with the matching template.
+2. **Merge** template requirements into the scaffold:
+   - Add scripts and dependencies (see **Dependencies** below); prefer `npx expo install` for Expo/RN packages already partially present
+   - Merge `app.json` plugins, experiments, and platform settings
+   - Extend `tsconfig.json` paths and strict mode without dropping Expo base config
+   - Layer Uniwind/Storybook onto the existing Metro config
+3. **Add** template-only files: `biome.json`, `eslint.config.mjs`, `jest.config.js`, `codegen.ts`, `scripts/`, `.github/workflows/ci.yml`, and new paths under `src/` and `assets/`.
+4. **Replace** demo routes/components removed during scaffold cleanup with the minimal shell from templates (`src/app/`, core components, theme pipeline).
+5. When **Storybook** is enabled, adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project.
+6. Set `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
+7. Replace sample Figma raw JSON under `src/theme/tokens/raw/` when a design file is provided; run `bun run tokens:generate`.
+8. After exporting project icons to `assets/icons/app-icons/`, regenerate font/glyphmap via the Expo plugin (outputs `.ttf` and `.glyphmap.json` alongside SVGs in the same directory).
+9. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
 
 ## Dependencies
 
-Install after scaffolding. Use `npx expo install` for Expo/React Native packages; `bun add` for everything else.
+Install after scaffolding. Use `npx expo install` for Expo/React Native packages; `bun add` for everything else. Merge into the scaffolded `package.json` — do not replace the whole file.
 
 **Required** (from `create-expo-app` plus):
 
@@ -39,7 +47,7 @@ Templates include a sample `GalleryCharacters` operation against `https://rickan
 
 ## Icons
 
-`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons/app-icons`. No `.nanoicons.json` is required for Expo projects.
+`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons/app-icons`. No `.nanoicons.json` is required for Expo projects. Merge this plugin block into the scaffolded `app.json`.
 
 ## Argent (device smoke tests)
 
@@ -54,4 +62,4 @@ This generates `.cursor/rules/argent.md`, MCP config, and related files.
 
 - Demo gallery screens and photo viewer UI
 - Full project icon SVG sets (placeholder icons only; sample `GalleryCharacters` GraphQL operation is included as infrastructure example)
-- `package.json` scripts/deps (merge manually per capability list above)
+- A complete `package.json` (merge dependencies and scripts manually per capability list above)

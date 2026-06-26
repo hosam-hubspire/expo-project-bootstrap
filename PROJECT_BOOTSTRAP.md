@@ -26,7 +26,7 @@ Figma token values, collection names, and raw export filenames will differ per p
 
 discover Figma variables → raw JSON exports → generate script → generated CSS/TS → Uniwind consumption in the app (and Storybook when enabled).
 
-Do not copy demo gallery screens, photo flows, or domain APIs from sample repos. Use the **bootstrap templates** for platform setup, token pipeline (when Figma is provided), theming, lint/test/CI, and the minimal app shell.
+Do not copy demo gallery screens, photo flows, or domain APIs from sample repos. **Refer to** bootstrap `templates/` and **adapt** them into the scaffolded project — the new `create-expo-app` output may already define dependencies, plugins, or config lines that must be preserved or merged.
 
 ---
 
@@ -48,13 +48,16 @@ Always bootstrap from the official Expo default template for SDK 56 — **do not
    - `bun add` for JS libraries (Uniwind, Tailwind, Biome, Zustand, MMKV, etc.)
    - `npx expo install` for Expo / React Native packages so versions stay compatible with SDK 56
    - See `templates/README.md` for dependency groups per capability
-4. **Copy and adapt bootstrap templates** from `templates/` (preserve paths into the project root):
-   - Root config: `biome.json`, `eslint.config.mjs`, `metro.config.js`, `jest.config.js`, `tsconfig.json`, `app.json`, `.gitignore`, `codegen.ts`
-   - `scripts/generate-design-tokens.mjs`, `.github/workflows/ci.yml`
-   - `src/` (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL example with `GalleryCharacters` + `prefetchQueries.ts`)
-   - `assets/` (tab icons, placeholder icon SVGs — replace when Figma icons are in scope)
-   - When Storybook is enabled: copy `optional/.rnstorybook/` → `.rnstorybook/` and merge `optional/src/stories/` into `src/stories/`
-   - Adapt `app.json` name/slug/scheme; trim or replace sample Figma raw JSON when project Figma differs
+4. **Apply bootstrap templates** — read files from `templates/` and **adapt** them into the scaffolded project. **Do not bulk-copy** over `package.json`, `app.json`, `tsconfig.json`, or other files the Expo template already generated; **merge** template intent with what `create-expo-app` produced:
+   - **`package.json`:** add scripts and dependencies from templates/README.md; keep Expo-scaffolded versions where `npx expo install` already pinned SDK 56–compatible packages
+   - **`app.json` / `expo` config:** merge plugins (`expo-router`, splash, `expo-localization`, `react-native-nano-icons`, etc.), `experiments`, and platform settings into the existing config; set `name` / `slug` / `scheme` from **New app name / slug**
+   - **`tsconfig.json`:** extend `expo/tsconfig.base`; merge `paths` (`@/*`, `@/assets/*`) and `strict` with any Expo defaults already present
+   - **`metro.config.js`:** start from the scaffolded Expo Metro config; layer Uniwind (`withUniwindConfig`) and Storybook (`withStorybook`) from templates
+   - **`biome.json`, `eslint.config.mjs`, `jest.config.js`, `.gitignore`, `codegen.ts`:** adopt from templates; adjust includes/ignores if the scaffold uses different paths
+   - **`scripts/generate-design-tokens.mjs`, `.github/workflows/ci.yml`:** add as new files (or merge CI steps if a workflow already exists)
+   - **`src/`, `assets/`:** add template modules (theme, components, lib, stores, providers, minimal `src/app/` shell, i18n, GraphQL example) at the paths templates define; replace demo routes/components removed in step 2 — do not overwrite unrelated scaffold files blindly
+   - **Storybook (when enabled):** adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project; wire Metro and env flags per templates
+   - **Figma tokens / icons:** replace sample raw JSON and placeholder SVGs when project inputs provide them; run `bun run tokens:generate` and regenerate icon font as needed
 5. **Argent setup (for device smoke tests):** In the project root after templates are in place:
    - If `command -v argent` fails, install the CLI: `npm i -g @swmansion/argent`
    - Run `npx @swmansion/argent init -y` (or `argent init -y` when the CLI is on PATH) to generate project config (`.cursor/rules/argent.md`, MCP entries, etc.)
@@ -212,7 +215,7 @@ Templates ship a thin shell: Home + Settings tabs, theme/language toggles on Set
 
 ### Git deliverable
 1. **Project root:** if **New project GitHub repo** is provided, clone it locally (or use an existing empty repo checkout). Otherwise, create a new local directory and `git init` with `main` as the default branch.
-2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default@sdk-56`, remove template cruft, install packages, copy bootstrap templates).
+2. **Scaffold** per **Project scaffold** above (`bunx create-expo-app@latest … --template default@sdk-56`, remove template cruft, install packages, adapt bootstrap templates into the project).
 3. Implement per Inputs and remaining sections above.
 4. Run and verify:
    - `bun install`
@@ -236,7 +239,7 @@ Templates ship a thin shell: Home + Settings tabs, theme/language toggles on Set
 
 ### Constraints
 - Start from `bunx create-expo-app@latest … --template default@sdk-56` — do not skip the official template or clone a sample app as the project base
-- Copy implementation files from bootstrap `templates/` — do not invent parallel config from scratch unless a template file must be adapted for this project
+- Adapt bootstrap `templates/` into the scaffolded project (merge config, add `src/` modules) — do not bulk-replace Expo-generated `package.json` / `app.json` / `tsconfig.json`, and do not invent parallel architecture from scratch when a template file exists
 - iOS and Android only — no web deployment, no `.web.tsx` variants, no `expo start --web`
 - Biome for formatting/general lint; ESLint only for `eslint-plugin-react-native-a11y`
 - Bun only (no npm/yarn)

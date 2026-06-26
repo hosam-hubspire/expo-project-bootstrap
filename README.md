@@ -8,12 +8,12 @@ Reusable agent prompt and **canonical templates** for scaffolding new Expo React
 2. Copy the prompt block into a new agent chat
 3. Fill in the placeholders (`<APP_NAME>`, Figma links, optional GitHub repo, etc.)
 
-The agent scaffolds with `create-expo-app@latest`, then copies files from [`templates/`](./templates/) into the new project.
+The agent scaffolds with `create-expo-app@latest`, then **refers to and adapts** files from [`templates/`](./templates/) into the new project (merging with Expo-generated config rather than bulk-copying).
 
 ## Repository layout
 
 | Path | Purpose |
 |------|---------|
 | `PROJECT_BOOTSTRAP.md` | Full agent prompt |
-| `templates/` | Config, scripts, theme pipeline, minimal app shell, optional Storybook |
-| `templates/README.md` | Copy order and dependency groups |
+| `templates/` | Reference config, scripts, theme pipeline, minimal app shell, optional Storybook |
+| `templates/README.md` | Adaptation workflow and dependency groups |
