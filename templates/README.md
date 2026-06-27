@@ -6,7 +6,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 
 1. Merge scaffold with templates — don't bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. Install deps (below) — skip groups for unchecked stack items.
-3. Add template files: lint/CI, `scripts/`, `.rnstorybook/`, `codegen.ts`, `FIGMA_EXPORT.md`, `src/`, `assets/`.
+3. Add template files: lint/CI, `scripts/`, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`.
 4. Replace demo routes with template `src/app/`.
 5. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 6. Figma tokens (if URL) — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md) after `bun install`.

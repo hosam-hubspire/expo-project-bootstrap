@@ -53,7 +53,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - No `move_agent_to_root` during bootstrap
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
-- Copy `FIGMA_EXPORT.md` when Figma is in scope
+- Figma Phase B: read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project
 - Figma: one collection per MCP call → `/tmp` → `persist-figma-export.mjs`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
 - No bridge scripts under `scripts/`; iOS/Android only; Bun only

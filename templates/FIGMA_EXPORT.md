@@ -1,6 +1,6 @@
 # Figma export — Phase B
 
-Run after scaffold + `bun install`. Copy this file into the new project when Figma is in scope.
+Run after scaffold + `bun install`. Read from the bootstrap repo during Phase B — do not copy into the new project.
 
 Icons are exported separately to `assets/icons/` — see `templates/README.md`.
 
