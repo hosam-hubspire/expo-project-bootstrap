@@ -1,0 +1,4 @@
+# Placeholder operation — replace with project queries after setting EXPO_PUBLIC_GRAPHQL_URL.
+query ExampleQuery {
+  __typename
+}

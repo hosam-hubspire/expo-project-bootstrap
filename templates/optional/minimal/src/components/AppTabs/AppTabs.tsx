@@ -1,5 +1,4 @@
 import { NativeTabs } from "expo-router/unstable-native-tabs";
-import { useTranslation } from "react-i18next";
 import { useResolveClassNames, withUniwind } from "uniwind";
 
 import {
@@ -12,8 +11,6 @@ import {
 const StyledNativeTabs = withUniwind(NativeTabs);
 
 export default function AppTabs() {
-  const { t } = useTranslation();
-
   const tabLabelDefault = useResolveClassNames(
     `${typographyClassName("global-body-xxs")} ${colorClassName("text-text-secondary")}`,
   );
@@ -31,7 +28,7 @@ export default function AppTabs() {
       }}
     >
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>{t("tabs.home")}</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require("@/assets/images/tabIcons/home.png")}
           renderingMode="template"
@@ -39,7 +36,7 @@ export default function AppTabs() {
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="settings">
-        <NativeTabs.Trigger.Label>{t("tabs.settings")}</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require("@/assets/images/tabIcons/settings.png")}
           renderingMode="template"

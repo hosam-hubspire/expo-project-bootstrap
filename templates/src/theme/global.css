@@ -8,6 +8,7 @@
 @import "./tokens/generated/spacing.css";
 @import "./tokens/generated/primitives.css";
 @import "./tokens/generated/typography-primitives.css";
+@import "./tokens/generated/font-families.css";
 @import "./tokens/generated/theme.css";
 
 @theme {
@@ -18,9 +19,4 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --max-width-content: var(--responsive-max-content-width);
-}
-
-:root {
-  --font-sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }

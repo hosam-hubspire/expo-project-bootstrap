@@ -16,11 +16,7 @@ const RAW_DIR = path.join(ROOT, "src/theme/tokens/raw");
 const OUT_DIR = path.join(ROOT, "src/theme/tokens/generated");
 /** Storybook metadata — written only when a design-tokens story dir exists. */
 function resolveStoryDefsPath() {
-  const candidates = [
-    path.join(ROOT, "src/stories/design-tokens/token-definitions.ts"),
-    path.join(ROOT, "optional/src/stories/design-tokens/token-definitions.ts"),
-  ];
-  return candidates.find((candidate) => fs.existsSync(path.dirname(candidate))) ?? candidates[0];
+  return path.join(ROOT, "src/stories/design-tokens/token-definitions.ts");
 }
 
 /** Figma mode names — preferred labels; generator falls back when a mode is missing. Set to null to skip. */
@@ -170,7 +166,7 @@ function resolveTypographyModes(collection) {
   return { sm, md, lg };
 }
 
-function appendTypographyDiff(parts, baseline, target, prefix) {
+function appendTypographyDiff(parts, baseline, target, prefix, familyRecord) {
   if (target.fontSize !== baseline.fontSize) {
     parts.push(`${prefix}:text-[${target.fontSize}px]`);
   }
@@ -181,7 +177,7 @@ function appendTypographyDiff(parts, baseline, target, prefix) {
     parts.push(`${prefix}:${fontWeightToTailwind(target.fontWeight)}`);
   }
   if (target.fontFamily !== baseline.fontFamily) {
-    parts.push(`${prefix}:${target.fontFamily === "mono" ? "font-mono" : "font-sans"}`);
+    parts.push(`${prefix}:${fontFamilyTailwindClass(target.fontFamily, familyRecord)}`);
   }
 }
 
@@ -230,6 +226,90 @@ function groupTypographyTokens(variables, mode) {
   return groups;
 }
 
+const SYSTEM_FALLBACK_STACK = "system-ui, sans-serif";
+const MONO_FALLBACK_SUFFIX = "ui-monospace, monospace";
+
+function slugifyFamilyName(familyName) {
+  return figmaToTokenName(familyName) || "family";
+}
+
+/** Distinct Figma family strings from typography tokens and primitive `family/*` variables. */
+function collectDistinctFamilies(typographyTokens, typographyPrimitives) {
+  const families = new Set();
+
+  for (const v of typographyTokens.variables) {
+    if (!v.name.endsWith("/font-family")) continue;
+    for (const value of Object.values(v.values ?? {})) {
+      if (value) families.add(value);
+    }
+  }
+
+  if (typographyPrimitives?.variables?.length) {
+    const mode = typographyPrimitives.modes[0];
+    for (const v of typographyPrimitives.variables) {
+      if (!v.name.startsWith("family/")) continue;
+      const value = v.values[mode];
+      if (value) families.add(value);
+    }
+  }
+
+  return [...families].sort();
+}
+
+function isMonoFamilySlot(typographyPrimitives, familyName) {
+  if (!typographyPrimitives?.variables?.length) return false;
+  const mode = typographyPrimitives.modes[0];
+  for (const v of typographyPrimitives.variables) {
+    if (!v.name.startsWith("family/")) continue;
+    const slot = v.name.slice("family/".length).toLowerCase();
+    if (!slot.includes("mono")) continue;
+    if (v.values[mode] === familyName) return true;
+  }
+  return /mono/i.test(familyName);
+}
+
+function buildFontFamilyRecord(families, typographyPrimitives) {
+  const record = {};
+  for (const name of families) {
+    const slug = slugifyFamilyName(name);
+    const mono = isMonoFamilySlot(typographyPrimitives, name);
+    const stack = mono
+      ? `"${name}", ${MONO_FALLBACK_SUFFIX}`
+      : `"${name}", ${SYSTEM_FALLBACK_STACK}`;
+    record[slug] = { name, slug, cssVar: `--font-family-${slug}`, stack };
+  }
+  return record;
+}
+
+function getFamilyEntry(familyName, familyRecord) {
+  const slug = slugifyFamilyName(familyName);
+  return familyRecord[slug] ?? null;
+}
+
+function fontFamilyTailwindClass(familyName, familyRecord) {
+  const entry = getFamilyEntry(familyName, familyRecord);
+  if (entry) {
+    return `font-[family-name:var(${entry.cssVar})]`;
+  }
+  return `font-[family-name:"${familyName}",${SYSTEM_FALLBACK_STACK}]`;
+}
+
+function generateFontFamiliesCss(familyRecord) {
+  const lines = [
+    "/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */",
+    "/* Figma font families → CSS variables for typography classes */",
+    "",
+    ":root {",
+  ];
+
+  for (const entry of Object.values(familyRecord).sort((a, b) => a.slug.localeCompare(b.slug))) {
+    lines.push(`  ${entry.cssVar}: ${entry.stack};`);
+  }
+
+  lines.push("}", "");
+  return lines.join("\n");
+}
+
 function sizeToCssVarName(figmaName) {
   if (figmaName.startsWith("space/spacing-")) {
     return `spacing-${figmaName.replace("space/spacing-", "")}`;
@@ -254,7 +334,7 @@ function writeFile(filePath, content) {
 
 function generateThemeCss(colorTokens, colorModes) {
   const lines = [
-    "/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */",
+    "/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */",
     "/* Design tokens → Uniwind @variant light / dark */",
     "",
     "@layer theme {",
@@ -292,7 +372,7 @@ function primitiveCssValue(v, value) {
 
 function generatePrimitivesCss(colorPrimitives, sizePrimitives) {
   const lines = [
-    "/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */",
+    "/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */",
     "/* Color + size primitives (static) */",
     "",
     ":root {",
@@ -318,7 +398,7 @@ function generatePrimitivesCss(colorPrimitives, sizePrimitives) {
 
 function generateTypographyPrimitivesCss(typographyPrimitives) {
   const lines = [
-    "/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */",
+    "/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */",
     "/* Typography primitives (static) */",
     "",
     ":root {",
@@ -363,7 +443,7 @@ function generateTypographyPrimitivesTs(typographyPrimitives) {
     else if (v.name.startsWith("weight/")) weights[key] = fontWeightToCss(value);
   }
 
-  return `/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+  return `/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
 /** Typography primitives resolved from Figma exports */
 
 export const typographyPrimitiveFamilies = ${JSON.stringify(families, null, 2)} as const;
@@ -405,7 +485,7 @@ function generateSpacingCss(sizeTokens, sizeModes) {
   const { sm, mdOverrides, lgOverrides } = collectSizeTokenValues(sizeTokens, sizeModes);
   const hasBreakpoints = sizeModes.md != null || sizeModes.lg != null;
   const lines = [
-    "/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */",
+    "/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */",
     hasBreakpoints
       ? `/* Size/spacing tokens — mobile-first (base default, md ≥${BREAKPOINT_MD}px, lg ≥${BREAKPOINT_LG}px) */`
       : "/* Size/spacing tokens — single Figma mode (no breakpoint overrides) */",
@@ -460,7 +540,7 @@ function generateColorsTs(colorTokens, colorModes) {
   }
 
   return (
-    `/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */` +
+    `/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */` +
     `
 /** Semantic color tokens resolved from Figma color collections */
 
@@ -536,7 +616,7 @@ function buildTypographyTokens(typographyTokens, textStyles, mode) {
         fontSize,
         lineHeight,
         fontWeight: fontWeightToCss(g.weight ?? "Regular"),
-        fontFamily: g.family === "IBM Plex Mono" ? "mono" : "sans",
+        fontFamily: g.family ?? "System",
       },
     ]);
   }
@@ -557,7 +637,13 @@ function fontWeightToTailwind(weight) {
   return map[weight] ?? "font-normal";
 }
 
-function generateTypographyClassNames(typographySm, typographyMd, typographyLg, typoModes) {
+function generateTypographyClassNames(
+  typographySm,
+  typographyMd,
+  typographyLg,
+  typoModes,
+  familyRecord,
+) {
   const classNames = {};
   const hasMd = typoModes.md != null && typoModes.md !== typoModes.sm;
   const lgBaselineKey = hasMd ? typoModes.md : typoModes.sm;
@@ -569,7 +655,7 @@ function generateTypographyClassNames(typographySm, typographyMd, typographyLg, 
   const breakpointComment =
     breakpointNotes.length > 0
       ? ` — mobile-first ${breakpointNotes.join(", ")} (Uniwind)`
-      : " (single Figma mode)";
+      : " — single Figma mode";
 
   for (const [name, sm] of Object.entries(typographySm)) {
     const md = typographyMd[name] ?? sm;
@@ -578,7 +664,7 @@ function generateTypographyClassNames(typographySm, typographyMd, typographyLg, 
       `text-[${sm.fontSize}px]`,
       `leading-[${sm.lineHeight}px]`,
       fontWeightToTailwind(sm.fontWeight),
-      sm.fontFamily === "mono" ? "font-mono" : "font-sans",
+      fontFamilyTailwindClass(sm.fontFamily, familyRecord),
     ];
 
     if (name.includes("underlined-links")) {
@@ -586,19 +672,19 @@ function generateTypographyClassNames(typographySm, typographyMd, typographyLg, 
     }
 
     if (hasMd) {
-      appendTypographyDiff(parts, sm, md, "md");
+      appendTypographyDiff(parts, sm, md, "md", familyRecord);
     }
     if (hasLg) {
-      appendTypographyDiff(parts, hasMd ? md : sm, lg, "lg");
+      appendTypographyDiff(parts, hasMd ? md : sm, lg, "lg", familyRecord);
     }
 
     classNames[name] = parts.join(" ");
   }
 
   return (
-    `/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */` +
+    `/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */` +
     `
-/** Responsive typography classNames — mobile-first${breakpointComment} */
+/** Responsive typography classNames${breakpointComment} */
 
 export const typographyClassNames = ${JSON.stringify(classNames, null, 2)} as const;
 
@@ -620,6 +706,7 @@ function generateTokenDefinitionsClean(
   colorModes,
   sizeModes,
   typoModes,
+  familyRecord,
 ) {
   const colorGroups = {};
   for (const v of colorTokens.variables) {
@@ -730,7 +817,11 @@ function generateTokenDefinitionsClean(
     .map((v) => `  '${figmaToTokenName(v.name)}': 'bg-${figmaToTokenName(v.name)}',`)
     .join("\n");
 
-  return `/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+  const fontFamiliesExport = Object.fromEntries(
+    Object.values(familyRecord).map((entry) => [entry.name, entry.stack]),
+  );
+
+  return `/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
 /** Design token metadata for Storybook */
 
 export const colorTokenGroups = ${JSON.stringify(colorGroups, null, 2)} as const;
@@ -770,10 +861,7 @@ export type TypographyPrimitiveGroup = keyof typeof typographyPrimitiveGroups;
 
 export const typographyTokenEntries = ${JSON.stringify(typographyEntries, null, 2)} as const;
 
-export const fontFamilies = {
-  sans: 'Helvetica Neue, Helvetica, Arial, system-ui, sans-serif',
-  mono: 'IBM Plex Mono, ui-monospace, monospace',
-} as const;
+export const fontFamilies = ${JSON.stringify(fontFamiliesExport, null, 2)} as const;
 
 export const typographyVariants = [
 ${Object.entries(typographyLg)
@@ -851,6 +939,9 @@ function main() {
   );
   writeFile(path.join(OUT_DIR, "spacing.css"), generateSpacingCss(sizeTokens, sizeModes));
   writeFile(path.join(OUT_DIR, "colors.ts"), generateColorsTs(colorTokens, colorModes));
+  const distinctFamilies = collectDistinctFamilies(typographyTokens, typographyPrimitives);
+  const familyRecord = buildFontFamilyRecord(distinctFamilies, typographyPrimitives);
+  writeFile(path.join(OUT_DIR, "font-families.css"), generateFontFamiliesCss(familyRecord));
   const typographySm = buildTypographyTokens(typographyTokens, textStyles, typoModes.sm);
   const typographyMd = typoModes.md
     ? buildTypographyTokens(typographyTokens, textStyles, typoModes.md)
@@ -860,7 +951,7 @@ function main() {
     : typographyMd;
   writeFile(
     path.join(OUT_DIR, "typography-classes.ts"),
-    generateTypographyClassNames(typographySm, typographyMd, typographyLg, typoModes),
+    generateTypographyClassNames(typographySm, typographyMd, typographyLg, typoModes, familyRecord),
   );
   writeFile(
     path.join(OUT_DIR, "typography-primitives.ts"),
@@ -883,6 +974,7 @@ function main() {
         colorModes,
         sizeModes,
         typoModes,
+        familyRecord,
       ),
     );
   } else {

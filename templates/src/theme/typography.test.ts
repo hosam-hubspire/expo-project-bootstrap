@@ -13,8 +13,14 @@ describe("isLinkVariant", () => {
 describe("typographyClassName", () => {
   it("uses mobile-first base sizes with lg: overrides per Uniwind breakpoints", () => {
     expect(typographyClassName("global-body-base")).toBe(
-      "text-[16px] leading-[22px] font-normal font-sans lg:text-[18px] lg:leading-[25px]",
+      "text-[16px] leading-[21px] font-normal font-[family-name:var(--font-family-system)] lg:text-[18px] lg:leading-[23px]",
     );
+  });
+
+  it("does not use Tailwind font-sans or font-mono slots", () => {
+    const className = typographyClassName("global-body-base");
+    expect(className).not.toContain("font-sans");
+    expect(className).not.toContain("font-mono");
   });
 
   it("includes underline for link variants", () => {

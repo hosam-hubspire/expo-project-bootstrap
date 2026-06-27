@@ -1,0 +1,6 @@
+/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
+/* Figma font families → CSS variables for typography classes */
+
+:root {
+  --font-family-system: "System", system-ui, sans-serif;
+}

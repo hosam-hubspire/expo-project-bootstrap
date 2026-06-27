@@ -1,6 +1,6 @@
 # Expo project bootstrap
 
-Reusable **agent skill** and **canonical templates** for scaffolding Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, optional Storybook / i18n / GraphQL).
+Reusable **agent skill** and **canonical templates** for scaffolding Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook). Templates use **project-agnostic placeholders** — raw token JSON, GraphQL endpoint, font families, and `app.json` name/slug are replaced during bootstrap intake and Phase B Figma export.
 
 ## Quick start
 
@@ -13,34 +13,29 @@ use bootstrap skill to scaffold a project
 **Install skill:**
 
 ```bash
-npx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
+bunx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
 ```
-
-The skill is named **`bootstrap`** (formerly `expo-project-bootstrap`). Re-run the install command above to update an existing global install.
 
 ## Repository layout
 
 | Path | Purpose |
 |------|---------|
-| `skills/bootstrap/` | Main skill — intake, checklist, links to workflow |
-| `skills/bootstrap/bootstrap.md` | Full scaffold workflow |
-| `templates/` | Config, scripts, theme pipeline, minimal app shell |
-| `templates/optional/` | i18n, GraphQL, Storybook, layout variants |
-| `templates/README.md` | Adaptation, grouped installs, capability merges |
+| `skills/bootstrap/` | Main skill — intake, checklist, workflow |
+| `templates/` | Full app shell (i18n, GraphQL, Storybook, `.rnstorybook/`) |
+| `templates/optional/minimal/` | Strip-down files when user unchecks stack items |
+| `templates/README.md` | Adaptation, installs, scripts |
 | `templates/FIGMA_EXPORT.md` | Design token export (Phase B) |
 | `templates/TOKENS.md` | Per-project sync tracker (copy into new apps) |
 
 ## How it fits together
 
 ```
-skills/bootstrap/   ← intake + workflow
-templates/          ← merge into create-expo-app output
-templates/optional/ ← enable only selected capabilities
+skills/bootstrap/              ← intake + workflow
+templates/                     ← full stack merged into create-expo-app output
+templates/optional/minimal/    ← use when user unchecks i18n / GraphQL / Storybook
 ```
 
-The agent scaffolds with `create-expo-app@latest`, then **adapts** templates — never bulk-copies over Expo-generated config.
-
-Icons ship as sample SVGs with `react-native-nano-icons` wired up. Export icons from Figma manually and drop them into `assets/icons/`, then run `bun run icons:generate`.
+**Intake:** i18n, GraphQL, and Storybook are **on by default** — user unchecks any they don't need.
 
 ## Manual prompt (without skill)
 
@@ -54,13 +49,14 @@ Templates: https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/te
 - App name / slug: <APP_NAME>
 - GitHub repo: <URL or "local only">
 - Figma design system: <URL or omit>
-- Optional capabilities: <Storybook, i18n, GraphQL subscriptions — list only what I want>
+- Stack toggles (default all on): i18n, GraphQL, Storybook — uncheck any not needed
+- GraphQL subscriptions: off by default
 - Platforms: iOS and Android only (no web)
 ```
 
 ## Develop locally
 
 ```bash
-npx skills add ./path/to/expo-project-bootstrap --skill bootstrap -g -y
-npx skills add ./path/to/expo-project-bootstrap --list
+bunx skills add ./path/to/expo-project-bootstrap --skill bootstrap -g -y
+bunx skills add ./path/to/expo-project-bootstrap --list
 ```

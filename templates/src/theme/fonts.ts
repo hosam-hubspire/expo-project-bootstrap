@@ -1,22 +1,12 @@
 import { Platform } from "react-native";
 
-/** Figma primitive family/family-sans */
-export const SansFamily = "Helvetica Neue" as const;
-
-const appFonts = {
-  sans: SansFamily,
-  mono: "IBMPlexMono-Regular",
-  monoMedium: "IBMPlexMono-Medium",
-  monoBold: "IBMPlexMono-Bold",
-} as const;
-
+/**
+ * Native font family names for expo-font loading.
+ * After Phase B, align keys with Figma families from `fontFamilies` in
+ * `src/stories/design-tokens/token-definitions.ts` (via `bun run tokens:generate`).
+ */
 export const Fonts = Platform.select({
-  ios: appFonts,
-  android: {
-    sans: "sans-serif",
-    mono: appFonts.mono,
-    monoMedium: appFonts.monoMedium,
-    monoBold: appFonts.monoBold,
-  },
-  default: appFonts,
-});
+  ios: {},
+  android: {},
+  default: {},
+}) as Record<string, string>;

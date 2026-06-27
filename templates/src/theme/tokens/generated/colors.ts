@@ -1,4 +1,4 @@
-/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
 /** Semantic color tokens resolved from Figma color collections */
 
 export const colorTokens = {

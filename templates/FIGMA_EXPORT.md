@@ -20,6 +20,8 @@ Large responses truncate (~20KB). Export **one variable collection per** `use_fi
 
 ## Phase overview
 
+Aligns with bootstrap phases A–C. Commit/push is bootstrap **Phase D** (not listed here).
+
 | Phase | Scope | Gate |
 |-------|--------|------|
 | **A — Scaffold** | Templates, install | `bun install` exit 0 |
@@ -59,9 +61,9 @@ return collections.map((c) => ({
 }));
 ```
 
-Record expected mode names and counts. Update `LIGHT_MODE`, `DARK_MODE`, and size/typography constants in `scripts/generate-design-tokens.mjs` from this inventory — not from template stubs.
+Record expected mode names and counts from your Figma file. Update `LIGHT_MODE`, `DARK_MODE`, and size/typography constants in `scripts/generate-design-tokens.mjs` to match **your export** — these are discovered during Phase B, not fixed template defaults.
 
-Template raw JSON is **illustrative only** (~small counts). Replace entirely during Phase B.
+Template raw JSON is **placeholder only** (~small counts). Replace entirely during Phase B.
 
 ## B2 — Export one collection per MCP call
 

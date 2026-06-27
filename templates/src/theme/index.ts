@@ -4,7 +4,7 @@
  * Regenerate tokens: bun run tokens:generate
  */
 
-export { Fonts, SansFamily } from "@/theme/fonts";
+export { Fonts } from "@/theme/fonts";
 export type { ColorTokenName } from "@/theme/tokens/generated/colors";
 export type { TypographyTokenName } from "@/theme/tokens/generated/typography-classes";
 export {

@@ -5,7 +5,7 @@
     {
       "name": "heading/app/section/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "heading/app/section/font-size",
@@ -20,7 +20,7 @@
     {
       "name": "global/body/small/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "global/body/small/font-size",
@@ -35,7 +35,7 @@
     {
       "name": "global/body/small bold/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "global/body/small bold/font-size",
@@ -50,7 +50,7 @@
     {
       "name": "global/body/xxs/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "global/body/xxs/font-size",
@@ -65,7 +65,7 @@
     {
       "name": "global/body/xxs bold/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "global/body/xxs bold/font-size",
@@ -80,7 +80,7 @@
     {
       "name": "global/body/base/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "global/body/base/font-size",
@@ -95,7 +95,7 @@
     {
       "name": "global/underlined links/base link/font-family",
       "type": "STRING",
-      "values": { "lg+": "Helvetica Neue", "sm/md": "Helvetica Neue" }
+      "values": { "lg+": "System", "sm/md": "System" }
     },
     {
       "name": "global/underlined links/base link/font-size",

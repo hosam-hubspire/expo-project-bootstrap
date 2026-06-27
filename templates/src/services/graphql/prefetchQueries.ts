@@ -1,6 +1,6 @@
 import type { ApolloClient, TypedDocumentNode } from "@apollo/client";
 
-import { GalleryCharactersDocument } from "@/services/graphql/generated/graphql";
+import { ExampleQueryDocument } from "@/services/graphql/generated/graphql";
 
 type PrefetchQueryConfig<TData, TVariables> = {
   query: TypedDocumentNode<TData, TVariables>;
@@ -18,7 +18,7 @@ function prefetchQuery<TData, TVariables>(
  */
 export const PREFETCH_QUERIES = [
   prefetchQuery({
-    query: GalleryCharactersDocument,
+    query: ExampleQueryDocument,
   }),
 ];
 

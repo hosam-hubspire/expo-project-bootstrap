@@ -1,9 +1,0 @@
-{
-  "iconSets": [
-    {
-      "inputDir": ".",
-      "outputDir": ".",
-      "fontFamily": "nanoicons"
-    }
-  ]
-}

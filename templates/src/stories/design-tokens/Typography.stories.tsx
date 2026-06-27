@@ -4,12 +4,6 @@ import { ScrollView, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { fontFamilies, typographyVariants } from "@/stories/design-tokens/token-definitions";
 import type { TypographyTokenName } from "@/theme";
-import { SansFamily } from "@/theme";
-
-const fontFamilyPreview: Record<keyof typeof fontFamilies, string | undefined> = {
-  sans: SansFamily,
-  mono: "IBMPlexMono-Regular",
-};
 
 function TypographyShowcase() {
   return (
@@ -17,32 +11,27 @@ function TypographyShowcase() {
       <View className="gap-xs">
         <ThemedText variant="heading-app-section">Font Families</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          From Figma typography primitives and global.css
+          Distinct families from Figma typography export (token-definitions / font-families.css)
         </ThemedText>
       </View>
 
-      {(Object.entries(fontFamilies) as [keyof typeof fontFamilies, string][]).map(
-        ([name, stack]) => (
-          <View
-            key={name}
-            className="gap-2xs rounded-panel border border-stroke-default bg-surface-secondary p-sm"
+      {(Object.entries(fontFamilies) as [string, string][]).map(([name, stack]) => (
+        <View
+          key={name}
+          className="gap-2xs rounded-panel border border-stroke-default bg-surface-secondary p-sm"
+        >
+          <ThemedText
+            variant="global-body-xs"
+            colorToken="text-text-secondary"
+            style={{ textTransform: "uppercase" }}
           >
-            <ThemedText
-              variant="global-body-xs"
-              colorToken="text-text-secondary"
-              style={{ textTransform: "uppercase" }}
-            >
-              {name}
-            </ThemedText>
-            <ThemedText
-              variant="global-body-base"
-              style={fontFamilyPreview[name] ? { fontFamily: fontFamilyPreview[name] } : undefined}
-            >
-              The quick brown fox — {stack.split(",")[0]}
-            </ThemedText>
-          </View>
-        ),
-      )}
+            {name}
+          </ThemedText>
+          <ThemedText variant="global-body-base" style={{ fontFamily: name }}>
+            The quick brown fox — {stack.split(",")[0]}
+          </ThemedText>
+        </View>
+      ))}
 
       <View className="gap-xs">
         <ThemedText variant="heading-app-section">Typography Variants</ThemedText>

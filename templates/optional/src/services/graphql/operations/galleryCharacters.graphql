@@ -1,9 +1,0 @@
-query GalleryCharacters {
-  characters(page: 1) {
-    results {
-      id
-      name
-      image
-    }
-  }
-}

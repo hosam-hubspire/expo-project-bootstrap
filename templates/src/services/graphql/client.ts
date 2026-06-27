@@ -21,14 +21,16 @@ if (__DEV__) {
   loadErrorMessages();
 }
 
-export const GRAPHQL_URI =
-  process.env.EXPO_PUBLIC_GRAPHQL_URL ?? "https://rickandmortyapi.com/graphql";
+/** Set EXPO_PUBLIC_GRAPHQL_URL to your project GraphQL HTTP endpoint. */
+export const GRAPHQL_URI = process.env.EXPO_PUBLIC_GRAPHQL_URL?.trim() ?? "";
 
 const subscriptionsEnabled = process.env.EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED === "true";
 
 const wsUri =
   process.env.EXPO_PUBLIC_GRAPHQL_WS_URL?.trim() ??
-  GRAPHQL_URI.replace(/^http:/, "ws:").replace(/^https:/, "wss:");
+  (GRAPHQL_URI
+    ? GRAPHQL_URI.replace(/^http:/, "ws:").replace(/^https:/, "wss:")
+    : "");
 
 const errorLink = new ErrorLink(({ error }) => {
   if (CombinedGraphQLErrors.is(error)) {
@@ -56,12 +58,24 @@ let resolvedClient: ApolloClient | null = null;
 let initPromise: Promise<ApolloClient> | null = null;
 
 function createHttpLink() {
+  if (!GRAPHQL_URI) {
+    throw new Error(
+      "EXPO_PUBLIC_GRAPHQL_URL is not set — configure your project GraphQL endpoint.",
+    );
+  }
+
   return new HttpLink({
     uri: GRAPHQL_URI,
   });
 }
 
 function createSubscriptionLink() {
+  if (!wsUri) {
+    throw new Error(
+      "GraphQL subscriptions require EXPO_PUBLIC_GRAPHQL_URL or EXPO_PUBLIC_GRAPHQL_WS_URL.",
+    );
+  }
+
   return new GraphQLWsLink(
     createClient({
       url: wsUri,

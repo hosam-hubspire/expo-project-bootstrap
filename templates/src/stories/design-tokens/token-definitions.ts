@@ -1,4 +1,4 @@
-/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
 /** Design token metadata for Storybook */
 
 export const colorTokenGroups = {
@@ -78,22 +78,7 @@ export const colorTokenGroups = {
 
 export type ColorTokenGroup = keyof typeof colorTokenGroups;
 
-export const colorPrimitiveGroups = {
-  "neutrals": [
-    {
-      "figmaName": "neutrals/black-20",
-      "tokenName": "neutrals-black-20",
-      "cssVar": "--primitive-neutrals-black-20",
-      "value": "#333333"
-    },
-    {
-      "figmaName": "neutrals/white",
-      "tokenName": "neutrals-white",
-      "cssVar": "--primitive-neutrals-white",
-      "value": "#ffffff"
-    }
-  ]
-} as const;
+export const colorPrimitiveGroups = {} as const;
 
 export type ColorPrimitiveGroup = keyof typeof colorPrimitiveGroups;
 
@@ -146,31 +131,11 @@ export const radiusTokens = {
   "radius-input": 4
 } as const;
 
-export const sizePrimitiveGroups = {
-  "space": [
-    {
-      "figmaName": "space/16",
-      "tokenName": "space-16",
-      "cssVar": "--primitive-space-16",
-      "value": 16,
-      "unit": "px"
-    }
-  ]
-} as const;
+export const sizePrimitiveGroups = {} as const;
 
 export type SizePrimitiveGroup = keyof typeof sizePrimitiveGroups;
 
-export const typographyPrimitiveGroups = {
-  "font-family": [
-    {
-      "figmaName": "font-family/sans",
-      "tokenName": "font-family-sans",
-      "cssVar": "--primitive-font-family-sans",
-      "value": "Helvetica Neue",
-      "cssValue": "Helvetica Neue"
-    }
-  ]
-} as const;
+export const typographyPrimitiveGroups = {} as const;
 
 export type TypographyPrimitiveGroup = keyof typeof typographyPrimitiveGroups;
 
@@ -178,7 +143,7 @@ export const typographyTokenEntries = [
   {
     "path": "heading/app/section",
     "key": "heading-app-section",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 24,
     "weight": "700",
     "sizeSmMd": 20,
@@ -187,7 +152,7 @@ export const typographyTokenEntries = [
   {
     "path": "global/body/small",
     "key": "global-body-small",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 16,
     "weight": "400",
     "sizeSmMd": 14,
@@ -196,7 +161,7 @@ export const typographyTokenEntries = [
   {
     "path": "global/body/small bold",
     "key": "global-body-small-bold",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 16,
     "weight": "500",
     "sizeSmMd": 14,
@@ -205,7 +170,7 @@ export const typographyTokenEntries = [
   {
     "path": "global/body/xxs",
     "key": "global-body-xxs",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 12,
     "weight": "400",
     "sizeSmMd": 10,
@@ -214,7 +179,7 @@ export const typographyTokenEntries = [
   {
     "path": "global/body/xxs bold",
     "key": "global-body-xxs-bold",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 12,
     "weight": "500",
     "sizeSmMd": 10,
@@ -223,7 +188,7 @@ export const typographyTokenEntries = [
   {
     "path": "global/body/base",
     "key": "global-body-base",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 18,
     "weight": "400",
     "sizeSmMd": 16,
@@ -232,7 +197,7 @@ export const typographyTokenEntries = [
   {
     "path": "global/underlined links/base link",
     "key": "global-underlined-links-base-link",
-    "family": "Helvetica Neue",
+    "family": "System",
     "size": 18,
     "weight": "700",
     "sizeSmMd": 16,
@@ -241,27 +206,26 @@ export const typographyTokenEntries = [
 ] as const;
 
 export const fontFamilies = {
-  sans: 'Helvetica Neue, Helvetica, Arial, system-ui, sans-serif',
-  mono: 'IBM Plex Mono, ui-monospace, monospace',
+  "System": "\"System\", system-ui, sans-serif"
 } as const;
 
 export const typographyVariants = [
-  { name: 'global-body-base', label: 'global body base', size: 18, sizeSmMd: 16, lineHeight: 25, lineHeightSmMd: 22, weight: '400', weightSmMd: '400' },
+  { name: 'global-body-base', label: 'global body base', size: 18, sizeSmMd: 16, lineHeight: 23, lineHeightSmMd: 21, weight: '400', weightSmMd: '400' },
   { name: 'global-body-small', label: 'global body small', size: 16, sizeSmMd: 14, lineHeight: 21, lineHeightSmMd: 18, weight: '400', weightSmMd: '400' },
   { name: 'global-body-small-bold', label: 'global body small bold', size: 16, sizeSmMd: 14, lineHeight: 21, lineHeightSmMd: 18, weight: '500', weightSmMd: '500' },
-  { name: 'global-body-xxs', label: 'global body xxs', size: 12, sizeSmMd: 10, lineHeight: 12, lineHeightSmMd: 10, weight: '400', weightSmMd: '400' },
-  { name: 'global-body-xxs-bold', label: 'global body xxs bold', size: 12, sizeSmMd: 10, lineHeight: 12, lineHeightSmMd: 10, weight: '500', weightSmMd: '500' },
-  { name: 'global-underlined-links-base-link', label: 'global underlined links base link', size: 18, sizeSmMd: 16, lineHeight: 25, lineHeightSmMd: 22, weight: '700', weightSmMd: '700' },
+  { name: 'global-body-xxs', label: 'global body xxs', size: 12, sizeSmMd: 10, lineHeight: 16, lineHeightSmMd: 13, weight: '400', weightSmMd: '400' },
+  { name: 'global-body-xxs-bold', label: 'global body xxs bold', size: 12, sizeSmMd: 10, lineHeight: 16, lineHeightSmMd: 13, weight: '500', weightSmMd: '500' },
+  { name: 'global-underlined-links-base-link', label: 'global underlined links base link', size: 18, sizeSmMd: 16, lineHeight: 23, lineHeightSmMd: 21, weight: '700', weightSmMd: '700' },
   { name: 'heading-app-section', label: 'heading app section', size: 24, sizeSmMd: 20, lineHeight: 31, lineHeightSmMd: 26, weight: '700', weightSmMd: '700' },
 ] as const;
 
 export const tokenCounts = {
   colorTokens: 8,
-  colorPrimitives: 2,
+  colorPrimitives: 0,
   sizeTokens: 8,
-  sizePrimitives: 1,
+  sizePrimitives: 0,
   typographyTokens: 21,
-  typographyPrimitives: 1,
-  figmaTotal: 41,
+  typographyPrimitives: 0,
+  figmaTotal: 37,
   figmaPhasesSkipped: 2,
 } as const;

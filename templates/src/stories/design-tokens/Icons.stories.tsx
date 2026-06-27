@@ -5,7 +5,7 @@ import glyphMap from "@/assets/icons/nanoicons.glyphmap.json";
 import { Icon, type IconName } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 
-const sampleIcons = (Object.keys(glyphMap.i) as IconName[]).slice(0, 36);
+const sampleIcons = Object.keys(glyphMap.i) as IconName[];
 
 function IconsShowcase() {
   return (
@@ -13,7 +13,7 @@ function IconsShowcase() {
       <View className="gap-xs">
         <ThemedText variant="heading-app-section">Icons</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          Sample of {sampleIcons.length} icons from react-native-nano-icons (nanoicons set)
+          All {sampleIcons.length} sample icons (replace SVGs in assets/icons/ and prebuild to update)
         </ThemedText>
       </View>
 

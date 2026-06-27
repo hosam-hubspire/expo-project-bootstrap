@@ -1,4 +1,4 @@
-/* AUTO-GENERATED — do not edit. Run: npm run tokens:generate */
+/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
 /** Typography primitives resolved from Figma exports */
 
 export const typographyPrimitiveFamilies = {} as const;
