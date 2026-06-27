@@ -1,57 +1,49 @@
-# Figma export — Phase B
+# Figma token sync — Phase B
 
-Run after scaffold + `bun install`. Read from the bootstrap repo during Phase B — do not copy into the new project.
+Run **after Argent (C2)** and **before commit/push (D)** when a design system is in scope. Read from the bootstrap repo — do not copy into the new project.
 
-Icons are exported separately to `assets/icons/` — see `templates/README.md`.
+Icons: export SVGs separately to `assets/icons/` — see `templates/README.md`.
 
-## Rule: MCP ≠ disk
+## 1 — Export from Figma
 
-`use_figma` returns JSON only. After **every** call:
-
-1. Write payload to `/tmp/<name>.json`
-2. `node scripts/persist-figma-export.mjs …`
-3. Verify counts on disk before the next call
-
-One variable collection per call (~20KB truncation limit). No bridge scripts under `scripts/`. No subagent delegation.
-
-**Tool:** `use_figma` (Plugin API). Not `get_variable_defs`, `get_design_context`, or `search_design_system`.
-
-## Loop
+Export variable collections and text styles from the design file (Figma desktop, plugin, MCP, or designer handoff). Copy into:
 
 ```
-use_figma → /tmp/<file>.json → persist → verify → next collection
+src/theme/tokens/raw/
 ```
+
+Exports may be **any mix of files and folders** — names are not fixed. Each variable collection JSON must include `{ collection, modes, variables }`. Text styles: JSON **array** with `fontFamily` on items.
+
+Remove template stubs when adding real exports.
+
+## 2 — Confirm copied
+
+Wait for the user to confirm exports are in `raw/`. Do not run `tokens:generate` until then.
+
+## 3 — Discover & adapt
 
 ```bash
-node scripts/persist-figma-export.mjs token color-tokens.json /tmp/color-tokens.json
-node scripts/persist-figma-export.mjs text-styles /tmp/text-styles.json
-node -e "const d=require('./src/theme/tokens/raw/color-tokens.json'); console.log(d.modes, d.variables.length)"
+node scripts/discover-figma-raw.mjs   # inventory + role mapping + mode hints
 ```
 
-## B1 — Discover
+The agent:
 
-In `use_figma`, call `listCollections()` from `scripts/figma-export-helpers.js`. Record mode names and counts. Update `LIGHT_MODE`, `DARK_MODE`, size/typography constants in `generate-design-tokens.mjs` to match your file. Template raw JSON is placeholder — replace entirely.
+1. Reviews discovery output (paths, counts, suggested `LIGHT_MODE` / size / typography modes).
+2. Pins ambiguous paths in `RAW_FILES` at the top of `scripts/generate-design-tokens.mjs` when auto-detection is wrong.
+3. Updates mode constants in that file to match discovered `modes`.
+4. Fixes app/story typography token names if the design system differs from template stubs.
 
-## B2 — Export
+Optional MCP export: use helpers in `scripts/figma-export-helpers.js` via `use_figma`, save JSON into `raw/` yourself — no persist script.
 
-| Figma collection | Raw file |
-|------------------|----------|
-| Color tokens | `color-tokens.json` |
-| Color primitives | `color-primitives.json` |
-| Size tokens | `size-tokens.json` |
-| Size primitives | `size-primitives.json` |
-| Typography tokens | `typography-tokens.json` |
-| Typography primitives | `typography-primitives.json` |
-| Text styles | `text-styles.json` |
+## 4 — Generate & verify
 
-Per collection: `exportCollection("Collection Name")` from `scripts/figma-export-helpers.js`. Text styles: `exportTextStyles()`. Adjust `RAW_FILES` in `generate-design-tokens.mjs` if filenames differ.
+```bash
+bun run tokens:generate
+bun run lint && bun test && bunx tsc --noEmit
+```
 
-## B3 — Token gate
+**Gate:** generator logs real collection counts (not stub-only). Re-run static checks before Phase D.
 
-- [ ] Raw files exist; counts match B1
-- [ ] `modes` match generator constants
-- [ ] `bun run tokens:generate` logs real counts, not stubs
+## Blocked sync
 
-## Blocked export
-
-Keep template stubs; document file key, collection map, and pending work in the bootstrap completion summary. Do not mark Phase B complete.
+Keep template stubs; document file key, export inventory, and pending work in the bootstrap summary. Do not mark Phase B complete.

@@ -1,6 +1,6 @@
 # Expo project bootstrap
 
-Agent skill + templates for Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook). Placeholders in templates are replaced at intake and Phase B Figma export.
+Agent skill + templates for Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook). Stub tokens ship for CI/Argent; real Figma exports are copied to `raw/` after device smoke tests.
 
 ## Quick start
 

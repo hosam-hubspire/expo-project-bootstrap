@@ -9,6 +9,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { discoverRawExports, printDiscoveryReport } from "./discover-figma-raw.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -30,15 +31,15 @@ const TYPO_MODE_MD = "md";
 const TYPO_MODE_SM_MD = "sm/md";
 const TYPO_MODE_LG = "lg+";
 
-/** Raw JSON filenames in src/theme/tokens/raw/ — rename to match your Figma exports. */
+/** Pin a path under raw/ to skip auto-discovery; leave null to detect from exports. */
 const RAW_FILES = {
-  colorTokens: "color-tokens.json",
-  colorPrimitives: "color-primitives.json",
-  sizeTokens: "size-tokens.json",
-  sizePrimitives: "size-primitives.json",
-  typographyTokens: "typography-tokens.json",
-  typographyPrimitives: "typography-primitives.json",
-  textStyles: "text-styles.json",
+  colorTokens: null,
+  colorPrimitives: null,
+  sizeTokens: null,
+  sizePrimitives: null,
+  typographyTokens: null,
+  typographyPrimitives: null,
+  textStyles: null,
 };
 /** Align with Uniwind default breakpoints (mobile-first). */
 const BREAKPOINT_MD = 768;
@@ -60,21 +61,24 @@ function figmaToCssVar(figmaName, prefix = "color") {
   return `--${prefix}-${figmaToTokenName(figmaName)}`;
 }
 
-function readJson(filename) {
-  const filePath = path.join(RAW_DIR, filename);
+function readJson(relativePath) {
+  const filePath = path.join(RAW_DIR, relativePath);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing required raw token file: ${filePath}`);
   }
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
 
-function readOptionalJson(filename) {
-  const filePath = path.join(RAW_DIR, filename);
+function readOptionalJson(relativePath) {
+  if (!relativePath) {
+    return { variables: [], modes: ["default"] };
+  }
+  const filePath = path.join(RAW_DIR, relativePath);
   if (!fs.existsSync(filePath)) {
     console.log(`  skip missing optional raw file: ${path.relative(ROOT, filePath)}`);
     return { variables: [], modes: ["default"] };
   }
-  return readJson(filename);
+  return readJson(relativePath);
 }
 
 /** Pick a Figma mode when present; log and return null when the preferred name is absent. */
@@ -898,14 +902,25 @@ export const tokenCounts = {
 function main() {
   console.log("Generating design tokens from Figma raw exports...\n");
 
-  const colorTokens = readJson(RAW_FILES.colorTokens);
-  const colorPrimitives = readOptionalJson(RAW_FILES.colorPrimitives);
-  const sizeTokens = readJson(RAW_FILES.sizeTokens);
-  const sizePrimitives = readOptionalJson(RAW_FILES.sizePrimitives);
-  const typographyTokens = readJson(RAW_FILES.typographyTokens);
-  const typographyPrimitives = readOptionalJson(RAW_FILES.typographyPrimitives);
-  const textStylesPath = path.join(RAW_DIR, RAW_FILES.textStyles);
-  const textStyles = fs.existsSync(textStylesPath) ? readJson(RAW_FILES.textStyles) : [];
+  const discovery = discoverRawExports(RAW_DIR, RAW_FILES);
+  printDiscoveryReport(RAW_DIR, discovery);
+
+  const resolved = discovery.paths;
+  for (const role of ["colorTokens", "sizeTokens", "typographyTokens"]) {
+    if (!resolved[role]) {
+      throw new Error(
+        `Required ${role} export not found under ${RAW_DIR}. Run: node scripts/discover-figma-raw.mjs`,
+      );
+    }
+  }
+
+  const colorTokens = readJson(resolved.colorTokens);
+  const colorPrimitives = readOptionalJson(resolved.colorPrimitives);
+  const sizeTokens = readJson(resolved.sizeTokens);
+  const sizePrimitives = readOptionalJson(resolved.sizePrimitives);
+  const typographyTokens = readJson(resolved.typographyTokens);
+  const typographyPrimitives = readOptionalJson(resolved.typographyPrimitives);
+  const textStyles = resolved.textStyles ? readJson(resolved.textStyles) : [];
 
   const colorModes = resolveColorModes(colorTokens);
   const sizeModes = resolveDimensionModes(

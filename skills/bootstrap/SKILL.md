@@ -24,7 +24,7 @@ Run intake first — even when the user already gave app name, Figma URL, or sta
 |-------|----------|-------|
 | App name / slug | Yes | Folder + `app.json` |
 | GitHub repo | No | Local-only if omitted |
-| Figma design system URL | No | Phase B |
+| Figma design system URL | No | Phase B (after Argent) |
 | Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
 
 **Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
@@ -42,9 +42,9 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 ```
 - [ ] 0 — Intake
 - [ ] A — Scaffold (templates, bun install exit 0)
-- [ ] B — Figma tokens (if URL) — templates/FIGMA_EXPORT.md
-- [ ] C — lint, test, tsc
-- [ ] C2 — Argent smoke test (iOS + Android) — required before D when Argent available
+- [ ] C — lint, test, tsc (stub tokens OK)
+- [ ] C2 — Argent smoke test (iOS + Android)
+- [ ] B — Figma sync (if URL) — copy to raw/, confirm, discover, tokens:generate, re-verify
 - [ ] D — Commit (+ push if repo provided)
 ```
 
@@ -54,12 +54,12 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - No `move_agent_to_root` during bootstrap
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
-- Figma Phase B: read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project
-- Figma: one collection per MCP call → `/tmp` → `persist-figma-export.mjs`
+- **Figma Phase B after C2:** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project
+- Copy Figma exports into `src/theme/tokens/raw/` (any files/folders); wait for user confirm; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
-- No bridge scripts under `scripts/`; iOS/Android only; Bun only
+- No one-off bridge scripts under `scripts/`; iOS/Android only; Bun only
 - **`argent init` ≠ smoke test** — init in Phase A; launch + verify in C2
-- **No commit or push until C2 passes** on both iOS and Android (when Argent MCP is available). If unavailable, stop before D and ask the user.
+- **No commit or push until C2 passes** (when Argent available) **and** Phase B complete when Figma URL was given
 
 ## Completion summary
 

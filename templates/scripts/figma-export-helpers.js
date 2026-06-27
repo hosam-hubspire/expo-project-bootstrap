@@ -1,6 +1,6 @@
 /**
- * Figma Plugin API helpers for use_figma MCP — one collection per call.
- * Paste into use_figma or read from this file during Phase B export.
+ * Optional Figma Plugin API helpers for use_figma MCP.
+ * Save JSON into src/theme/tokens/raw/ — discovery handles naming.
  */
 
 async function resolveValue(v, modeId) {

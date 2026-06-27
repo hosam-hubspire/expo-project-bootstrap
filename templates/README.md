@@ -9,8 +9,8 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 3. Add template files: lint/CI, `scripts/`, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`.
 4. Replace demo routes with template `src/app/`.
 5. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
-6. Figma tokens (if URL) — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md) after `bun install`.
-7. Argent — `bunx @swmansion/argent init -y`.
+6. Argent — `bunx @swmansion/argent init -y`.
+7. Figma tokens (if URL) — **after Argent** — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
 ## Installs
 
@@ -44,14 +44,22 @@ Set `EXPO_PUBLIC_GRAPHQL_URL` when GraphQL is enabled. Run `graphql:generate` wh
 |--------|------|
 | `lint` / `lint:fix` / `lint:a11y` | always |
 | `test` / `test:watch` | always |
-| `tokens:generate` | always |
+| `tokens:discover` | Phase B — inspect raw exports |
+| `tokens:generate` | always (stubs at scaffold; real tokens after Phase B) |
 | `graphql:generate` | GraphQL enabled |
 | `storybook` / `storybook-generate` | Storybook enabled |
 
+Add to `package.json`:
+
+```json
+"tokens:discover": "node scripts/discover-figma-raw.mjs",
+"tokens:generate": "node scripts/generate-design-tokens.mjs"
+```
+
 ## Icons
 
-Sample SVGs + `nanoicons.glyphmap.json` / `nanoicons.ttf` in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
+Sample SVGs + glyphmap in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
 
 ## Raw token stubs
 
-`src/theme/tokens/raw/` — placeholder files for CI. Replace entirely in Phase B — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+`src/theme/tokens/raw/` — minimal stubs for CI/Argent. Replace in Phase B — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md). Exports may use any file/folder names; discovery is automatic.
