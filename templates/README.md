@@ -10,7 +10,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 4. Replace demo routes with template `src/app/`.
 5. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 6. Argent — `bunx @swmansion/argent init -y`.
-7. Figma tokens (if URL) — **after Argent** — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+7. Design tokens (if enabled at intake) — **after Argent** — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
 ## Installs
 

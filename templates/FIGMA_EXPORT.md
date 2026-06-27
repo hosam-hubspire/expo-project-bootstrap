@@ -1,6 +1,6 @@
 # Figma token sync — Phase B
 
-Run **after Argent (C2)** and **before commit/push (D)** when a design system is in scope. Read from the bootstrap repo — do not copy into the new project.
+Run **after Argent (C2)** and **before commit/push (D)** when intake enabled **Sync design tokens**. Read from the bootstrap repo — do not copy into the new project.
 
 Icons: export SVGs separately to `assets/icons/` — see `templates/README.md`.
 

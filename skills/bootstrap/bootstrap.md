@@ -26,7 +26,7 @@ Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` o
 bun run lint && bun test && bunx tsc --noEmit
 ```
 
-### Argent smoke test (Phase C2 — before Figma sync)
+### Argent smoke test (Phase C2)
 
 Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor/rules/argent.md` and `argent-device-interact` skill first.
 
@@ -37,11 +37,11 @@ On **each** platform (iOS simulator, then Android emulator):
 3. Verify: no redbox, root screen renders, tab navigation (home + settings)
 4. `describe` or screenshot — both platforms
 
-**Gate:** C2 must pass on iOS **and** Android before Phase B (when Figma URL given) or Phase D (when no Figma URL).
+**Gate:** C2 must pass on iOS **and** Android before Phase B (when token sync enabled) or Phase D (when off).
 
-### Figma token sync (Phase B — after C2, before D)
+### Design token sync (Phase B — after C2, before D)
 
-When intake included a Figma URL — [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md):
+When intake enabled **Sync design tokens** — [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md):
 
 1. User exports from Figma → copies into `src/theme/tokens/raw/` (any file/folder names)
 2. User confirms copies are done
@@ -57,4 +57,4 @@ Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · copy Figma JSON to `raw/` · discover + `tokens:generate` only · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when applicable) before push
+Latest Expo default template · merge templates into scaffold · copy JSON to `raw/` · discover + `tokens:generate` only · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push
