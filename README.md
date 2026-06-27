@@ -25,7 +25,6 @@ bunx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
 | `templates/optional/minimal/` | Strip-down files when user unchecks stack items |
 | `templates/README.md` | Adaptation, installs, scripts |
 | `templates/FIGMA_EXPORT.md` | Design token export (Phase B) |
-| `templates/TOKENS.md` | Per-project sync tracker (copy into new apps) |
 
 ## How it fits together
 

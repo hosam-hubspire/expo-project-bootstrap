@@ -10,7 +10,7 @@ Reference implementation for the bootstrap skill. **Adapt** into a new app **aft
 
 1. **Compare** scaffolded files with templates — merge, do not bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. **Install** dependencies (grouped commands below) — skip groups for stack items the user unchecked at intake.
-3. **Add** template files: lint config, `scripts/`, CI, `.rnstorybook/`, `codegen.ts`, `FIGMA_EXPORT.md`, `TOKENS.md`, `src/`, `assets/` (including `assets/icons/nanoicons.ttf` and `nanoicons.glyphmap.json`).
+3. **Add** template files: lint config, `scripts/`, CI, `.rnstorybook/`, `codegen.ts`, `FIGMA_EXPORT.md`, `src/`, `assets/` (including `assets/icons/nanoicons.ttf` and `nanoicons.glyphmap.json`).
 4. **Replace** demo routes with the app shell from `src/app/`.
 5. **Strip down** when the user unchecked i18n, GraphQL, or Storybook — see [`optional/minimal/README.md`](./optional/minimal/README.md).
 6. **Figma tokens** (when a design-system URL is provided): Phase B after `bun install` — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).

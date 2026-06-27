@@ -140,4 +140,4 @@ Adjust `RAW_FILES` in `generate-design-tokens.mjs` when collection filenames dif
 
 ## If export is blocked
 
-Scaffold with template sample raw JSON, copy `templates/TOKENS.md` to the project root, document what remains. **Do not** mark Phase B complete in the bootstrap summary.
+Scaffold with template sample raw JSON and document what remains in the bootstrap completion summary (file key, collection map, pending phases). **Do not** mark Phase B complete in the bootstrap summary.

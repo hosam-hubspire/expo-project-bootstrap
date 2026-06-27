@@ -60,7 +60,7 @@ Record what stays **enabled** vs **omitted**, then follow **[bootstrap.md](boots
 - **Do not** call `move_agent_to_root` during bootstrap
 - Install deps in **logical groups** with `--verbose` — see `templates/README.md`; skip groups for unchecked stack items
 - Apply **full templates by default**; strip per `templates/optional/minimal/README.md` when user unchecked items
-- Copy `FIGMA_EXPORT.md` and `TOKENS.md` into the new project when Figma is in scope
+- Copy `FIGMA_EXPORT.md` into the new project when Figma is in scope
 - Figma tokens: one collection per MCP call → `/tmp` → `persist-figma-export.mjs` — see `templates/FIGMA_EXPORT.md`
 - Icons: export SVGs from Figma into `assets/icons/`; regenerate via `bunx expo prebuild`
 - **Never** add bridge scripts under `scripts/`
@@ -71,7 +71,7 @@ Record what stays **enabled** vs **omitted**, then follow **[bootstrap.md](boots
 1. Local clone: `templates/` at repo root
 2. GitHub: https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
 
-Key docs: `templates/README.md`, `templates/FIGMA_EXPORT.md`, `templates/TOKENS.md`.
+Key docs: `templates/README.md`, `templates/FIGMA_EXPORT.md`.
 
 ## Completion summary
 
