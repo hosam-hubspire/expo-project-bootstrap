@@ -10,7 +10,7 @@
 2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, web files. Move `app/` → `src/app/`; wire `@/` in `tsconfig.json`.
 3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. `bun install --verbose` must exit **0**.
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `scripts/`, `src/`, `assets/`. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md). Phase B tokens when Figma URL given — [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md).
-5. **Argent** — `bunx @swmansion/argent init -y` when CLI available.
+5. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
 
 ## Default stack
 
@@ -28,8 +28,23 @@ bun run tokens:generate   # when Phase B ran
 bun run lint && bun test && bunx tsc --noEmit
 ```
 
-Argent smoke test when available. Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md](SKILL.md).
+### Argent smoke test (Phase C2 — before commit/push)
+
+Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor/rules/argent.md` and `argent-device-interact` skill first.
+
+On **each** platform (iOS simulator, then Android emulator):
+
+1. `list-devices` → boot if needed → start Metro (`bun run ios` / `bun run android` or `expo start`)
+2. `launch-app` (or platform run command) — open the scaffolded app
+3. Verify: no redbox, root screen renders, tab navigation works (home + settings minimum)
+4. `describe` or screenshot to confirm UI — do not skip both platforms
+
+**Gate:** C2 must pass on iOS **and** Android before Phase D. Do not commit or push until then.
+
+If Argent is unavailable: report in completion summary, skip D push, ask the user.
+
+Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md](SKILL.md).
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · Figma via `/tmp` + `persist-figma-export.mjs` only · never edit `src/theme/tokens/generated/*` · CI must pass before push
+Latest Expo default template · merge templates into scaffold · Figma via `/tmp` + `persist-figma-export.mjs` only · never edit `src/theme/tokens/generated/*` · CI checks + Argent C2 (iOS + Android) must pass before push

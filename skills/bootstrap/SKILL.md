@@ -43,7 +43,8 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - [ ] 0 — Intake
 - [ ] A — Scaffold (templates, bun install exit 0)
 - [ ] B — Figma tokens (if URL) — templates/FIGMA_EXPORT.md
-- [ ] C — lint, test, tsc; Argent when available
+- [ ] C — lint, test, tsc
+- [ ] C2 — Argent smoke test (iOS + Android) — required before D when Argent available
 - [ ] D — Commit (+ push if repo provided)
 ```
 
@@ -57,6 +58,8 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Figma: one collection per MCP call → `/tmp` → `persist-figma-export.mjs`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
 - No bridge scripts under `scripts/`; iOS/Android only; Bun only
+- **`argent init` ≠ smoke test** — init in Phase A; launch + verify in C2
+- **No commit or push until C2 passes** on both iOS and Android (when Argent MCP is available). If unavailable, stop before D and ask the user.
 
 ## Completion summary
 
