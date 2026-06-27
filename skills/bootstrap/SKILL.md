@@ -10,73 +10,56 @@ disable-model-invocation: true
 
 # Bootstrap
 
-Scaffold a new Expo app using templates from this repository.
+**Repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
-**Repository:** https://github.com/hosam-hubspire/expo-project-bootstrap
+## Intake (before any work)
 
-## Before you start (STRICT)
+Run intake first — even when the user already gave app name, Figma URL, or stack prefs.
 
-Run intake **before** any scaffold work — even when the user's first message includes app name, Figma links, or stack preferences.
-
-1. **Use AskQuestion** when available — one form for all inputs below.
-2. **Pre-fill** from the user's first message where stated; still ask every field.
-3. If AskQuestion is unavailable, ask conversationally in one message.
-4. **Do not** clone, `create-expo-app`, install, or call Figma MCP until intake is complete.
+1. **AskQuestion** (one form) when available; otherwise one conversational message.
+2. Pre-fill from the user's message; still confirm every field.
+3. **Do not** scaffold, install, or call Figma MCP until intake is done.
 
 | Input | Required | Notes |
 |-------|----------|-------|
-| App name / slug | Yes | Folder name and `app.json` name/slug |
-| GitHub repo URL | No | Omit for local-only |
-| Figma design system URL | No | Phase B (tokens) |
-| **Stack toggles** | Yes (confirm) | i18n, GraphQL, Storybook — **all on by default**; user unchecks to omit |
+| App name / slug | Yes | Folder + `app.json` |
+| GitHub repo | No | Local-only if omitted |
+| Figma design system URL | No | Phase B |
+| Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
 
-### Stack toggles (AskQuestion)
+**Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
 
-Use **`allow_multiple: true`**. Pre-check **all three** unless the user already said to skip one:
+- **i18n** — `i18next`, localized tabs, language toggle
+- **GraphQL** — Apollo, `ExampleQuery`, codegen; needs `EXPO_PUBLIC_GRAPHQL_URL`
+- **Storybook** — on-device, token + component stories
 
-1. **i18n** — `i18next`, localized tab screens, language toggle on Settings
-2. **GraphQL** — Apollo Client, placeholder `ExampleQuery`, codegen (`graphql:generate`); set `EXPO_PUBLIC_GRAPHQL_URL`
-3. **Storybook** — on-device Storybook, design-token stories, colocated component stories
+Also ask: **GraphQL subscriptions** — off by default.
 
-Also ask (separate question or follow-up when GraphQL stays enabled):
+Then follow **[bootstrap.md](bootstrap.md)**.
 
-- **GraphQL subscriptions** — off by default; enable only when selected
-
-Record what stays **enabled** vs **omitted**, then follow **[bootstrap.md](bootstrap.md)**.
-
-## Phase checklist
+## Phases
 
 ```
-- [ ] 0 — Intake complete (stack toggles confirmed)
-- [ ] A — Scaffold: create-expo-app, remove cruft, install deps, apply templates, strip if needed, bun install exit 0
-- [ ] B — Design tokens (if Figma design system URL): see templates/FIGMA_EXPORT.md
-- [ ] C — Verify: lint, test, tsc; Argent smoke tests when available
-- [ ] D — Commit (+ push if GitHub repo provided)
+- [ ] 0 — Intake
+- [ ] A — Scaffold (templates, bun install exit 0)
+- [ ] B — Figma tokens (if URL) — templates/FIGMA_EXPORT.md
+- [ ] C — lint, test, tsc; Argent when available
+- [ ] D — Commit (+ push if repo provided)
 ```
 
-## Quick rules
+## Rules
 
 - `bunx create-expo-app@latest --template default` — never hand-roll `package.json`
-- **Do not** call `move_agent_to_root` during bootstrap
-- Install deps in **logical groups** with `--verbose` — see `templates/README.md`; skip groups for unchecked stack items
-- Apply **full templates by default**; strip per `templates/optional/minimal/README.md` when user unchecked items
-- Copy `FIGMA_EXPORT.md` into the new project when Figma is in scope
-- Figma tokens: one collection per MCP call → `/tmp` → `persist-figma-export.mjs` — see `templates/FIGMA_EXPORT.md`
-- Icons: export SVGs from Figma into `assets/icons/`; regenerate via `bunx expo prebuild`
-- **Never** add bridge scripts under `scripts/`
-- iOS and Android only; Bun only
-
-## Templates source
-
-1. Local clone: `templates/` at repo root
-2. GitHub: https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
-
-Key docs: `templates/README.md`, `templates/FIGMA_EXPORT.md`.
+- No `move_agent_to_root` during bootstrap
+- Grouped installs — `templates/README.md`; skip unchecked stack groups
+- Full templates by default; strip — `templates/optional/minimal/README.md`
+- Copy `FIGMA_EXPORT.md` when Figma is in scope
+- Figma: one collection per MCP call → `/tmp` → `persist-figma-export.mjs`
+- Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
+- No bridge scripts under `scripts/`; iOS/Android only; Bun only
 
 ## Completion summary
 
-Reply with: local path, remote URL (if pushed), commit SHA, **stack toggles** (enabled vs omitted), Figma file key (if any), **token gate**, **device verification**, custom Figma → code mappings.
+Path, remote URL, commit SHA, stack toggles, Figma file key, token gate, device verification, custom mappings.
 
-## Full workflow
-
-**[bootstrap.md](bootstrap.md)** — scaffold, stack, architecture, git deliverable.
+**Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [templates/README.md](../../templates/README.md)
