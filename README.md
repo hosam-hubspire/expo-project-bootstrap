@@ -1,58 +1,66 @@
 # Expo project bootstrap
 
-Reusable **agent skill**, prompt entry point, and **canonical templates** for scaffolding new Expo React Native apps (latest Expo SDK via `create-expo-app@latest`, Uniwind, Bun, Biome, design tokens, optional Storybook / GraphQL / icons).
+Reusable **agent skill** and **canonical templates** for scaffolding Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, optional Storybook / i18n / GraphQL).
 
 ## Quick start
 
-**Cursor (recommended):**
+**Cursor:**
 
 ```
-use expo-project-bootstrap skill to bootstrap a project
+use bootstrap skill to scaffold a project
 ```
 
-**Install the skill:**
+**Install skill:**
 
 ```bash
-npx skills add hosam-hubspire/expo-project-bootstrap --skill expo-project-bootstrap -g -y
-npx skills add hosam-hubspire/expo-project-bootstrap --skill figma-icons-sync -g -y
+npx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
 ```
 
-`figma-icons-sync` is invoked automatically by `expo-project-bootstrap` Phase C when a Figma icons URL is provided. Install it separately only if you sync icons outside bootstrap.
-
-**Manual prompt:** see [PROJECT_BOOTSTRAP.md](./PROJECT_BOOTSTRAP.md).
+The skill is named **`bootstrap`** (formerly `expo-project-bootstrap`). Re-run the install command above to update an existing global install.
 
 ## Repository layout
 
 | Path | Purpose |
 |------|---------|
-| `skills/expo-project-bootstrap/` | Agent skill (`SKILL.md`, `bootstrap.md`, `addons.md`) — bootstrap workflow |
-| `skills/figma-icons-sync/` | Icon export from Figma (batched `/tmp` JSON, parallel slices) — Phase C |
-| `templates/` | Reference config, scripts, theme pipeline, minimal app shell, optional Storybook |
-| `PROJECT_BOOTSTRAP.md` | Thin prompt wrapper — links to skill, no duplicated workflow |
-| `templates/README.md` | Adaptation workflow and one-package-per-install dependency list |
-| `templates/FIGMA_EXPORT.md` | Figma MCP export workflow |
-| `templates/TOKENS.md` | Copy to new projects when Figma export is pending |
+| `skills/bootstrap/` | Main skill — intake, checklist, links to workflow |
+| `skills/bootstrap/bootstrap.md` | Full scaffold workflow |
+| `templates/` | Config, scripts, theme pipeline, minimal app shell |
+| `templates/optional/` | i18n, GraphQL, Storybook, layout variants |
+| `templates/README.md` | Adaptation, grouped installs, capability merges |
+| `templates/FIGMA_EXPORT.md` | Design token export (Phase B) |
+| `templates/TOKENS.md` | Per-project sync tracker (copy into new apps) |
 
 ## How it fits together
 
 ```
-skills/expo-project-bootstrap/   ← bootstrap workflow
-skills/figma-icons-sync/         ← Phase C icon sync (called when icons URL provided)
-templates/                       ← files to merge into the new app
+skills/bootstrap/   ← intake + workflow
+templates/          ← merge into create-expo-app output
+templates/optional/ ← enable only selected capabilities
 ```
 
-The agent scaffolds with `create-expo-app@latest`, then **adapts** `templates/` into the new project (merging with Expo-generated config — not bulk-copying).
+The agent scaffolds with `create-expo-app@latest`, then **adapts** templates — never bulk-copies over Expo-generated config.
+
+Icons ship as sample SVGs with `react-native-nano-icons` wired up. Export icons from Figma manually and drop them into `assets/icons/`, then run `bun run icons:generate`.
+
+## Manual prompt (without skill)
+
+```
+Bootstrap a new Expo React Native app.
+
+Workflow: https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/skills/bootstrap/bootstrap.md
+Templates: https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
+
+### Inputs
+- App name / slug: <APP_NAME>
+- GitHub repo: <URL or "local only">
+- Figma design system: <URL or omit>
+- Optional capabilities: <Storybook, i18n, GraphQL subscriptions — list only what I want>
+- Platforms: iOS and Android only (no web)
+```
 
 ## Develop locally
 
-Clone this repo, then install the skill from your checkout:
-
 ```bash
-npx skills add ./path/to/expo-project-bootstrap --skill expo-project-bootstrap -g -y
-```
-
-Verify discoverability:
-
-```bash
+npx skills add ./path/to/expo-project-bootstrap --skill bootstrap -g -y
 npx skills add ./path/to/expo-project-bootstrap --list
 ```

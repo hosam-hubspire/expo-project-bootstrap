@@ -7,9 +7,6 @@
  *
  * Text styles (array from getLocalTextStylesAsync):
  *   node scripts/persist-figma-export.mjs text-styles /path/to/styles.json
- *
- * Icons (array of { name, svg }):
- *   node scripts/persist-figma-export.mjs icons /path/to/icons.json
  */
 
 import fs from "node:fs";
@@ -19,7 +16,6 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const RAW_DIR = path.join(ROOT, "src/theme/tokens/raw");
-const ICONS_DIR = path.join(ROOT, "assets/icons");
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -51,27 +47,10 @@ function persistTextStyles(sourcePath) {
   console.log(`  ${data.length} text styles`);
 }
 
-function persistIcons(sourcePath) {
-  const data = readJson(sourcePath);
-  if (!Array.isArray(data)) {
-    throw new Error(`Invalid icons export — expected [{ name, svg }, ...]`);
-  }
-  fs.mkdirSync(ICONS_DIR, { recursive: true });
-  let written = 0;
-  for (const icon of data) {
-    if (!icon.name || !icon.svg) continue;
-    const fileName = `${icon.name}.svg`;
-    fs.writeFileSync(path.join(ICONS_DIR, fileName), icon.svg, "utf8");
-    written++;
-  }
-  console.log(`  ${written} SVGs → assets/icons/`);
-}
-
 function usage() {
   console.error(`Usage:
   node scripts/persist-figma-export.mjs token <out-file.json> <source.json>
-  node scripts/persist-figma-export.mjs text-styles <source.json>
-  node scripts/persist-figma-export.mjs icons <source.json>`);
+  node scripts/persist-figma-export.mjs text-styles <source.json>`);
   process.exit(1);
 }
 
@@ -85,9 +64,6 @@ try {
   } else if (kind === "text-styles") {
     if (!arg1) usage();
     persistTextStyles(arg1);
-  } else if (kind === "icons") {
-    if (!arg1) usage();
-    persistIcons(arg1);
   } else {
     usage();
   }

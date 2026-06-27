@@ -1,128 +1,111 @@
 # Bootstrap templates
 
-Reference implementation for the Expo project bootstrap prompt. **Adapt** into a new app **after** `bunx create-expo-app@latest … --template default` and removing default template cruft.
+Reference implementation for the bootstrap skill. **Adapt** into a new app **after** `bunx create-expo-app@latest … --template default` and removing default cruft.
 
-**Non-interactive scaffold:** use `bunx create-expo-app@latest <APP_NAME> …` for a new folder (no prior `git init`). When `.git` already exists, run `CI=true bunx create-expo-app@latest . …`.
+**Non-interactive:** new folder → `bunx create-expo-app@latest <APP_NAME> …`. Existing `.git` → `CI=true bunx create-expo-app@latest . …`.
 
-**Source repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
+**Source:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
 ## Adaptation workflow
 
-Read template files from this directory and merge them into the scaffolded project. **Do not bulk-copy** over Expo-generated config — `create-expo-app` may already define dependencies, plugins, or lines that must be preserved.
+1. **Compare** scaffolded files with templates — merge, do not bulk-copy `package.json`, `app.json`, `tsconfig.json`.
+2. **Install** dependencies (grouped commands below) — CLI resolves versions; merge scripts manually.
+3. **Add** template-only files: lint config, `scripts/`, CI, `FIGMA_EXPORT.md`, `TOKENS.md`, `src/`, `assets/`.
+4. **Replace** demo routes with the minimal shell from `src/app/`.
+5. **Enable optional capabilities** from `optional/` — see **Capability merges**.
+6. **Figma tokens** (when a design-system URL is provided): Phase B after `bun install` — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+7. **Argent:** `npm i -g @swmansion/argent`; `npx @swmansion/argent init -y` in project root.
 
-1. **Compare** each scaffolded file (`package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, etc.) with the matching template.
-2. **Merge** template requirements into the scaffold:
-   - Install dependencies via CLI (see `templates/README.md` **Installing dependencies**) — checklist only, no hand-written versions; then merge scripts
-   - Merge `app.json` plugins, experiments, and platform settings
-   - Extend `tsconfig.json` paths and strict mode without dropping Expo base config
-   - Layer Uniwind/Storybook onto the existing Metro config
-3. **Add** template-only files: `biome.json`, `eslint.config.mjs`, `jest.config.js`, `codegen.ts`, `scripts/`, `FIGMA_EXPORT.md`, `TOKENS.md`, `.github/workflows/ci.yml`, and new paths under `src/` and `assets/`.
-4. **Replace** demo routes/components removed during scaffold cleanup with the minimal shell from templates (`src/app/`, core components, theme pipeline).
-5. When **Storybook** is enabled, adapt `optional/.rnstorybook/` and `optional/src/stories/` into the project.
-6. Set `app.json` `name`, `slug`, and `scheme` to **New app name / slug**.
-7. **Figma export (when a design file is provided):** run **Phase B (tokens)** and **Phase C (icons)** as separate gated steps after `bun install` — see [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md). MCP fetch alone is not export; persist each payload with `scripts/persist-figma-export.mjs` and verify counts on disk before `tokens:generate` or icon font regeneration.
-8. For **Argent device smoke tests**: install CLI if needed (`npm i -g @swmansion/argent`), then run `npx @swmansion/argent init -y` in the project root.
+## Installing dependencies
 
-## Dependencies
+Package checklist only — no `templates/package.json`, no hand-written version ranges.
 
-Install after scaffolding. The lists below are a **package checklist only** — there is no `templates/package.json` and **no version pins**. Do not replace the scaffolded `package.json`; add packages with the CLI so Bun/npm resolve real versions into `package.json` and `bun.lock`.
+- **`bunx expo install --verbose …`** — Expo / React Native packages
+- **`bun add --verbose …`** — runtime libraries
+- **`bun add -d --verbose …`** — devDependencies
 
-- **`bunx expo install <pkg> …`** — Expo and React Native packages (including packages the scaffold already partially lists)
-- **`bun add <pkg> …`** — runtime JS libraries
-- **`bun add -d <pkg> …`** — devDependencies (lint, test, codegen, Storybook)
+Install in **logical groups** (one shell command per group). Use `--verbose` so Bun logs stream in the UI. Wait for each group to finish (non-zero exit = stop). After all groups: `bun install --verbose`.
 
-### Installing dependencies
+Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json`.
 
-1. Read the checklist sections below for **which** packages to add (required + enabled optional capabilities).
-2. Install with the CLI — **never** type `"name": "^x.y.z"` into `package.json` by hand.
-3. **One package per command** — each line below is exactly **one** shell invocation with **one** package. Never `bun add pkg1 pkg2 …`. Never batch Storybook addons or dev tools in a single `bun add -d`. Multi-package installs often hang indefinitely on `Resolving dependencies`.
-4. **Live install logs (agents):** one Shell tool call per package. Run the bare install command so Bun output streams live (`Resolving dependencies`, `installed …`, warnings). Foreground only — never background (`block_until_ms: 0`), never chain with `&&`, never prefix with `echo` or redirect stdout/stderr. Use the shell step **description** (e.g. `Install storybook`) for progress in the UI.
-5. Wait for each command to finish and read stdout/stderr before the next package. Non-zero exit = hard stop.
-6. Merge **scripts** and `"packageManager": "bun@…"` from **Scripts** below into `package.json` manually.
-7. After the last package, run `bun install` and **stop if it fails** — do not proceed to Figma export, `tokens:generate`, lint, or commit until install succeeds.
-8. To verify a version before pinning a nightly or override: `npm view <pkg> version` or `npm view <pkg> dist-tags`.
-
-**Required — one package per shell step, in order:**
+### Required groups
 
 ```bash
-bunx expo install expo-localization
-bun add uniwind
-bun add tailwindcss
-bun add zustand
-bun add react-native-mmkv
-bun add react-native-nitro-modules
-bun add react-native-nano-icons
-bun add -d @biomejs/biome
-bun add -d eslint
-bun add -d eslint-plugin-react-native-a11y
-bun add -d typescript-eslint
-bun add -d jest
-bun add -d jest-expo
-bun add -d @testing-library/react-native
-bun add -d @types/jest
+# Expo / localization
+bunx expo install --verbose expo-localization
+
+# Styling + state
+bun add --verbose uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules
+
+# Icons (nano-icons font pipeline)
+bun add --verbose react-native-nano-icons
+
+# Lint + format
+bun add -d --verbose @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint
+
+# Test
+bun add -d --verbose jest jest-expo @testing-library/react-native @types/jest
+
+bun install --verbose
 ```
 
-**Optional — add only enabled capabilities (one package per shell step):**
+### Optional groups (enabled capabilities only)
 
 ```bash
-# i18n (runtime)
-bun add i18next
-bun add react-i18next
+# i18n
+bun add --verbose i18next react-i18next
 
-# GraphQL (runtime)
-bun add @apollo/client
-bun add graphql
-bun add graphql-ws
-bun add apollo3-cache-persist
-bun add @graphql-typed-document-node/core
-
-# Storybook (dev) — each addon is its own shell step
-bun add -d storybook
-bun add -d @storybook/react-native
-bun add -d @storybook/addon-ondevice-actions
-bun add -d @storybook/addon-ondevice-backgrounds
-bun add -d @storybook/addon-ondevice-controls
-bun add -d @storybook/addon-ondevice-notes
+# GraphQL runtime
+bun add --verbose @apollo/client graphql graphql-ws apollo3-cache-persist @graphql-typed-document-node/core
 
 # GraphQL codegen (dev)
-bun add -d @graphql-codegen/cli
-bun add -d @graphql-codegen/client-preset
+bun add -d --verbose @graphql-codegen/cli @graphql-codegen/client-preset
+
+# Storybook (dev)
+bun add -d --verbose storybook @storybook/react-native @storybook/addon-ondevice-actions @storybook/addon-ondevice-backgrounds @storybook/addon-ondevice-controls @storybook/addon-ondevice-notes
 
 # Fonts (when Figma/brand requires)
-bunx expo install expo-font
+bunx expo install --verbose expo-font
+
+bun install --verbose
 ```
 
-After all applicable commands finish, run `bun install` once to confirm the lockfile is consistent.
+## Capability merges
 
-### `dependencies` (required, beyond `create-expo-app`)
+Apply only for capabilities the user selected.
 
-- `uniwind`, `tailwindcss`
-- `zustand`, `react-native-mmkv`, `react-native-nitro-modules`
+### i18n
 
-### `devDependencies` (required)
+1. Copy `optional/src/i18n/` → `src/i18n/`
+2. Replace `src/stores/preferences-store.ts` with `optional/src/stores/preferences-store.ts`
+3. Replace `src/app/(tabs)/index.tsx`, `settings.tsx`, `src/components/AppTabs/AppTabs.tsx` with optional versions
+4. Replace `src/app/_layout.tsx` with `optional/src/app/_layout.with-i18n.tsx` (or merge the `@/i18n` import)
 
-- `@biomejs/biome`, `eslint`, `eslint-plugin-react-native-a11y`, `typescript-eslint`
-- `jest`, `jest-expo`, `@testing-library/react-native`, `@types/jest`
+### GraphQL
 
-### Optional — `dependencies`
+1. Copy `optional/src/services/graphql/` → `src/services/graphql/`
+2. Copy `optional/src/providers/` → `src/providers/`
+3. Copy `optional/codegen.ts` → project root
+4. Merge `_layout.with-graphql.tsx` — wrap app in `AppApolloProvider`
+5. Run `bun run graphql:generate`
 
-- i18n: `i18next`, `react-i18next` + `bunx expo install expo-localization`
-- GraphQL: `@apollo/client`, `graphql`, `graphql-ws`, `apollo3-cache-persist`, `@graphql-typed-document-node/core`
-- Icons: `react-native-nano-icons`
-- Fonts (when Figma/brand requires): `bunx expo install expo-font` + font packages per design
+Example operation: `GalleryCharacters` against Rick & Morty API — replace with project operations.
 
-### Optional — `devDependencies`
+### Storybook
 
-- Storybook: `storybook`, `@storybook/react-native`, `@storybook/addon-ondevice-actions`, `@storybook/addon-ondevice-backgrounds`, `@storybook/addon-ondevice-controls`, `@storybook/addon-ondevice-notes`
-- GraphQL codegen: `@graphql-codegen/cli`, `@graphql-codegen/client-preset`
+1. Copy `optional/.rnstorybook/` → `.rnstorybook/`
+2. Copy `optional/src/stories/` → `src/stories/`
+3. Copy colocated `optional/src/components/*/*.stories.tsx` into matching `src/components/` folders
+4. Replace `metro.config.js` with `optional/metro.config.with-storybook.js`
+5. Replace or merge `_layout.with-storybook.tsx` (Storybook env gate)
 
-Also set `"packageManager": "bun@…"` to match the installed Bun version.
+### GraphQL + i18n + Storybook
+
+Compose layout merges — e.g. i18n import + Apollo wrapper + Storybook branch.
 
 ## Scripts
 
-Merge these into the scaffolded `package.json` (keep Expo defaults like `start` / `ios` / `android` if already present):
-
-**Required:**
+Merge into scaffolded `package.json`:
 
 | Script | Command |
 |--------|---------|
@@ -131,39 +114,29 @@ Merge these into the scaffolded `package.json` (keep Expo defaults like `start` 
 | `lint:a11y` | `eslint .` |
 | `test` | `jest --ci` |
 | `test:watch` | `jest --watchAll` |
-| `tokens:generate` | `node scripts/generate-design-tokens.mjs` (when Figma pipeline is in scope) |
-
-**Figma export (when a design file is provided):** see [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md). Persist MCP payloads with `scripts/persist-figma-export.mjs` — do not add project-specific export scripts.
-
-**When optional capabilities are enabled:**
-
-| Script | Command |
-|--------|---------|
-| `graphql:generate` | `graphql-codegen --config codegen.ts` |
-| `storybook` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start` |
-| `storybook-generate` | `sb-rn-get-stories` |
-| `icons:generate` | `react-native-nano-icons --path ./assets/icons` (when icon font pipeline is in scope) |
-
-## GraphQL example
-
-Templates include a sample `GalleryCharacters` operation against `https://rickandmortyapi.com/graphql` (default in `client.ts`, `codegen.ts`, and `prefetchQueries.ts`). Replace with project operations when GraphQL is enabled.
+| `tokens:generate` | `node scripts/generate-design-tokens.mjs` |
+| `graphql:generate` | `graphql-codegen --config codegen.ts` (GraphQL) |
+| `storybook` | `EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start` (Storybook) |
+| `storybook-generate` | `sb-rn-get-stories` (Storybook) |
+| `icons:generate` | `react-native-nano-icons --path ./assets/icons` (icons) |
 
 ## Icons
 
-`react-native-nano-icons` is configured in `app.json` with `inputDir` and `outputDir` both set to `./assets/icons`. SVGs, `.nanoicons.json`, `nanoicons.ttf`, and `nanoicons.glyphmap.json` all live in that folder — not a nested subfolder. Set `fontFamily` to `"nanoicons"` in `.nanoicons.json`.
+`react-native-nano-icons` is configured in `app.json`: `inputDir` and `outputDir` → `./assets/icons`. Sample SVGs ship in `assets/icons/` so the app compiles out of the box.
 
-| When | Regenerate `.ttf` + `.glyphmap.json` |
-|------|--------------------------------------|
-| **Expo prebuild / dev client build** | Expo config plugin (no `.nanoicons.json` required) |
-| **Bootstrap / CI before prebuild** | Copy `assets/icons/.nanoicons.json.example` → `assets/icons/.nanoicons.json`, then `bun run icons:generate` |
+**Adding icons from Figma:** export SVGs from Figma and place them in `assets/icons/` (kebab-case filenames, e.g. `home.svg`). Use `fill="currentColor"` / `stroke="currentColor"` so icons respect theme colors. Then regenerate the font:
 
-Merge the plugin block into the scaffolded `app.json`. Export and persist SVGs per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+| Context | Regenerate `.ttf` + `.glyphmap.json` |
+|---------|--------------------------------------|
+| Prebuild / dev client | Expo config plugin |
+| Bootstrap / CI | Copy `.nanoicons.json.example` → `.nanoicons.json`, then `bun run icons:generate` |
 
-## Argent (device smoke tests)
+Set `fontFamily` to `"nanoicons"` in `.nanoicons.json`. Wire `Icon` and `IconFontLoader` from templates (already in the default shell).
 
-Argent is **not** created by `create-expo-app`. During bootstrap:
+## Argent
 
-1. Install CLI if missing: `npm i -g @swmansion/argent`
-2. In the project root: `npx @swmansion/argent init -y`
+Not created by `create-expo-app`. During bootstrap: install CLI if needed, run `npx @swmansion/argent init -y` in project root.
 
-This generates `.cursor/rules/argent.md`, MCP config, and related files.
+## Raw token stubs
+
+`src/theme/tokens/raw/` ships **3 sample files** (`color-tokens`, `size-tokens`, `typography-tokens`) so CI compiles before Phase B. Replace entirely during Figma export — see [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).

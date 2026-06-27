@@ -8,7 +8,6 @@ Track Figma → code status for this project. Remove sections that do not apply.
 |-------|--------|
 | File key | |
 | Design system URL | |
-| Icons section URL | |
 | Last synced | |
 
 ## Variable collections
@@ -35,9 +34,8 @@ Document non-obvious mappings in `scripts/generate-design-tokens.mjs`:
 
 ## Pending / notes
 
-- [ ] Raw JSON exported and persisted under `src/theme/tokens/raw/`
+- [ ] Raw JSON exported and persisted under `src/theme/tokens/raw/` (replace template stubs — see `FIGMA_EXPORT.md`)
 - [ ] `bun run tokens:generate` run after export
-- [ ] Icons exported to `assets/icons/` (if in scope)
-- [ ] Icon font regenerated (if in scope)
+- [ ] Icon SVGs added to `assets/icons/` and `bun run icons:generate` run (when replacing sample icons)
 
 Notes:

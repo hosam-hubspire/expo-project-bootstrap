@@ -6,9 +6,16 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useUniwind } from "uniwind";
 
 import { IconFontLoader } from "@/components/IconFontLoader";
+import StorybookUIRoot from "../../.rnstorybook";
+
+const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === "true";
 
 export default function RootLayout() {
   const { theme } = useUniwind();
+
+  if (isStorybookEnabled) {
+    return <StorybookUIRoot />;
+  }
 
   return (
     <GestureHandlerRootView className="flex-1">
