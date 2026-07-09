@@ -1,12 +1,12 @@
 # Figma token sync — Phase B
 
-Run **after Argent (C2)** and **before commit/push (D)** when intake enabled **Sync design tokens**. Read from the bootstrap repo — do not copy into the new project.
+Run **after Argent (C2)** and **before commit/push (D)** when intake enabled **Sync design tokens**. Requires **Figma design tokens URL** from intake. Read from the bootstrap repo — do not copy into the new project.
 
 Icons: export SVGs separately to `assets/icons/` — see `templates/README.md`.
 
 ## 1 — Export from Figma
 
-Export variable collections and text styles from the design file (Figma desktop, plugin, MCP, or designer handoff). Copy into:
+Export variable collections and text styles from the **intake Figma URL** (Figma desktop, plugin, MCP, or designer handoff). Copy into:
 
 ```
 src/theme/tokens/raw/
@@ -14,7 +14,7 @@ src/theme/tokens/raw/
 
 Exports may be **any mix of files and folders** — names are not fixed. Each variable collection JSON must include `{ collection, modes, variables }`. Text styles: JSON **array** with `fontFamily` on items.
 
-Remove template stubs when adding real exports.
+Remove template stub JSON files from `raw/` when adding real exports (scripts are only present when sync was enabled at intake).
 
 ## 2 — Confirm copied
 

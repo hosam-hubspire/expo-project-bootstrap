@@ -38,7 +38,7 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | GitHub repo | none (local-only) |
 | Setup EAS | on |
 | Expo account owner | `hubspire` |
-| Sync design tokens | on |
+| Sync design tokens | off (template `generated/` stubs) |
 | Stack toggles | i18n, GraphQL, Storybook (all on) |
 | GraphQL subscriptions | off |
 | Android smoke test | off (iOS simulator only) |
@@ -54,7 +54,8 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | GitHub repo | No | Local-only if omitted |
 | Setup EAS | Yes | Link project, `eas.json`, cloud simulator build in C2 — **on by default** |
 | Expo account owner | No | Only when EAS on — **`hubspire` by default** (`expo.owner` in `app.json`) |
-| Sync design tokens | Yes | Phase B after C2 — **on by default** |
+| Sync design tokens | Yes | Phase B after C2 — **off by default** |
+| Figma design tokens URL | When sync on | Required — `figma.com/design/…` or `figma.com/file/…` link to the token source file |
 | Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
 | Android smoke test | Yes | Argent on Android emulator — **off by default** (iOS only) |
 
@@ -62,7 +63,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 
 **Expo account owner** — only ask when **Setup EAS** is on. Set `expo.owner` in `app.json` before `eas init`. Default **`hubspire`** unless intake provides another account slug.
 
-**Sync design tokens** — when **on**, run Phase B after C2: copy token scripts + `raw/` at scaffold, user copies Figma exports into `raw/`, confirms, then `discover-figma-raw.mjs` + `tokens:generate`. When **off**, ship pre-built `generated/` stubs only — **no token scripts, no `raw/`**.
+**Sync design tokens** — when **off** (default), ship pre-built `src/theme/tokens/generated/` from templates only — **no** `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, `src/theme/tokens/raw/`, and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake (Step 3 or when enabling sync in customize); at scaffold copy token scripts + empty `raw/` only; run Phase B after C2 using that URL (Figma MCP / export per [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md)) → `discover` → `tokens:generate`.
 
 **Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
 
@@ -84,7 +85,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - [ ] A2 — EAS configure (if enabled at intake)
 - [ ] C — lint, test, tsc (stub tokens OK)
 - [ ] C2 — Argent smoke test (EAS simulator build if A2; else local build)
-- [ ] B — Design token sync (if enabled) — copy to raw/, confirm, discover, tokens:generate, re-verify
+- [ ] B — Design token sync (if enabled) — export from intake Figma URL → raw/, discover, tokens:generate, re-verify
 - [ ] D — Commit (+ push if repo provided)
 ```
 
@@ -96,7 +97,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - No `move_agent_to_root` during bootstrap
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
-- **Token scripts + `raw/` only when token sync enabled** at intake; otherwise ship pre-built `generated/` stubs only
+- **Token scripts, `raw/`, and `tokens:*` package.json scripts only when sync is on** at intake; when off, copy pre-built `generated/` stubs only — never copy or add token scripts
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C
 - **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`
 - **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — scaffold lacks `settings.png`
@@ -106,8 +107,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **C2 with EAS:** `development-simulator` cloud build → `eas build:run` (no `--non-interactive`) → Metro → tap server in dev client → Argent. **C2 without EAS:** local `expo run:ios` (+ `expo run:android` if Android opted in) → Argent
 - After `eas build:run`, start Metro (`bun run start`) before Argent launch — dev client needs the bundler
 - Expo MCP (`build_run`, `build_list`, …) may be used when EAS is enabled and MCP is authenticated; prefer `eas` CLI for bootstrap reliability
-- **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project
-- Copy exports into `src/theme/tokens/raw/` (any files/folders); wait for user confirm; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
+- **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
 - No one-off bridge scripts under `scripts/`; iOS/Android only; Bun only
 - **`argent init` ≠ smoke test** — init in Phase A; launch + verify in C2
@@ -116,6 +116,6 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, token sync on/off, Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, token sync on/off (+ Figma URL when on), Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
 
 **Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [templates/README.md](../../templates/README.md)

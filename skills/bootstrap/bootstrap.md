@@ -10,8 +10,8 @@
 2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, web files. Move `app/` → `src/app/` if needed; wire `@/` in `tsconfig.json`.
 3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo packages:** `bun add …@latest`. Never copy version pins from templates. `bun install --verbose` must exit **0**.
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
-   - **Token sync off:** copy pre-built `src/theme/tokens/generated/` only — **no** `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, or `src/theme/tokens/raw/`.
-   - **Token sync on:** also copy token scripts + `src/theme/tokens/raw/`; add `tokens:discover` / `tokens:generate` scripts to `package.json`.
+   - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` only — **do not** copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, or `src/theme/tokens/raw/`; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
+   - **Token sync on:** copy token scripts + empty `src/theme/tokens/raw/` (README only); add `tokens:discover` / `tokens:generate` to `package.json`. Figma URL collected at intake — exports land in `raw/` during Phase B, not at scaffold.
    - **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — default Expo scaffold has `home.png` but not `settings.png`.
    - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
 5. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
@@ -77,7 +77,7 @@ Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI �
 
 When **Setup EAS** is on: also EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
 
-Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). Real fonts arrive in Phase B — typography uses `--font-family-*` vars, not `font-sans`/`font-mono`.
+Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). With **token sync off** (default), typography uses template stub tokens and `--font-family-*` vars — not `font-sans`/`font-mono`. Real fonts arrive in Phase B when sync is enabled.
 
 **GraphQL dev placeholder** (when GraphQL enabled): set `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` in local `.env` before C2. The bundled `ExampleQuery` (`__typename`) works against any endpoint.
 
@@ -126,15 +126,17 @@ When intake enabled **Android smoke test**, after iOS passes:
 
 ### Design token sync (Phase B — after C2, before D)
 
-When intake enabled **Sync design tokens** — [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md):
+Only when intake enabled **Sync design tokens** — [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md). Requires **Figma design tokens URL** from intake.
 
-1. User exports from Figma → copies into `src/theme/tokens/raw/` (any file/folder names)
-2. User confirms copies are done
+1. Export variable collections and text styles from the intake Figma URL (Figma desktop, plugin, MCP, or designer handoff) → `src/theme/tokens/raw/`
+2. User confirms exports are in `raw/`
 3. `node scripts/discover-figma-raw.mjs` — agent reviews mapping and mode hints
 4. Adapt `scripts/generate-design-tokens.mjs` (`RAW_FILES` pins, mode constants) if needed
 5. `bun run tokens:generate` then re-run Phase C checks
 
 **Gate:** real token counts in generator log; lint/test/tsc pass before Phase D.
+
+If export is blocked, keep template `generated/` stubs; document Figma URL, export inventory, and pending work in the summary. Do not mark Phase B complete.
 
 If Argent unavailable: report in summary, ask user before D.
 
