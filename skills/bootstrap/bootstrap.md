@@ -9,12 +9,13 @@
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
 2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, web files. Move `app/` → `src/app/`; wire `@/` in `tsconfig.json`.
 3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. `bun install --verbose` must exit **0**.
-4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, `eas.json`, lint/CI, `scripts/`, `src/`, `assets/`. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md). Stub tokens in `src/theme/tokens/raw/` for CI/Argent.
+4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `scripts/`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md). Stub tokens in `src/theme/tokens/raw/` for CI/Argent.
 5. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
+6. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
 
-## EAS configure (Phase A2)
+## EAS configure (Phase A2 — only when Setup EAS is on at intake)
 
-After scaffold, before Phase C:
+Skip this entire phase when intake disabled **Setup EAS**.
 
 1. **Set owner** — add `"owner": "<EXPO_OWNER>"` to `app.json` (`expo` key). Default **`hubspire`** from intake unless user provided another account slug.
 2. **Merge `templates/eas.json`** — default profiles:
@@ -24,9 +25,8 @@ After scaffold, before Phase C:
    - `production` — store builds with auto-increment
 3. **Install dev client** — `bunx expo install expo-dev-client`
 4. **Link EAS project** — `bunx eas-cli whoami` (must be logged in); then `bunx eas-cli init --non-interactive`. Writes `extra.eas.projectId` to `app.json`.
-5. **Prebuild** — `bunx expo prebuild` if not already done (nano-icons, native projects for EAS).
 
-If `eas init` or login fails, stop and ask the user to run `bunx eas-cli login` — do not skip EAS unless user explicitly opts out.
+If `eas init` or login fails, stop and ask the user to run `bunx eas-cli login`.
 
 ### Default `eas.json` profiles
 
@@ -45,7 +45,9 @@ Or via **Expo MCP** when Cursor has `expo` MCP authenticated: `build_run` with p
 
 All included unless unchecked at intake:
 
-Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · i18n · GraphQL (needs `EXPO_PUBLIC_GRAPHQL_URL`) · Storybook · EAS (hubspire) · expo-dev-client
+Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · i18n · GraphQL (needs `EXPO_PUBLIC_GRAPHQL_URL`) · Storybook
+
+When **Setup EAS** is on: also EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
 
 Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). Real fonts arrive in Phase B — typography uses `--font-family-*` vars, not `font-sans`/`font-mono`.
 
@@ -55,13 +57,15 @@ Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` o
 bun run lint && bun test && bunx tsc --noEmit
 ```
 
-### EAS iOS simulator build + Argent smoke test (Phase C2)
+### Argent smoke test (Phase C2)
 
 Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor/rules/argent.md` and `argent-device-interact` skill first.
 
-**Default: iOS simulator via EAS + Argent.** Android is opt-in at intake.
+**Default: iOS simulator only.** Android is opt-in at intake.
 
-#### iOS (always) — EAS simulator build
+#### iOS (always)
+
+**When Setup EAS is on** (EAS path):
 
 1. **Cloud build** — `bunx eas-cli build -p ios -e development-simulator --non-interactive --wait`
    - Or Expo MCP `build_run` with profile `development-simulator` when MCP is authenticated
@@ -70,17 +74,22 @@ Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor
 3. **Start Metro** — `bun run start` (dev client needs bundler; keep running in background)
 4. **Argent verify** — `launch-app` → no redbox, home screen renders, tab navigation (home + settings) → `describe` or screenshot
 
-**Fallback:** if EAS build fails (auth, billing, network), fall back to local `bunx expo run:ios` + same Argent checks; note the fallback in the completion summary.
+**When Setup EAS is off** (local path):
+
+1. `list-devices` → boot simulator if needed
+2. **Local build** — `bunx expo run:ios` (builds, installs, starts Metro)
+3. **Argent verify** — same checks as above
 
 #### Android (opt-in at intake)
 
 When intake enabled **Android smoke test**, after iOS passes:
 
 1. `list-devices` → boot emulator if needed
-2. Local `bunx expo run:android` (or EAS `preview` APK if preferred)
-3. Same Argent verification steps
+2. **EAS on:** local `bunx expo run:android` or EAS `preview` APK
+3. **EAS off:** local `bunx expo run:android`
+4. Same Argent verification steps
 
-**Gate:** C2 must pass on **iOS** (EAS simulator build preferred) before Phase B (when token sync enabled) or Phase D (when off). When Android smoke test was opted in, Android must pass too before proceeding.
+**Gate:** C2 must pass on **iOS** before Phase B (when token sync enabled) or Phase D (when off). When Android smoke test was opted in, Android must pass too before proceeding.
 
 ### Design token sync (Phase B — after C2, before D)
 
@@ -100,4 +109,4 @@ Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · copy JSON to `raw/` · discover + `tokens:generate` only · never hand-edit `src/theme/tokens/generated/*` · EAS A2 + C2 + Phase B (when enabled) before push
+Latest Expo default template · merge templates into scaffold · copy JSON to `raw/` · discover + `tokens:generate` only · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake
