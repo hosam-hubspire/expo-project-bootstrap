@@ -1,6 +1,6 @@
 # Bootstrap workflow
 
-**Intake:** [SKILL.md](SKILL.md) — do not start until confirmed.
+**Intake:** [SKILL.md](SKILL.md) — do not start until confirmed. Step 1: app name. Step 2: use defaults? (skips remaining questions when yes).
 
 **Templates:** https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
 

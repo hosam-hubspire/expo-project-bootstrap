@@ -14,15 +14,43 @@ disable-model-invocation: true
 
 ## Intake (before any work)
 
-Run intake first — even when the user already gave app name, stack prefs, or token-sync intent.
+Run intake first — even when the user already gave app name, stack prefs, or token-sync intent. **Two steps only project name is asked before the defaults shortcut.**
 
-1. **AskQuestion** (one form) when available; otherwise one conversational message.
-2. Pre-fill from the user's message; still confirm every field.
-3. **Do not** scaffold or install until intake is done.
+**Do not** scaffold or install until intake is done.
+
+### Step 1 — App name (always)
+
+Ask **only** for app name / slug (folder + `app.json`). Pre-fill from the user's message if they already gave one; still confirm the name.
+
+### Step 2 — Use defaults? (always, immediately after Step 1)
+
+Ask whether to **use defaults for all remaining options** and skip the detailed form.
+
+| Choice | Effect |
+|--------|--------|
+| **Yes — use defaults (Recommended)** | Skip Step 3; apply the default row below |
+| **No — customize** | Run Step 3 (full form or conversational follow-up) |
+
+**Defaults** (when Step 2 is Yes):
+
+| Input | Value |
+|-------|-------|
+| GitHub repo | none (local-only) |
+| Setup EAS | on |
+| Expo account owner | `hubspire` |
+| Sync design tokens | on |
+| Stack toggles | i18n, GraphQL, Storybook (all on) |
+| GraphQL subscriptions | off |
+| Android smoke test | off (iOS simulator only) |
+
+When the user chose defaults, **do not** re-ask those fields — proceed to [bootstrap.md](bootstrap.md).
+
+### Step 3 — Detailed intake (only when Step 2 is No)
+
+**AskQuestion** (one form) when available; otherwise one conversational message. Pre-fill from the user's message; still confirm every field.
 
 | Input | Required | Notes |
 |-------|----------|-------|
-| App name / slug | Yes | Folder + `app.json` |
 | GitHub repo | No | Local-only if omitted |
 | Setup EAS | Yes | Link project, `eas.json`, cloud simulator build in C2 — **on by default** |
 | Expo account owner | No | Only when EAS on — **`hubspire` by default** (`expo.owner` in `app.json`) |
