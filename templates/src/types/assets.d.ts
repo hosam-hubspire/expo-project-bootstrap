@@ -3,6 +3,8 @@ declare module "*.ttf" {
   export default value;
 }
 
+declare module "*.css";
+
 declare module "*.glyphmap.json" {
   import type { NanoGlyphMapInput } from "react-native-nano-icons";
 

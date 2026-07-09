@@ -24,8 +24,8 @@ function ColorSwatch({ name }: { name: SemanticColorName }) {
     <View className="mb-sm w-[46%] overflow-hidden rounded-panel border border-stroke-default">
       <View className={`h-14 ${semanticColorClasses[name]}`} />
       <View className="gap-2xs bg-surface-secondary p-xs">
-        <ThemedText variant="global-body-xs">{name}</ThemedText>
-        <ThemedText variant="global-body-base-code" colorToken="text-text-secondary">
+        <ThemedText variant="global-body-xxs">{name}</ThemedText>
+        <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
           {hex}
         </ThemedText>
       </View>
@@ -38,10 +38,10 @@ function PrimitiveSwatch({ tokenName, value }: { tokenName: string; value: strin
     <View className="mb-sm w-[46%] overflow-hidden rounded-panel border border-stroke-default">
       <View className="h-14" style={{ backgroundColor: value }} />
       <View className="gap-2xs bg-surface-secondary p-xs">
-        <ThemedText variant="global-body-xs" numberOfLines={2}>
+        <ThemedText variant="global-body-xxs" numberOfLines={2}>
           {tokenName}
         </ThemedText>
-        <ThemedText variant="global-body-base-code" colorToken="text-text-secondary">
+        <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
           {value}
         </ThemedText>
       </View>
@@ -52,7 +52,7 @@ function PrimitiveSwatch({ tokenName, value }: { tokenName: string; value: strin
 function TokenGroupSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <View className="gap-sm">
-      <ThemedText variant="global-body-base-bold">{title}</ThemedText>
+      <ThemedText variant="global-body-small-bold">{title}</ThemedText>
       <View className="flex-row flex-wrap justify-between">{children}</View>
     </View>
   );
@@ -89,17 +89,20 @@ function ColorsShowcase() {
         </ThemedText>
       </View>
 
-      {primitiveGroups.map((group) => (
-        <TokenGroupSection key={group} title={`primitive / ${group}`}>
-          {colorPrimitiveGroups[group].map((token) => (
-            <PrimitiveSwatch
-              key={token.tokenName}
-              tokenName={token.tokenName}
-              value={token.value}
-            />
-          ))}
-        </TokenGroupSection>
-      ))}
+      {tokenCounts.colorPrimitives > 0 &&
+        primitiveGroups.map((group) => (
+          <TokenGroupSection key={group} title={`primitive / ${group}`}>
+            {(colorPrimitiveGroups[group] as Array<{ tokenName: string; value: string }>).map(
+              (token) => (
+                <PrimitiveSwatch
+                  key={token.tokenName}
+                  tokenName={token.tokenName}
+                  value={token.value}
+                />
+              ),
+            )}
+          </TokenGroupSection>
+        ))}
     </ScrollView>
   );
 }

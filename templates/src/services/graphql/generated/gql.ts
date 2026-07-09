@@ -1,6 +1,5 @@
 /* eslint-disable */
 import * as types from "./graphql";
-import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 
 /**
  * Map of all GraphQL operations in the project.
@@ -20,6 +19,6 @@ export function graphql(
   source: "query ExampleQuery {\n  __typename\n}",
 ): (typeof documents)["query ExampleQuery {\n  __typename\n}"];
 
-export function graphql(source: string) {
-  return (documents as Record<string, DocumentNode>)[source] ?? {};
+export function graphql(source: string): unknown {
+  return (documents as unknown as Record<string, unknown>)[source];
 }

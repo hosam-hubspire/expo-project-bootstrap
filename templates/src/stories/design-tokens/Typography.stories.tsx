@@ -21,7 +21,7 @@ function TypographyShowcase() {
           className="gap-2xs rounded-panel border border-stroke-default bg-surface-secondary p-sm"
         >
           <ThemedText
-            variant="global-body-xs"
+            variant="global-body-xxs"
             colorToken="text-text-secondary"
             style={{ textTransform: "uppercase" }}
           >
@@ -42,7 +42,7 @@ function TypographyShowcase() {
 
       {typographyVariants.map((variant) => (
         <View key={variant.name} className="gap-2xs border-b border-stroke-default pb-sm">
-          <ThemedText variant="global-body-xs" colorToken="text-text-secondary">
+          <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
             {variant.label} — {variant.size}px / {variant.lineHeight ?? "auto"} lh /{" "}
             {variant.weight}
           </ThemedText>

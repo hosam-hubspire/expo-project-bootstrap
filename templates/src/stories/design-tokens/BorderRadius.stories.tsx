@@ -23,8 +23,8 @@ function RadiusShowcase() {
               className="h-20 w-20 border-2 border-stroke-default bg-button-button-secondary"
               style={{ borderRadius: px }}
             />
-            <ThemedText variant="global-body-base-code">{name}</ThemedText>
-            <ThemedText variant="global-body-base-code" colorToken="text-text-secondary">
+            <ThemedText variant="global-body-xxs">{name}</ThemedText>
+            <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
               {px}px
             </ThemedText>
           </View>

@@ -19,8 +19,8 @@ function SpacingShowcase() {
       {entries.map(([name, px]) => (
         <View key={name} className="flex-row items-center gap-sm">
           <View className="w-28">
-            <ThemedText variant="global-body-base-code">{name}</ThemedText>
-            <ThemedText variant="global-body-base-code" colorToken="text-text-secondary">
+            <ThemedText variant="global-body-xxs">{name}</ThemedText>
+            <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
               {px}px
             </ThemedText>
           </View>

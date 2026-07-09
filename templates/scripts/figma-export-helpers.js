@@ -26,7 +26,7 @@ async function resolveValue(v, modeId) {
   return val;
 }
 
-async function exportCollection(collectionName) {
+async function _exportCollection(collectionName) {
   const collections = await figma.variables.getLocalVariableCollectionsAsync();
   const collection = collections.find((c) => c.name === collectionName);
   if (!collection) return { error: `Collection not found: ${collectionName}` };
@@ -45,7 +45,7 @@ async function exportCollection(collectionName) {
   return { collection: collection.name, modes, variables };
 }
 
-async function listCollections() {
+async function _listCollections() {
   const collections = await figma.variables.getLocalVariableCollectionsAsync();
   return collections.map((c) => ({
     name: c.name,
@@ -54,6 +54,6 @@ async function listCollections() {
   }));
 }
 
-async function exportTextStyles() {
+async function _exportTextStyles() {
   return figma.getLocalTextStylesAsync();
 }

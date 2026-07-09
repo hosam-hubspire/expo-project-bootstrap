@@ -5,43 +5,66 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 ## Steps
 
 1. Merge scaffold with templates — don't bulk-copy `package.json`, `app.json`, `tsconfig.json`.
-2. Install deps (below) — skip groups for unchecked stack items.
-3. Add template files: lint/CI, `scripts/`, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
-4. Replace demo routes with template `src/app/`.
-5. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
-6. Argent — `bunx @swmansion/argent init -y`.
-7. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
-8. Design tokens (if enabled at intake) — **after Argent** — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+2. Install deps (below) — skip groups for unchecked stack items. **Expo packages:** `bunx expo install` (SDK-compatible). **All other packages:** `bun add …@latest`. Never copy version pins from this repo.
+3. Add template files: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
+4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, and `src/theme/tokens/raw/` **only when Sync design tokens is on** at intake. When off, copy pre-built `src/theme/tokens/generated/` only (no raw/, no token scripts).
+5. Replace demo routes with template `src/app/`. Merge `assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/` — the default Expo scaffold ships `home.png` but not `settings.png`.
+6. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
+7. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
+8. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
+9. Argent — `bunx @swmansion/argent init -y`.
+10. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
+11. Design tokens (if enabled at intake) — **after C2** — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+
+**`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`.
 
 ## Installs
 
-Run in groups with `--verbose`, then `bun install --verbose`.
+**Version policy:**
+
+| Package type | Command | Version |
+|--------------|---------|---------|
+| Expo / SDK-aligned | `bunx expo install <pkg>` | SDK-compatible (no `@latest`) |
+| Everything else | `bun add <pkg>@latest` or `bun add -d <pkg>@latest` | `@latest` always |
+
+**Never pass `--verbose` to `bunx expo install`** — it is not supported. Use `--verbose` on `bun add` only.
 
 ### Core (always)
 
 ```bash
-bunx expo install --verbose expo-localization expo-font
-bun add --verbose uniwind tailwindcss zustand react-native-mmkv react-native-nitro-modules react-native-nano-icons
-bun add -d --verbose @biomejs/biome eslint eslint-plugin-react-native-a11y typescript-eslint jest jest-expo @testing-library/react-native @types/jest
+bunx expo install expo-localization expo-font jest-expo
+bun add --verbose uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest
+bun add -d --verbose @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest @types/jest@latest jest@latest
+bunx biome migrate --write
 ```
 
 ### EAS (when Setup EAS is on at intake)
 
 ```bash
-bunx expo install --verbose expo-dev-client
+bunx expo install expo-dev-client
 ```
 
 ### Default stack (unless unchecked)
 
 ```bash
-bun add --verbose i18next react-i18next
-bun add --verbose @apollo/client graphql graphql-ws apollo3-cache-persist @graphql-typed-document-node/core
-bun add -d --verbose @graphql-codegen/cli @graphql-codegen/client-preset
-bun add -d --verbose storybook @storybook/react-native @storybook/addon-ondevice-actions @storybook/addon-ondevice-backgrounds @storybook/addon-ondevice-controls @storybook/addon-ondevice-notes
+bun add --verbose i18next@latest react-i18next@latest
+bun add --verbose @apollo/client@latest graphql@latest graphql-ws@latest apollo3-cache-persist@latest @graphql-typed-document-node/core@latest
+bun add -d --verbose @graphql-codegen/cli@latest @graphql-codegen/client-preset@latest
+bun add -d --verbose storybook@latest @storybook/react-native@latest @storybook/addon-ondevice-actions@latest @storybook/addon-ondevice-backgrounds@latest @storybook/addon-ondevice-controls@latest @storybook/addon-ondevice-notes@latest
 bun install --verbose
 ```
 
-Set `EXPO_PUBLIC_GRAPHQL_URL` when GraphQL is enabled. Run `graphql:generate` when `.graphql` ops change. Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`).
+### GraphQL dev placeholder
+
+When GraphQL is enabled, add `.env.example` and a local `.env` (gitignored) before C2:
+
+```bash
+EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/
+```
+
+The bundled `ExampleQuery` (`__typename`) works against any GraphQL endpoint. Replace with your project URL before shipping. Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`).
+
+Run `graphql:generate` when `.graphql` ops change (requires `EXPO_PUBLIC_GRAPHQL_URL`).
 
 **Fonts:** after Phase B, install packages matching exported Figma families; load via `expo-font`. See `font-families.css` from `tokens:generate`.
 
@@ -51,12 +74,12 @@ Set `EXPO_PUBLIC_GRAPHQL_URL` when GraphQL is enabled. Run `graphql:generate` wh
 |--------|------|
 | `lint` / `lint:fix` / `lint:a11y` | always |
 | `test` / `test:watch` | always |
-| `tokens:discover` | Phase B — inspect raw exports |
-| `tokens:generate` | always (stubs at scaffold; real tokens after Phase B) |
+| `tokens:discover` | token sync enabled — Phase B |
+| `tokens:generate` | token sync enabled — Phase B |
 | `graphql:generate` | GraphQL enabled |
 | `storybook` / `storybook-generate` | Storybook enabled |
 
-Add to `package.json`:
+Add token scripts to `package.json` **only when Sync design tokens is on**:
 
 ```json
 "tokens:discover": "node scripts/discover-figma-raw.mjs",
@@ -67,6 +90,8 @@ Add to `package.json`:
 
 Sample SVGs + glyphmap in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
 
-## Raw token stubs
+Tab bar PNGs: scaffold provides `home.png`; merge `settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/`.
 
-`src/theme/tokens/raw/` — minimal stubs for CI/Argent. Replace in Phase B — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md). Exports may use any file/folder names; discovery is automatic.
+## Stub tokens (sync off)
+
+When **Sync design tokens** is off at intake, ship pre-built `src/theme/tokens/generated/` from templates. No `raw/`, no token scripts. Replace via Phase B when user enables sync later — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).

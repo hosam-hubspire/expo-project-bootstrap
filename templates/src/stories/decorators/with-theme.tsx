@@ -28,7 +28,7 @@ function ThemeToggleBar() {
         >
           <ThemedText
             variant="global-body-small"
-            colorToken={theme === mode ? "text-text-invert" : "text-text-default"}
+            colorToken={theme === mode ? "surface-default" : "text-text-default"}
             className="capitalize"
           >
             {mode}

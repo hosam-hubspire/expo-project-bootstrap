@@ -7,11 +7,31 @@
 ## Scaffold
 
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
-2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, web files. Move `app/` → `src/app/`; wire `@/` in `tsconfig.json`.
-3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. `bun install --verbose` must exit **0**.
-4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `scripts/`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md). Stub tokens in `src/theme/tokens/raw/` for CI/Argent.
-5. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
-6. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
+2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, web files. Move `app/` → `src/app/` if needed; wire `@/` in `tsconfig.json`.
+3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo packages:** `bun add …@latest`. Never copy version pins from templates. `bun install --verbose` must exit **0**.
+4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
+   - **Token sync off:** copy pre-built `src/theme/tokens/generated/` only — **no** `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, or `src/theme/tokens/raw/`.
+   - **Token sync on:** also copy token scripts + `src/theme/tokens/raw/`; add `tokens:discover` / `tokens:generate` scripts to `package.json`.
+   - **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — default Expo scaffold has `home.png` but not `settings.png`.
+   - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
+5. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
+6. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
+7. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
+8. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
+
+### `app.json` merge checklist
+
+Merge into the scaffold `app.json` under `expo` — do not replace the whole file:
+
+| Key | When | Notes |
+|-----|------|-------|
+| `name`, `slug`, `scheme` | always | from intake |
+| `owner` | EAS on | default `hubspire` |
+| `plugins` | always | append `expo-localization`, `react-native-nano-icons` config |
+| `experiments` | always | `typedRoutes`, `reactCompiler` from template |
+| `extra.eas.projectId` | EAS on | from `eas init` or existing project lookup |
+
+Keep scaffold keys (`ios`, `android`, `icon`, splash config). **`experiments` and `extra` are siblings** — never nest one inside the other.
 
 ## EAS configure (Phase A2 — only when Setup EAS is on at intake)
 
@@ -26,7 +46,15 @@ Skip this entire phase when intake disabled **Setup EAS**.
 3. **Install dev client** — `bunx expo install expo-dev-client`
 4. **Link EAS project** — `bunx eas-cli whoami` (must be logged in); then `bunx eas-cli init --non-interactive`. Writes `extra.eas.projectId` to `app.json`.
 
-If `eas init` or login fails, stop and ask the user to run `bunx eas-cli login`.
+**Project already exists** — if `eas init` reports an existing project (same slug under the owner), skip `--force`. Look up the project ID:
+
+```bash
+bunx eas-cli project:info --json
+```
+
+Merge `extra.eas.projectId` into `app.json` manually. Do not stop bootstrap.
+
+If login fails, stop and ask the user to run `bunx eas-cli login`.
 
 ### Default `eas.json` profiles
 
@@ -45,17 +73,21 @@ Or via **Expo MCP** when Cursor has `expo` MCP authenticated: `build_run` with p
 
 All included unless unchecked at intake:
 
-Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · i18n · GraphQL (needs `EXPO_PUBLIC_GRAPHQL_URL`) · Storybook
+Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · i18n · GraphQL · Storybook
 
 When **Setup EAS** is on: also EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
 
 Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). Real fonts arrive in Phase B — typography uses `--font-family-*` vars, not `font-sans`/`font-mono`.
+
+**GraphQL dev placeholder** (when GraphQL enabled): set `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` in local `.env` before C2. The bundled `ExampleQuery` (`__typename`) works against any endpoint.
 
 ## Verify (Phase C — stub tokens OK)
 
 ```bash
 bun run lint && bun test && bunx tsc --noEmit
 ```
+
+Requires Uniwind types generated in Phase A step 6.
 
 ### Argent smoke test (Phase C2)
 
@@ -72,7 +104,8 @@ Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor
 2. **Install on simulator** — `bunx eas-cli build:run -p ios --latest -e development-simulator`
    - Boot a simulator first via Argent `boot-device` if none is running
 3. **Start Metro** — `bun run start` (dev client needs bundler; keep running in background)
-4. **Argent verify** — `launch-app` → no redbox, home screen renders, tab navigation (home + settings) → `describe` or screenshot
+4. **Dev client** — tap the Metro server entry if the launcher appears
+5. **Argent verify** — `launch-app` → no redbox, home screen renders, tab navigation (home + settings) → `describe` or screenshot
 
 **When Setup EAS is off** (local path):
 
@@ -109,4 +142,4 @@ Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · copy JSON to `raw/` · discover + `tokens:generate` only · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake
+Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins
