@@ -38,7 +38,7 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | GitHub repo | none (local-only) |
 | Setup EAS | on |
 | Expo account owner | `hubspire` |
-| Sync design tokens | off (template `generated/` stubs) |
+| Sync design tokens | off (template `generated/` + `raw/` stubs) |
 | Stack toggles | i18n, GraphQL, Storybook (all on) |
 | GraphQL subscriptions | off |
 | Android smoke test | off (iOS simulator only) |
@@ -63,7 +63,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 
 **Expo account owner** — only ask when **Setup EAS** is on. Set `expo.owner` in `app.json` before `eas init`. Default **`hubspire`** unless intake provides another account slug.
 
-**Sync design tokens** — when **off** (default), ship pre-built `src/theme/tokens/generated/` from templates only — **no** `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, `src/theme/tokens/raw/`, and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake (Step 3 or when enabling sync in customize); at scaffold copy token scripts + empty `raw/` only; run Phase B after C2 using that URL (Figma MCP / export per [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md)) → `discover` → `tokens:generate`.
+**Sync design tokens** — when **off** (default), copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **no** token scripts (`discover-figma-raw.mjs`, `generate-design-tokens.mjs`, `figma-export-helpers.js`) and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake; at scaffold copy token scripts + empty `raw/` (README only); run Phase B after C2 using that URL (Figma MCP / export per [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md)) → `discover` → `tokens:generate`.
 
 **Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
 
@@ -97,7 +97,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - No `move_agent_to_root` during bootstrap
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
-- **Token scripts, `raw/`, and `tokens:*` package.json scripts only when sync is on** at intake; when off, copy pre-built `generated/` stubs only — never copy or add token scripts
+- **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C
 - **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`
 - **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — scaffold lacks `settings.png`

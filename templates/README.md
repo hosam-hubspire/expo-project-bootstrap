@@ -7,7 +7,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 1. Merge scaffold with templates — don't bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. Install deps (below) — skip groups for unchecked stack items. **Expo packages:** `bunx expo install` (SDK-compatible). **All other packages:** `bun add …@latest`. Never copy version pins from this repo.
 3. Add template files: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
-4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js`, and empty `src/theme/tokens/raw/` (README only) **only when Sync design tokens is on** at intake. When off (default), copy pre-built `src/theme/tokens/generated/` only — no `raw/`, no token scripts, no `tokens:discover` / `tokens:generate` in `package.json`.
+4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js` **only when Sync design tokens is on** at intake. **Always** copy `src/theme/tokens/raw/` — template stub JSON when sync is off; empty `raw/` (README only) when sync is on. When off (default), also copy pre-built `src/theme/tokens/generated/`; no `tokens:discover` / `tokens:generate` in `package.json`.
 5. Replace demo routes with template `src/app/`. Merge `assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/` — the default Expo scaffold ships `home.png` but not `settings.png`.
 6. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 7. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
@@ -94,4 +94,4 @@ Tab bar PNGs: scaffold provides `home.png`; merge `settings.png` (+ `@2x`/`@3x`)
 
 ## Stub tokens (sync off — default)
 
-When **Sync design tokens** is off at intake (default), ship pre-built `src/theme/tokens/generated/` from templates. No `raw/`, no token scripts, no `tokens:*` scripts in `package.json`. Enable sync later via intake + Phase B — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+When **Sync design tokens** is off at intake (default), ship pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/`. No token scripts, no `tokens:*` scripts in `package.json`. Enable sync later via intake + Phase B — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
