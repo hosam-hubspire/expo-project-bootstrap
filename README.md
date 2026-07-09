@@ -34,6 +34,7 @@ GitHub repo: <URL or local only>
 Figma design system: <URL or omit>
 Stack toggles (default all on): i18n, GraphQL, Storybook
 GraphQL subscriptions: off by default
+Android smoke test: off by default (iOS only via Argent)
 Platforms: iOS and Android only
 ```
 

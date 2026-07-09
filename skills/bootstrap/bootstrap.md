@@ -30,14 +30,18 @@ bun run lint && bun test && bunx tsc --noEmit
 
 Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor/rules/argent.md` and `argent-device-interact` skill first.
 
-On **each** platform (iOS simulator, then Android emulator):
+**Default: iOS simulator only.** Android is opt-in at intake — do not boot, build, or verify Android unless the user selected **Android smoke test**.
 
-1. `list-devices` → boot if needed → start Metro (`bun run ios` / `bun run android`)
+On **iOS simulator** (always):
+
+1. `list-devices` → boot if needed → start Metro (`bun run ios`)
 2. `launch-app` — open the scaffolded app
 3. Verify: no redbox, root screen renders, tab navigation (home + settings)
-4. `describe` or screenshot — both platforms
+4. `describe` or screenshot
 
-**Gate:** C2 must pass on iOS **and** Android before Phase B (when token sync enabled) or Phase D (when off).
+When intake enabled **Android smoke test**, repeat the same steps on an Android emulator after iOS passes (`bun run android`).
+
+**Gate:** C2 must pass on **iOS** before Phase B (when token sync enabled) or Phase D (when off). When Android smoke test was opted in, Android must pass too before proceeding.
 
 ### Design token sync (Phase B — after C2, before D)
 
