@@ -31,6 +31,7 @@ Templates: https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/te
 
 App name/slug: <APP_NAME>
 GitHub repo: <URL or local only>
+Expo account owner: hubspire (default)
 Figma design system: <URL or omit>
 Stack toggles (default all on): i18n, GraphQL, Storybook
 GraphQL subscriptions: off by default
