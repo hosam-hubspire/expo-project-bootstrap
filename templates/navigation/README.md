@@ -60,6 +60,8 @@ Hold the native splash until preferences (and session, when auth on) rehydrate �
 
 Drawer + tabs: **Drawer wraps Tabs** (one drawer item can be the tab navigator). Install drawer deps when drawer is on — see [templates/README.md](../README.md).
 
+**Drawer header + tabs:** do **not** set `headerShown: false` on the `(tabs)` drawer screen. Hiding that header removes the menu (hamburger) icon on Home/Settings even though edge-swipe still opens the drawer. Keep the default drawer header so the toggle is visible; drawer-only screens (e.g. `about`) already show it.
+
 ## Module map
 
 | Path | Copy when |
@@ -76,7 +78,7 @@ Drawer + tabs: **Drawer wraps Tabs** (one drawer item can be the tab navigator).
 2. Start from `templates/src/app/` (and shared `src/` components/stores).
 3. If intro **off**: delete `(onboarding)/`; remove onboarding `Protected` + `hasCompletedOnboarding` usage from navigator (keep store field optional or remove).
 4. If auth **on**: copy `navigation/auth/*`; wrap providers; add sign-in screen + guards; `bunx expo install expo-secure-store` (session persistence).
-5. If drawer **on**: copy `navigation/drawer/*`; replace `(app)/_layout`; install drawer deps; if tabs on, keep `(tabs)` nested under drawer.
+5. If drawer **on**: copy `navigation/drawer/*`; replace `(app)/_layout`; install drawer deps; if tabs on, keep `(tabs)` nested under drawer with the drawer header **shown** (menu icon — never `headerShown: false` on `(tabs)`).
 6. If tabs **off**: remove `(tabs)/` + `AppTabs`; copy `navigation/screens/` into `(app)/`.
 7. Update C2 Argent checks: dismiss onboarding if present; verify tabs and/or drawer; sign-in → app when auth on.
 
@@ -86,5 +88,5 @@ Drawer + tabs: **Drawer wraps Tabs** (one drawer item can be the tab navigator).
 |---------|--------|
 | Intro | First launch shows onboarding; Complete → main shell; relaunch skips intro |
 | Tabs | Home ↔ Settings |
-| Drawer | Open drawer; navigate to a drawer item |
+| Drawer | Menu (hamburger) icon visible in header on Home/tabs; tap it (or swipe) to open; navigate to a drawer item |
 | Auth | Signed out → sign-in; Sign in → `(app)`; Sign out → sign-in |

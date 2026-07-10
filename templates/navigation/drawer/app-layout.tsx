@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 
 /**
  * `(app)/_layout` when Drawer is on.
- * - Tabs on: nest `(tabs)` as a drawer screen (header hidden on that item).
+ * - Tabs on: nest `(tabs)` as a drawer screen — keep the drawer header visible so
+ *   the menu (hamburger) icon is available on Home/Settings (edge-swipe alone is not enough).
  * - Tabs off: list flat screens (`index`, `settings`, …) as drawer items.
  */
 export default function AppDrawerLayout() {
@@ -16,7 +17,6 @@ export default function AppDrawerLayout() {
         options={{
           drawerLabel: t("drawer.home"),
           title: t("drawer.home"),
-          headerShown: false,
         }}
       />
       <Drawer.Screen
