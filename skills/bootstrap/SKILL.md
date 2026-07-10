@@ -43,6 +43,7 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | GraphQL subscriptions | off |
 | **Navigation** | **Tabs on · Drawer off · Intro on · Protected/auth off** |
 | Android smoke test | off (iOS simulator only) |
+| **Permissions** | **all off** (microphone, location, notifications, image picker, documents) |
 
 When the user chose defaults, **do not** re-ask those fields — proceed to [bootstrap.md](bootstrap.md).
 
@@ -59,6 +60,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | Figma design tokens URL | When sync on | Required — `figma.com/design/…` or `figma.com/file/…` link to the token source file |
 | Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
 | **Navigation toggles** | Yes | Orthogonal mix — see below |
+| **Permission toggles** | Yes | Device capabilities — see below; **all off by default** |
 | Android smoke test | Yes | Argent on Android emulator — **off by default** (iOS only) |
 
 **Setup EAS** — when **on** (default), run Phase A2 and C2 uses an EAS `development-simulator` cloud build installed on the iOS Simulator, then Argent smoke test. When **off**, skip Phase A2 entirely; C2 uses **local** `expo run:ios` / `expo run:android` + Argent.
@@ -88,6 +90,19 @@ At least one of **Tabs** or **Drawer** should be on for a main shell; if both of
 
 Assembly rules and file map: [`templates/navigation/README.md`](../../templates/navigation/README.md). Expo docs: [Protected routes](https://docs.expo.dev/router/advanced/protected/), [Authentication](https://docs.expo.dev/router/advanced/authentication/), [Drawer](https://docs.expo.dev/router/advanced/drawer/), [Tabs](https://docs.expo.dev/router/advanced/tabs/).
 
+**Permission toggles** — `allow_multiple: true`. All unchecked by default. When any are on, copy `src/utils/permissions/` per [`templates/src/utils/permissions/README.md`](../../templates/src/utils/permissions/README.md): install listed packages, merge `app.json` config plugins with iOS usage strings from `ios-strings.ts`, copy only selected modules + shared files, trim `index.ts` exports.
+
+| Toggle | Packages |
+|--------|----------|
+| **Microphone** (audio / video) | `expo-audio` |
+| **Location (foreground)** | `expo-location` |
+| **Location (background)** | `expo-location`, `expo-task-manager` (implies foreground) |
+| **Notifications** | `expo-notifications` |
+| **Image picker** (camera + photos/videos) | `expo-image-picker` |
+| **Documents / file system** | `expo-document-picker`, `expo-file-system` |
+
+Customize iOS permission copy in `app.json` plugins before shipping. Re-run prebuild after plugin changes.
+
 **Android smoke test** — when **off** (default), run Argent C2 on **iOS simulator only**. When **on**, also boot an Android emulator and run the same checks after iOS passes.
 
 Then follow **[bootstrap.md](bootstrap.md)**.
@@ -113,7 +128,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
 - **Navigation:** start from `templates/src/app/` (tabs + intro); assemble drawer/auth/flat screens from `templates/navigation/` per intake — never leave unused route groups in the app
-- **Hooks:** place React hooks under `src/hooks/` (e.g. auth `use-storage-state.ts`) — never under `src/lib/` (`lib/` is for non-hook utilities like `mmkv`)
+- **Hooks:** place React hooks under `src/hooks/` (e.g. auth `use-storage-state.ts`) — never under `src/lib/` (`lib/` is for non-hook utilities like `mmkv`; `utils/` for optional helpers like permissions)
 - **Constants:** shared string/number constants under `src/constants/` (e.g. `SESSION_STORAGE_KEY`) — not under `src/lib/`
 - **Providers:** when GraphQL and auth are both on, nest `SessionProvider` **inside** `AppApolloProvider`. Apollo auth link reads `SESSION_STORAGE_KEY` from SecureStore (not React context).
 - **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
@@ -129,6 +144,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Expo MCP (`build_run`, `build_list`, …) may be used when EAS is enabled and MCP is authenticated; prefer `eas` CLI for bootstrap reliability
 - **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
+- **Toasts:** copy `src/components/AppToast/` + `src/utils/toast.ts`; keep `<AppToast />` in root `_layout.tsx` when composing auth/drawer navigators
 - No one-off bridge scripts under `scripts/`; **iOS/Android only** — no web target, no `Platform.OS === "web"` branches, no `localStorage` / DOM APIs, no web-only packages or polyfills; Bun only
 - Remove scaffold web files during Phase A (e.g. `src/app/+html.tsx`, web entry/assets); do not reintroduce web support later
 - **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (NativeTabs clears the home indicator). Pin primary CTAs with `footer`.
@@ -139,6 +155,6 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **navigation toggles** (tabs/drawer/intro/auth), token sync on/off (+ Figma URL when on), Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **navigation toggles** (tabs/drawer/intro/auth), **permission toggles** (when any on), token sync on/off (+ Figma URL when on), Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
 
 **Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [templates/README.md](../../templates/README.md) · **Navigation:** [templates/navigation/README.md](../../templates/navigation/README.md)

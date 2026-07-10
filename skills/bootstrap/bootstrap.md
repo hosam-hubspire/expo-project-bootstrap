@@ -22,6 +22,7 @@
    - **GraphQL + auth:** Apollo client already includes a SecureStore auth link (`SetContextLink` + WS `connectionParams`) keyed by `SESSION_STORAGE_KEY` — do not read the token from React context in the link.
    - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README (`@react-navigation/drawer` + gesture/reanimated/worklets).
    - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
+   - **Permissions on:** copy selected modules from `templates/src/utils/permissions/` per [`src/utils/permissions/README.md`](../../templates/src/utils/permissions/README.md); install packages; merge `app.json` plugins with iOS usage strings from `ios-strings.ts`; trim `index.ts` to exported modules only.
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
 7. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` (not `generate-types` — that command does not exist).
 8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` (or `bunx biome check --write .`) so Argent MCP JSON matches Biome before Phase C.
@@ -39,7 +40,7 @@ Merge into the scaffold `app.json` under `expo` — do not replace the whole fil
 |-----|------|-------|
 | `name`, `slug`, `scheme` | always | from intake |
 | `owner` | EAS on | default `hubspire` |
-| `plugins` | always | append `expo-localization`, `react-native-nano-icons` config |
+| `plugins` | always | append `expo-localization`, `react-native-nano-icons` config; append permission plugins when selected at intake |
 | `experiments` | always | `typedRoutes`, `reactCompiler` from template |
 | `extra.eas.projectId` | EAS on | from `eas init` or existing project lookup |
 
@@ -85,7 +86,7 @@ Or via **Expo MCP** when Cursor has `expo` MCP authenticated: `build_run` with p
 
 All included unless unchecked at intake:
 
-Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · i18n · GraphQL · Storybook
+Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · toasts · i18n · GraphQL · Storybook
 
 **Default navigation:** tabs + intro onboarding (drawer off, auth off). Other combos via intake + `templates/navigation/`.
 

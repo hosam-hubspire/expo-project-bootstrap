@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useUniwind } from "uniwind";
 
 import { IconFontLoader } from "@/components/IconFontLoader";
+import { AppToast } from "@/components/AppToast";
 import { SplashScreenController } from "@/components/SplashScreenController";
 import { usePreferencesStore } from "@/stores/preferences-store";
 
@@ -19,6 +20,7 @@ export default function RootLayout() {
         <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
           <SplashScreenController />
           <RootNavigator />
+          <AppToast />
         </ThemeProvider>
       </IconFontLoader>
     </GestureHandlerRootView>

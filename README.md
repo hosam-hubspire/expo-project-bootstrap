@@ -40,6 +40,7 @@ Figma design system: <URL or omit>
 Stack toggles (default all on): i18n, GraphQL, Storybook
 GraphQL subscriptions: off by default
 Navigation toggles (default: tabs + intro): Tabs, Drawer, Intro screens, Protected/auth
+Permission toggles (default: all off): Microphone, Location foreground, Location background, Notifications, Image picker (camera + photos/videos), Documents/file system
 Android smoke test: off by default (iOS only via Argent)
 Platforms: iOS and Android only
 ```

@@ -21,6 +21,8 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 
 **Safe area** — screens use the `Screen` component (`src/components/Screen`), which applies [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) on an outer `style` and keeps Uniwind classes on `contentClassName`. Do not use `SafeAreaView`. Tab routes: `edges={["top","left","right"]}`. Full-screen flows (onboarding, auth): default edges + `footer` for the primary CTA.
 
+**Toasts** — `<AppToast />` is mounted in the root `_layout.tsx` (core, always). Call `toast.success()`, `toast.error()`, or `toast.info()` from `@/utils/toast` anywhere in the app.
+
 ## Installs
 
 **Version policy:**
@@ -40,7 +42,7 @@ bunx expo install expo-localization expo-font jest-expo
 # Pin Jest to jest-expo's stack — never jest@latest (Jest 30 breaks jest-expo)
 JEST_RANGE=$(node -p "require('jest-expo/package.json').dependencies['babel-jest']")
 bun add -d jest@${JEST_RANGE} @types/jest@${JEST_RANGE}
-bun add --verbose uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest
+bun add --verbose uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest react-native-toast-message@latest
 bun add -d --verbose @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest
 bunx biome migrate --write
 ```
@@ -79,6 +81,42 @@ When GraphQL is on, nest providers as:
   <SessionProvider>{/* … */}</SessionProvider>
 </AppApolloProvider>
 ```
+
+### Permissions (when toggles enabled at intake)
+
+See [`src/utils/permissions/README.md`](./src/utils/permissions/README.md) for the full matrix, `app.json` plugin snippets, and iOS Info.plist keys.
+
+```bash
+# Microphone (audio / video recording)
+bunx expo install expo-audio
+
+# Location (foreground)
+bunx expo install expo-location
+
+# Location (background) — also install foreground; merge background plugin options
+bunx expo install expo-location expo-task-manager
+
+# Notifications
+bunx expo install expo-notifications
+
+# Image picker (camera + photos/videos on device)
+bunx expo install expo-image-picker
+
+# Documents / file system
+bunx expo install expo-document-picker expo-file-system
+```
+
+Copy into the app:
+
+| Always (when any permission on) | `types.ts`, `ios-strings.ts`, `open-settings.ts`, `index.ts` |
+|---------------------------------|----------------------------------------------------------------|
+| Microphone | `microphone.ts` |
+| Location (foreground or background) | `location.ts` |
+| Notifications | `notifications.ts` |
+| Image picker (camera + photos/videos) | `image-picker.ts` |
+| Documents / file system | `documents.ts` |
+
+Merge iOS usage strings from `IOS_PERMISSION_STRINGS` in `ios-strings.ts` into each plugin block. Trim `index.ts` exports to match copied modules.
 
 ### Default stack (unless unchecked)
 
