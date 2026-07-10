@@ -31,6 +31,7 @@
      2. **Relink after restart** — each `server start` rotates the bearer token. If the server was started or restarted this session, relink: `printf 'y\n' | argent unlink` then `argent link argent://<token>@127.0.0.1:3001 --yes` (token from `server start` output).
      3. Verify: `argent tools` exits 0 — not `401 Unauthorized`.
 9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
+10. **Project README** — replace the stock Expo `README.md` with a project-specific one from [`templates/project-README.md`](../../templates/project-README.md). Fill placeholders from intake (app name, stack/nav/permission toggles, EAS, tokens, env, scripts). Do this in Phase A (or before Phase D) — **never commit the default create-expo-app README**.
 
 ### `app.json` merge checklist
 
@@ -167,8 +168,10 @@ If export is blocked, keep template `generated/` stubs; document Figma URL, expo
 
 If Argent unavailable: report in summary, ask user before D.
 
+**Before commit:** ensure root `README.md` is the filled project README (not the stock Expo template). See Phase A step 10.
+
 Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md](SKILL.md).
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app · prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView` ([docs](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets)) · **native only** (iOS/Android) — no web platform code
+Latest Expo default template · merge templates into scaffold · **replace stock Expo `README.md` with intake-filled `templates/project-README.md` before Phase D** · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app · prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView` ([docs](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets)) · **native only** (iOS/Android) — no web platform code

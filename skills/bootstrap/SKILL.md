@@ -111,12 +111,12 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 
 ```
 - [ ] 0 — Intake
-- [ ] A — Scaffold (latest deps, templates, nav assembly, uniwind types, bun install exit 0)
+- [ ] A — Scaffold (latest deps, templates, nav assembly, uniwind types, bun install exit 0, project README)
 - [ ] A2 — EAS configure (if enabled at intake)
 - [ ] C — lint, test, tsc (stub tokens OK)
 - [ ] C2 — Argent smoke test (EAS simulator build if A2; else local build)
 - [ ] B — Design token sync (if enabled) — export from intake Figma URL → raw/, discover, tokens:generate, re-verify
-- [ ] D — Commit (+ push if repo provided)
+- [ ] D — Commit (+ push if repo provided) — project README must already replace stock Expo README
 ```
 
 ## Rules
@@ -152,6 +152,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
 - **Argent CLI (C2):** before `argent run`, check `argent server status` (`health: ok`). If the tool-server was started/restarted this session, relink (`argent unlink` → `argent link` with token from `server start`); verify with `argent tools` (not 401). MCP clients may auto-spawn — relink applies mainly to CLI smoke tests
 - **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too
+- **Project README:** before Phase D, replace the stock Expo `README.md` with a filled copy of [`templates/project-README.md`](../../templates/project-README.md) (app name + intake toggles). Never leave the create-expo-app README in the committed app
 - **C2 defaults to iOS only** — do not boot or build Android unless intake selected Android smoke test
 
 ## Completion summary

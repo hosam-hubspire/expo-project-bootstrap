@@ -25,6 +25,8 @@ bunx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
 
 **Navigation defaults:** Tabs on · Intro on · Drawer off · Protected/auth off. Toggles combine freely (e.g. auth+tabs+drawer). See [`templates/navigation/README.md`](./templates/navigation/README.md).
 
+**Scaffolded app README:** agents replace the stock Expo `README.md` with a filled [`templates/project-README.md`](./templates/project-README.md) before the first commit.
+
 ## Manual prompt
 
 ```

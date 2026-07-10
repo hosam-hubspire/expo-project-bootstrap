@@ -16,6 +16,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix` (or `bunx biome check --write .`) so generated MCP JSON is Biome-clean before Phase C. Before C2 CLI smoke tests: `argent server status` → relink if token rotated → `argent tools` must not 401. Template `biome.json` also ignores Argent MCP/settings paths.
 11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
 12. Design tokens (if enabled at intake) — **after C2** — collect Figma URL at intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+13. **Project README** — replace stock Expo `README.md` with a filled [`project-README.md`](./project-README.md) from intake (before Phase D commit).
 
 **`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`.
 
