@@ -13,10 +13,11 @@ Navigation assembly (tabs / drawer / intro / auth) is independent — follow [`n
 
 ## Omit GraphQL
 
-- Remove `AppApolloProvider` from `_layout.tsx`
+- Remove `AppApolloProvider` from `_layout.tsx` (keep `SessionProvider` at the root if auth is on)
 - Delete `src/services/graphql/`, `src/providers/apollo-provider.tsx`, `codegen.ts`
 - Remove `graphql:generate` script; skip GraphQL installs
-- Keep `SessionProvider` if Protected routes were enabled (lives under `providers/session-provider.tsx`)
+- Keep `SessionProvider` if Protected routes were enabled (lives under `providers/session-provider.tsx`); keep `src/constants/session.ts` for the SecureStore key
+- Note: with GraphQL omitted there is no Apollo auth link — session is still persisted via SecureStore for route guards
 
 ## Omit Storybook
 

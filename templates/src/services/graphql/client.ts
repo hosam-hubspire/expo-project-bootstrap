@@ -2,14 +2,17 @@ import type { Operation } from "@apollo/client";
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from "@apollo/client";
 import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
 import { CombinedGraphQLErrors } from "@apollo/client/errors";
+import { SetContextLink } from "@apollo/client/link/context";
 import { ErrorLink } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { persistCache } from "apollo3-cache-persist";
+import * as SecureStore from "expo-secure-store";
 import type { FragmentDefinitionNode, OperationDefinitionNode } from "graphql";
 import { createClient } from "graphql-ws";
 
+import { SESSION_STORAGE_KEY } from "@/constants/session";
 import {
   APOLLO_CACHE_PERSIST_KEY,
   apolloCacheStorage,
@@ -54,8 +57,24 @@ const retryLink = new RetryLink({
   },
 });
 
+/** Reads the session token from SecureStore — independent of React SessionProvider. */
+const authLink = new SetContextLink(async (prevContext) => {
+  const token = await SecureStore.getItemAsync(SESSION_STORAGE_KEY);
+  return {
+    headers: {
+      ...prevContext.headers,
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    },
+  };
+});
+
 let resolvedClient: ApolloClient | null = null;
 let initPromise: Promise<ApolloClient> | null = null;
+
+async function getAuthConnectionParams() {
+  const token = await SecureStore.getItemAsync(SESSION_STORAGE_KEY);
+  return token ? { authorization: `Bearer ${token}` } : {};
+}
 
 function createHttpLink() {
   if (!GRAPHQL_URI) {
@@ -79,6 +98,7 @@ function createSubscriptionLink() {
   return new GraphQLWsLink(
     createClient({
       url: wsUri,
+      connectionParams: getAuthConnectionParams,
       retryAttempts: 5,
     }),
   );
@@ -86,7 +106,7 @@ function createSubscriptionLink() {
 
 function createTransportLink() {
   const httpLink = createHttpLink();
-  const opsLink = ApolloLink.from([errorLink, retryLink, httpLink]);
+  const opsLink = ApolloLink.from([authLink, errorLink, retryLink, httpLink]);
 
   if (!subscriptionsEnabled) {
     return opsLink;

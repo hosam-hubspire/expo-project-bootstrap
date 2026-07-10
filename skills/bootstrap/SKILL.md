@@ -114,6 +114,8 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Full templates by default; strip — `templates/optional/minimal/README.md`
 - **Navigation:** start from `templates/src/app/` (tabs + intro); assemble drawer/auth/flat screens from `templates/navigation/` per intake — never leave unused route groups in the app
 - **Hooks:** place React hooks under `src/hooks/` (e.g. auth `use-storage-state.ts`) — never under `src/lib/` (`lib/` is for non-hook utilities like `mmkv`)
+- **Constants:** shared string/number constants under `src/constants/` (e.g. `SESSION_STORAGE_KEY`) — not under `src/lib/`
+- **Providers:** when GraphQL and auth are both on, nest `SessionProvider` **inside** `AppApolloProvider`. Apollo auth link reads `SESSION_STORAGE_KEY` from SecureStore (not React context).
 - **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
 - **Drawer on:** `bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets` — `expo-router/drawer` still needs `@react-navigation/drawer`
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C (CLI has no `generate-types`)

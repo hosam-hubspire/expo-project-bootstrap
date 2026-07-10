@@ -77,7 +77,7 @@ Drawer + tabs: **Drawer wraps Tabs** (one drawer item can be the tab navigator).
 1. Read intake toggles.
 2. Start from `templates/src/app/` (and shared `src/` components/stores).
 3. If intro **off**: delete `(onboarding)/`; remove onboarding `Protected` + `hasCompletedOnboarding` usage from navigator (keep store field optional or remove).
-4. If auth **on**: copy `navigation/auth/*` (`session-provider` → `src/providers/`, `use-storage-state` → `src/hooks/`, `sign-in` → `src/app/`); wrap providers; add sign-in screen + guards; `bunx expo install expo-secure-store` (session persistence). Hooks go under `src/hooks/`, not `src/lib/`.
+4. If auth **on**: copy `navigation/auth/*` (`session-provider` → `src/providers/`, `use-storage-state` → `src/hooks/`, `sign-in` → `src/app/`); ensure `src/constants/session.ts` exists; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL is on (else wrap root with `SessionProvider` alone); add sign-in screen + guards; `bunx expo install expo-secure-store` (session persistence). Hooks go under `src/hooks/`, constants under `src/constants/`, not `src/lib/`. Apollo auth link already attaches `Authorization` from SecureStore — do not wire the link to React context.
 5. If drawer **on**: copy `navigation/drawer/*`; replace `(app)/_layout`; install drawer deps; if tabs on, keep `(tabs)` nested under drawer with the drawer header **shown** (menu icon — never `headerShown: false` on `(tabs)`).
 6. If tabs **off**: remove `(tabs)/` + `AppTabs`; copy `navigation/screens/` into `(app)/`.
 7. Update C2 Argent checks: dismiss onboarding if present; verify tabs and/or drawer; sign-in → app when auth on.

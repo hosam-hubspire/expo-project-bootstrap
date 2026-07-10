@@ -66,15 +66,28 @@ Copy auth files into the app:
 | `sign-in.tsx` | `src/app/sign-in.tsx` |
 | `sign-out-button.tsx` | use in Settings (optional) |
 
+Also ensure `templates/src/constants/session.ts` → `src/constants/session.ts` (`SESSION_STORAGE_KEY`, shared with the Apollo auth link).
+
+When GraphQL is on, nest providers as:
+
+```tsx
+<AppApolloProvider>
+  <SessionProvider>{/* … */}</SessionProvider>
+</AppApolloProvider>
+```
+
 ### Default stack (unless unchecked)
 
 ```bash
 bun add --verbose i18next@latest react-i18next@latest
 bun add --verbose @apollo/client@latest graphql@latest graphql-ws@latest apollo3-cache-persist@latest @graphql-typed-document-node/core@latest
+bunx expo install expo-secure-store
 bun add -d --verbose @graphql-codegen/cli@latest @graphql-codegen/client-preset@latest
 bun add -d --verbose storybook@latest @storybook/react-native@latest @storybook/addon-ondevice-actions@latest @storybook/addon-ondevice-backgrounds@latest @storybook/addon-ondevice-controls@latest @storybook/addon-ondevice-notes@latest
 bun install --verbose
 ```
+
+GraphQL’s Apollo client includes a SecureStore auth link (`SESSION_STORAGE_KEY` in `src/constants/session.ts`) — install `expo-secure-store` whenever GraphQL is on (even if Protected/auth is off; the link no-ops without a token).
 
 ### GraphQL dev placeholder
 

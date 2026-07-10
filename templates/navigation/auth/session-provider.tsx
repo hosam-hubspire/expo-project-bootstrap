@@ -1,6 +1,7 @@
 import { createContext, use, type PropsWithChildren } from "react";
 
 import { useStorageState } from "@/hooks/use-storage-state";
+import { SESSION_STORAGE_KEY } from "@/constants/session";
 
 type AuthContextValue = {
   signIn: () => void;
@@ -21,7 +22,7 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [[isLoading, session], setSession] = useStorageState("session");
+  const [[isLoading, session], setSession] = useStorageState(SESSION_STORAGE_KEY);
 
   return (
     <AuthContext.Provider

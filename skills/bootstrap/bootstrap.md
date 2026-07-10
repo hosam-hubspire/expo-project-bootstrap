@@ -18,7 +18,8 @@
    - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
 5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
-   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts`, `app/sign-in.tsx`; wrap `SessionProvider`; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings. Custom hooks always go under `src/hooks/` — never `src/lib/`.
+   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts`, `app/sign-in.tsx`; ensure `src/constants/session.ts` (`SESSION_STORAGE_KEY`) is present; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL is on (so auth can use mutations); when GraphQL is off, wrap with `SessionProvider` alone; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings. Custom hooks always go under `src/hooks/` — never `src/lib/`. Constants go under `src/constants/`.
+   - **GraphQL + auth:** Apollo client already includes a SecureStore auth link (`SetContextLink` + WS `connectionParams`) keyed by `SESSION_STORAGE_KEY` — do not read the token from React context in the link.
    - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README (`@react-navigation/drawer` + gesture/reanimated/worklets).
    - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.

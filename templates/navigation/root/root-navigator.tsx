@@ -6,7 +6,7 @@ import { usePreferencesStore } from "@/stores/preferences-store";
  * Default RootNavigator: intro + tabs (no auth, no drawer).
  * Compose additional Stack.Protected blocks from navigation/README.md when toggles change.
  *
- * Auth on — wrap SessionProvider; add:
+ * Auth on — nest SessionProvider inside AppApolloProvider (when GraphQL on); add:
  *   <Stack.Protected guard={hasCompletedOnboarding && !session}><Stack.Screen name="sign-in" /></Stack.Protected>
  *   and tighten the (app) guard to `hasCompletedOnboarding && !!session`
  * Intro off — drop the onboarding Protected block; (app) guard becomes `true` (or `!!session` if auth).
