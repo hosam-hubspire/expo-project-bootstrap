@@ -8,7 +8,7 @@ Expo Router layouts are **orthogonal toggles** — compose any combination. Do n
 
 | Toggle | Default | Effect |
 |--------|---------|--------|
-| **Tabs** | on | `(app)/(tabs)/` + `AppTabs` |
+| **Tabs** | on | `(app)/(tabs)/` + `AppTabs` (Expo Router JS [`Tabs`](https://docs.expo.dev/router/advanced/tabs/), not Native Tabs) |
 | **Drawer** | off | `(app)/_layout` uses `Drawer`; nest `(tabs)` inside when tabs on |
 | **Intro / onboarding** | on | `(onboarding)/` + `Stack.Protected` until `hasCompletedOnboarding` |
 | **Protected / auth** | off | `sign-in` + `SessionProvider` + `Stack.Protected` on `(app)` |

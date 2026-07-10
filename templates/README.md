@@ -8,7 +8,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 2. Install deps (below) — skip groups for unchecked stack items. **Expo packages:** `bunx expo install` (SDK-compatible). **All other packages:** `bun add …@latest`. Never copy version pins from this repo.
 3. Add template files: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
 4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js` **only when Sync design tokens is on** at intake. **Always** copy `src/theme/tokens/raw/` — template stub JSON when sync is off; empty `raw/` (README only) when sync is on. When off (default), also copy pre-built `src/theme/tokens/generated/`; no `tokens:discover` / `tokens:generate` in `package.json`.
-5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tab bar icons use the nano icon font built from `assets/icons/*.svg` (`home`, `settings`) — no separate `tabIcons` PNGs.
+5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tabs use Expo Router JS `Tabs` (`AppTabs`) with nano icons from `assets/icons/*.svg` (`home`, `settings`).
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
@@ -171,7 +171,7 @@ Add token scripts to `package.json` **only when Sync design tokens is on**:
 
 Sample SVGs + glyphmap in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
 
-Tab bar icons use the same nano icon font (`TabBarIcon` in `src/components/AppTabs/tab-bar-icons.ts`) — `home` and `settings` glyphs from `assets/icons/home.svg` and `assets/icons/settings.svg`. Do not rely on Expo scaffold `tabIcons/*.png`.
+Tab bar uses Expo Router JS [`Tabs`](https://docs.expo.dev/router/advanced/tabs/) (`src/components/AppTabs`) with nano `Icon` glyphs from `assets/icons/home.svg` and `assets/icons/settings.svg`. Do not use `expo-router/unstable-native-tabs` or scaffold `tabIcons/*.png`.
 
 ## Stub tokens (sync off — default)
 

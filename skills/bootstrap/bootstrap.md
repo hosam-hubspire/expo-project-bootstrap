@@ -14,7 +14,7 @@
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
    - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **do not** copy token scripts; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
    - **Token sync on:** copy token scripts + empty `src/theme/tokens/raw/` (README only); add `tokens:discover` / `tokens:generate` to `package.json`. Figma URL collected at intake — real exports land in `raw/` during Phase B.
-   - **Tab icons (when tabs on):** use nano icon font from `assets/icons/*.svg` via `AppTabs` + `tab-bar-icons.ts` (`home`, `settings`) — do not merge scaffold `tabIcons` PNGs for settings.
+   - **Tab icons (when tabs on):** Expo Router JS `Tabs` (`expo-router`) with nano `Icon` (`home` / `settings` from `assets/icons/*.svg`) — not Native Tabs.
    - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
 5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.

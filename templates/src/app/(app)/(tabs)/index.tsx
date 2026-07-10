@@ -6,7 +6,7 @@ import { Screen } from "@/components/Screen";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-/** Tab screens omit bottom inset — NativeTabs already clears the home indicator. */
+/** Tab screens omit bottom inset — the JS tab bar already clears the home indicator. */
 export default function HomeScreen() {
   const { t } = useTranslation();
 

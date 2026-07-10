@@ -135,7 +135,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **Drawer on:** `bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets` — `expo-router/drawer` still needs `@react-navigation/drawer`
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C (CLI has no `generate-types`)
 - **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`. Template ignores Argent MCP/settings paths; after `argent init`, run `lint:fix` before Phase C
-- **Tab icons:** use nano SVG icon font for tabs (`home` / `settings` via `TabBarIcon`) — do not merge `tabIcons/settings.png`
+- **Tab icons:** Expo Router JS `Tabs` with nano `Icon` (`home` / `settings` SVGs) — not `unstable-native-tabs`
 - **`app.json` merge:** follow checklist in [bootstrap.md](bootstrap.md) — `experiments` and `extra.eas` are siblings under `expo`
 - **GraphQL on:** copy `.env.example`; create local `.env` with `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` before C2; gitignore `.env`
 - **EAS only when intake enabled:** merge `templates/eas.json`; set `expo.owner` (default `hubspire`); install `expo-dev-client`; `bunx eas-cli init --non-interactive`. If project exists, merge `projectId` from `eas project:info` — do not `--force`
@@ -148,7 +148,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **Permissions demos:** when any permission on, copy `PermissionsExamples` and enable the Settings block; trim to selected capabilities
 - No one-off bridge scripts under `scripts/`; **iOS/Android only** — no web target, no `Platform.OS === "web"` branches, no `localStorage` / DOM APIs, no web-only packages or polyfills; Bun only
 - Remove scaffold web files during Phase A (e.g. `src/app/+html.tsx`, web entry/assets); do not reintroduce web support later
-- **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (NativeTabs clears the home indicator). Pin primary CTAs with `footer`.
+- **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (JS `Tabs` bar clears the home indicator). Pin primary CTAs with `footer`.
 - **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
 - **Argent CLI (C2):** before `argent run`, check `argent server status` (`health: ok`). If the tool-server was started/restarted this session, relink (`argent unlink` → `argent link` with token from `server start`); verify with `argent tools` (not 401). MCP clients may auto-spawn — relink applies mainly to CLI smoke tests
 - **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too
