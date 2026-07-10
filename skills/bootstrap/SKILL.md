@@ -132,7 +132,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **Constants:** shared string/number constants under `src/constants/` (e.g. `SESSION_STORAGE_KEY`) — not under `src/lib/`
 - **Providers:** when GraphQL and auth are both on, nest `SessionProvider` **inside** `AppApolloProvider`. Apollo auth link reads `SESSION_STORAGE_KEY` from SecureStore (not React context).
 - **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
-- **Drawer on:** `bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets` — `expo-router/drawer` still needs `@react-navigation/drawer`
+- **Drawer on (SDK 56+):** `bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets` — drawer is bundled in `expo-router` ([docs](https://docs.expo.dev/router/advanced/drawer/#installation)); do **not** install `@react-navigation/drawer`
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C (CLI has no `generate-types`)
 - **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`. Template ignores Argent MCP/settings paths; after `argent init`, run `lint:fix` before Phase C
 - **Tab icons:** Expo Router JS `Tabs` with nano `Icon` (`home` / `settings` SVGs) — not `unstable-native-tabs`

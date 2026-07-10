@@ -59,8 +59,9 @@ bunx expo install expo-dev-client
 ### Navigation (when toggles enabled at intake)
 
 ```bash
-# Drawer on — expo-router/drawer still needs the React Navigation drawer package + gesture stack
-bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets
+# Drawer on (SDK 56+) — bundled in expo-router; only animation/gesture peers
+# https://docs.expo.dev/router/advanced/drawer/#installation
+bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets
 
 # Protected / auth on — secure session persistence (see navigation/auth/)
 bunx expo install expo-secure-store
