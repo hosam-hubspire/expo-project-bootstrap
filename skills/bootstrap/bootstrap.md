@@ -10,7 +10,7 @@
 
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
 2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, **all web files** (`+html.tsx`, web entry/assets). Move `app/` → `src/app/` if needed; wire `@/` in `tsconfig.json`. Apps are **iOS/Android only** — never add `Platform.OS === "web"`, `localStorage`, or other web-only code.
-3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo packages:** `bun add …@latest`. Never copy version pins from templates. `bun install --verbose` must exit **0**.
+3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo packages:** `bun add …@latest` (except `jest` / `@types/jest` — derive from `jest-expo`). Never copy version pins from templates. `bun install --verbose` must exit **0**.
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
    - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **do not** copy token scripts; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
    - **Token sync on:** copy token scripts + empty `src/theme/tokens/raw/` (README only); add `tokens:discover` / `tokens:generate` to `package.json`. Figma URL collected at intake — real exports land in `raw/` during Phase B.
@@ -25,6 +25,10 @@
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
 7. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` (not `generate-types` — that command does not exist).
 8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` (or `bunx biome check --write .`) so Argent MCP JSON matches Biome before Phase C.
+   - **CLI smoke prep (before C2):** when C2 will use `argent run` / `argent tools` (MCP unavailable or prefer CLI), ensure the tool-server is healthy and the CLI token matches:
+     1. `argent server status` — `health: ok`; if not running, `argent server start` (background).
+     2. **Relink after restart** — each `server start` rotates the bearer token. If the server was started or restarted this session, relink: `printf 'y\n' | argent unlink` then `argent link argent://<token>@127.0.0.1:3001 --yes` (token from `server start` output).
+     3. Verify: `argent tools` exits 0 — not `401 Unauthorized`.
 9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
 
 ### `app.json` merge checklist
@@ -102,6 +106,8 @@ Requires Uniwind types generated in Phase A step 7.
 ### Argent smoke test (Phase C2)
 
 Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor/rules/argent.md` and `argent-device-interact` skill first.
+
+**CLI pre-flight:** if using `argent run` (not MCP), confirm tool-server health and relink when the token rotated — see Phase A step 8.
 
 **Default: iOS simulator only.** Android is opt-in at intake.
 

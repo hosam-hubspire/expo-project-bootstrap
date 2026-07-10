@@ -13,7 +13,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
 9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` (CLI has no `generate-types`).
-10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix` (or `bunx biome check --write .`) so generated MCP JSON is Biome-clean before Phase C. Template `biome.json` also ignores Argent MCP/settings paths.
+10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix` (or `bunx biome check --write .`) so generated MCP JSON is Biome-clean before Phase C. Before C2 CLI smoke tests: `argent server status` → relink if token rotated → `argent tools` must not 401. Template `biome.json` also ignores Argent MCP/settings paths.
 11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
 12. Design tokens (if enabled at intake) — **after C2** — collect Figma URL at intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
@@ -28,6 +28,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 | Package type | Command | Version |
 |--------------|---------|---------|
 | Expo / SDK-aligned | `bunx expo install <pkg>` | SDK-compatible (no `@latest`) |
+| Jest / `@types/jest` | After `jest-expo` — derive from its `babel-jest` dep | **Never `@latest`** — Jest 30 breaks `jest-expo` |
 | Everything else | `bun add <pkg>@latest` or `bun add -d <pkg>@latest` | `@latest` always |
 
 **Never pass `--verbose` to `bunx expo install`** — it is not supported. Use `--verbose` on `bun add` only.
@@ -36,8 +37,11 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 
 ```bash
 bunx expo install expo-localization expo-font jest-expo
+# Pin Jest to jest-expo's stack — never jest@latest (Jest 30 breaks jest-expo)
+JEST_RANGE=$(node -p "require('jest-expo/package.json').dependencies['babel-jest']")
+bun add -d jest@${JEST_RANGE} @types/jest@${JEST_RANGE}
 bun add --verbose uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest
-bun add -d --verbose @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest @types/jest@latest jest@latest
+bun add -d --verbose @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest
 bunx biome migrate --write
 ```
 

@@ -107,7 +107,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 ## Rules
 
 - `bunx create-expo-app@latest --template default` — never hand-roll `package.json`
-- **Package versions:** `bunx expo install` for Expo/SDK packages (no `@latest`); `bun add <pkg>@latest` / `bun add -d <pkg>@latest` for everything else. Never copy version pins from templates.
+- **Package versions:** `bunx expo install` for Expo/SDK packages (no `@latest`); `bun add <pkg>@latest` / `bun add -d <pkg>@latest` for everything else. **Exception:** `jest` / `@types/jest` — derive from `jest-expo`'s `babel-jest` dep after `bunx expo install jest-expo`; never `jest@latest`. Never copy version pins from templates.
 - **Never pass `--verbose` to `bunx expo install`** — only on `bun add`
 - No `move_agent_to_root` during bootstrap
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
@@ -133,6 +133,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Remove scaffold web files during Phase A (e.g. `src/app/+html.tsx`, web entry/assets); do not reintroduce web support later
 - **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (NativeTabs clears the home indicator). Pin primary CTAs with `footer`.
 - **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
+- **Argent CLI (C2):** before `argent run`, check `argent server status` (`health: ok`). If the tool-server was started/restarted this session, relink (`argent unlink` → `argent link` with token from `server start`); verify with `argent tools` (not 401). MCP clients may auto-spawn — relink applies mainly to CLI smoke tests
 - **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too
 - **C2 defaults to iOS only** — do not boot or build Android unless intake selected Android smoke test
 
