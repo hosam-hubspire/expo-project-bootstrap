@@ -1,6 +1,6 @@
 import { useContext, type ReactNode } from "react";
 import { ScrollView, View, type ViewProps } from "react-native";
-import { HeaderHeightContext } from "@react-navigation/elements";
+import { HeaderHeightContext } from "expo-router/react-navigation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedView } from "@/components/ThemedView";
@@ -15,7 +15,7 @@ export type ScreenProps = ViewProps & {
   /**
    * Which edges receive inset padding. Default: all four.
    * Tab screens usually omit `bottom` (tab bar clears the home indicator).
-   * Top is skipped automatically when a React Navigation header is shown
+   * Top is skipped automatically when a navigator header is shown
    * (`headerShown: true`) so content is not double-padded under the header.
    */
   edges?: SafeAreaEdge[];
