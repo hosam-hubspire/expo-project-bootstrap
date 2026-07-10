@@ -19,11 +19,11 @@
 5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
    - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `lib/use-storage-state.ts`, `app/sign-in.tsx`; wrap `SessionProvider`; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings.
-   - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README.
+   - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README (`@react-navigation/drawer` + gesture/reanimated/worklets).
    - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
-7. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
-8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
+7. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` (not `generate-types` — that command does not exist).
+8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` (or `bunx biome check --write .`) so Argent MCP JSON matches Biome before Phase C.
 9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
 
 ### `app.json` merge checklist

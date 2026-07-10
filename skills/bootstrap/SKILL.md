@@ -114,8 +114,9 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Full templates by default; strip — `templates/optional/minimal/README.md`
 - **Navigation:** start from `templates/src/app/` (tabs + intro); assemble drawer/auth/flat screens from `templates/navigation/` per intake — never leave unused route groups in the app
 - **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
-- **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C
-- **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`
+- **Drawer on:** `bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets` — `expo-router/drawer` still needs `@react-navigation/drawer`
+- **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C (CLI has no `generate-types`)
+- **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`. Template ignores Argent MCP/settings paths; after `argent init`, run `lint:fix` before Phase C
 - **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) when tabs on — scaffold lacks `settings.png`
 - **`app.json` merge:** follow checklist in [bootstrap.md](bootstrap.md) — `experiments` and `extra.eas` are siblings under `expo`
 - **GraphQL on:** copy `.env.example`; create local `.env` with `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` before C2; gitignore `.env`
@@ -126,7 +127,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
 - No one-off bridge scripts under `scripts/`; iOS/Android only; Bun only
-- **`argent init` ≠ smoke test** — init in Phase A; launch + verify in C2
+- **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
 - **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too
 - **C2 defaults to iOS only** — do not boot or build Android unless intake selected Android smoke test
 

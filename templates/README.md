@@ -12,8 +12,8 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
-9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
-10. Argent — `bunx @swmansion/argent init -y`.
+9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` (CLI has no `generate-types`).
+10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix` (or `bunx biome check --write .`) so generated MCP JSON is Biome-clean before Phase C. Template `biome.json` also ignores Argent MCP/settings paths.
 11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
 12. Design tokens (if enabled at intake) — **after C2** — collect Figma URL at intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
@@ -48,8 +48,8 @@ bunx expo install expo-dev-client
 ### Navigation (when toggles enabled at intake)
 
 ```bash
-# Drawer on — SDK 56+ drawer is in expo-router; ensure gesture/reanimated/worklets present
-bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets
+# Drawer on — expo-router/drawer still needs the React Navigation drawer package + gesture stack
+bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets
 
 # Protected / auth on — secure session persistence (see navigation/auth/)
 bunx expo install expo-secure-store

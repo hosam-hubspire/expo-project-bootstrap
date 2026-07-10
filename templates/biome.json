@@ -19,7 +19,13 @@
       "!**/src/stories/design-tokens/token-definitions.ts",
       "!**/assets/icons",
       "!**/assets/expo.icon",
-      "!**/.rnstorybook/storybook.requires.ts"
+      "!**/.rnstorybook/storybook.requires.ts",
+      "!**/.cursor/mcp.json",
+      "!**/.mcp.json",
+      "!**/.vscode/mcp.json",
+      "!**/.claude/settings.json",
+      "!**/.claude/agents",
+      "!**/.agents"
     ]
   },
   "formatter": {
