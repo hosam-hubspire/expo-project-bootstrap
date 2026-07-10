@@ -1,7 +1,8 @@
-import { Pressable, View } from "react-native";
-
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import {
+  SettingsActionButton,
+  SettingsButtonRow,
+  SettingsPanel,
+} from "@/components/SettingsUI";
 import { toast } from "@/utils/toast";
 
 type ToastExamplesProps = {
@@ -20,36 +21,12 @@ export function ToastExamples({
   infoLabel,
 }: ToastExamplesProps) {
   return (
-    <ThemedView colorToken="surface-secondary" className="gap-sm rounded-panel p-base">
-      <View className="gap-2xs">
-        <ThemedText variant="global-body-small-bold">{title}</ThemedText>
-        <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          {description}
-        </ThemedText>
-      </View>
-      <View className="flex-row flex-wrap gap-xs">
-        <Pressable
-          onPress={() => toast.success(successLabel)}
-          className="min-h-10 flex-1 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-          accessibilityRole="button"
-        >
-          <ThemedText variant="global-body-small-bold">{successLabel}</ThemedText>
-        </Pressable>
-        <Pressable
-          onPress={() => toast.error(errorLabel)}
-          className="min-h-10 flex-1 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-          accessibilityRole="button"
-        >
-          <ThemedText variant="global-body-small-bold">{errorLabel}</ThemedText>
-        </Pressable>
-        <Pressable
-          onPress={() => toast.info(infoLabel)}
-          className="min-h-10 flex-1 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-          accessibilityRole="button"
-        >
-          <ThemedText variant="global-body-small-bold">{infoLabel}</ThemedText>
-        </Pressable>
-      </View>
-    </ThemedView>
+    <SettingsPanel title={title} description={description}>
+      <SettingsButtonRow>
+        <SettingsActionButton label={successLabel} onPress={() => toast.success(successLabel)} />
+        <SettingsActionButton label={errorLabel} onPress={() => toast.error(errorLabel)} />
+        <SettingsActionButton label={infoLabel} onPress={() => toast.info(infoLabel)} />
+      </SettingsButtonRow>
+    </SettingsPanel>
   );
 }

@@ -20,9 +20,9 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 
 **`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`.
 
-**Safe area** — screens use the `Screen` component (`src/components/Screen`), which applies [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) on an outer `style` and keeps Uniwind classes on `contentClassName`. Do not use `SafeAreaView`. Tab routes: `edges={["top","left","right"]}`. Full-screen flows (onboarding, auth): default edges + `footer` for the primary CTA.
+**Safe area** — screens use the `Screen` component (`src/components/Screen`), which applies [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) on an outer `style` and keeps Uniwind classes on `contentClassName`. Do not use `SafeAreaView`. Tab routes: `edges={["top","left","right"]}`. When a navigator header is visible (`headerShown: true`, e.g. Drawer), `Screen` skips the top inset automatically so content is not double-padded. Full-screen flows (onboarding, auth): default edges + `footer` for the primary CTA.
 
-**Toasts** — `<AppToast />` is mounted in the root `_layout.tsx` (core, always). Call `toast.success()`, `toast.error()`, or `toast.info()` from `@/utils/toast` anywhere in the app. Settings includes a **ToastExamples** panel with sample buttons.
+**Toasts** — `<AppToast />` is mounted in the root `_layout.tsx` (core, always). Call `toast.success()`, `toast.error()`, or `toast.info()` from `@/utils/toast` anywhere in the app. Settings includes a **ToastExamples** panel with sample buttons (uses shared `SettingsUI` row/panel primitives — copy `src/components/SettingsUI/` with Settings).
 
 **Permissions demos** — when any permission toggle is on, copy `src/components/PermissionsExamples/`, enable the commented block in Settings (import + `<PermissionsExamples />`), and keep only `labels` keys (plus matching imports/rows in `PermissionsExamples.tsx`) for selected capabilities. See [`src/utils/permissions/README.md`](./src/utils/permissions/README.md).
 

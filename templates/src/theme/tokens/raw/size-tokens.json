@@ -38,6 +38,11 @@
       "values": { "lg+": 4, "md": 4, "sm": 4 }
     },
     {
+      "name": "radius/button",
+      "type": "FLOAT",
+      "values": { "lg+": 8, "md": 8, "sm": 8 }
+    },
+    {
       "name": "responsive/max-content-width",
       "type": "FLOAT",
       "values": { "lg+": 800, "md": 800, "sm": 800 }

@@ -485,23 +485,48 @@ function collectSizeTokenValues(sizeTokens, sizeModes) {
   return { sm, mdOverrides, lgOverrides };
 }
 
+function isThemeSpacingOrRadius(baseName) {
+  return baseName.startsWith("spacing-") || baseName.startsWith("radius-");
+}
+
+/**
+ * Emit @theme (so Uniwind generates gap-2xs, p-base, rounded-panel, …) plus
+ * media-query :root overrides. Do not use `@theme inline { --x: var(--x) }` —
+ * self-referential theme vars break Tailwind resolution.
+ */
 function generateSpacingCss(sizeTokens, sizeModes) {
   const { sm, mdOverrides, lgOverrides } = collectSizeTokenValues(sizeTokens, sizeModes);
   const hasBreakpoints = sizeModes.md != null || sizeModes.lg != null;
+  const sorted = Object.entries(sm).sort(([a], [b]) => a.localeCompare(b));
+  const themeEntries = sorted.filter(([name]) => isThemeSpacingOrRadius(name));
+  const otherEntries = sorted.filter(([name]) => !isThemeSpacingOrRadius(name));
   const lines = [
     "/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */",
     hasBreakpoints
       ? `/* Size/spacing tokens — mobile-first (base default, md ≥${BREAKPOINT_MD}px, lg ≥${BREAKPOINT_LG}px) */`
       : "/* Size/spacing tokens — single Figma mode (no breakpoint overrides) */",
     "",
-    ":root {",
   ];
 
-  for (const [baseName, value] of Object.entries(sm).sort(([a], [b]) => a.localeCompare(b))) {
-    lines.push(`  --${baseName}: ${value}px;`);
+  // Literal @theme values register utilities; @theme also emits these onto :root.
+  if (themeEntries.length > 0) {
+    lines.push(
+      "/* Uniwind/Tailwind utilities: gap-*, p-*, m-*, rounded-* from these theme keys */",
+      "@theme {",
+    );
+    for (const [baseName, value] of themeEntries) {
+      lines.push(`  --${baseName}: ${value}px;`);
+    }
+    lines.push("}", "");
   }
 
-  lines.push("}", "");
+  if (otherEntries.length > 0) {
+    lines.push(":root {");
+    for (const [baseName, value] of otherEntries) {
+      lines.push(`  --${baseName}: ${value}px;`);
+    }
+    lines.push("}", "");
+  }
 
   if (Object.keys(mdOverrides).length > 0) {
     lines.push(`@media (min-width: ${BREAKPOINT_MD}px) {`, "  :root {");

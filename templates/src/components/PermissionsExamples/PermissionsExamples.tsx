@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, View } from "react-native";
 
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import {
+  SettingsActionButton,
+  SettingsButtonRow,
+  SettingsDetailRow,
+  SettingsPanel,
+} from "@/components/SettingsUI";
 import {
   ensureBackgroundLocationPermission,
   ensureCameraPermission,
@@ -49,46 +52,34 @@ function PermissionRow({
     : "…";
 
   return (
-    <View className="gap-xs border-t border-stroke-default pt-sm">
-      <View className="gap-2xs">
-        <ThemedText variant="global-body-small-bold">{label}</ThemedText>
-        <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
-          {statusLabel}: {statusText}
-          {extra ? ` · ${extra}` : ""}
-        </ThemedText>
-      </View>
-      <View className="flex-row flex-wrap gap-xs">
-        <Pressable
+    <SettingsDetailRow
+      title={label}
+      subtitle={`${statusLabel}: ${statusText}${extra ? ` · ${extra}` : ""}`}
+    >
+      <SettingsButtonRow>
+        <SettingsActionButton
+          label={statusLabel}
           onPress={() => {
             void onRefresh();
           }}
-          className="min-h-10 flex-1 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-          accessibilityRole="button"
-        >
-          <ThemedText variant="global-body-small-bold">{statusLabel}</ThemedText>
-        </Pressable>
-        <Pressable
+        />
+        <SettingsActionButton
+          label={requestLabel}
           onPress={() => {
             void onRequest().then(() => onRefresh());
           }}
-          className="min-h-10 flex-1 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-          accessibilityRole="button"
-        >
-          <ThemedText variant="global-body-small-bold">{requestLabel}</ThemedText>
-        </Pressable>
+        />
         {status && !status.granted && status.canAskAgain === false ? (
-          <Pressable
+          <SettingsActionButton
+            label={openSettingsLabel}
+            variant="emphasis"
             onPress={() => {
               void openAppSettings();
             }}
-            className="min-h-10 flex-1 items-center justify-center rounded-input border border-button-button-primary bg-surface-default px-sm py-xs active:opacity-80"
-            accessibilityRole="button"
-          >
-            <ThemedText variant="global-body-small-bold">{openSettingsLabel}</ThemedText>
-          </Pressable>
+          />
         ) : null}
-      </View>
-    </View>
+      </SettingsButtonRow>
+    </SettingsDetailRow>
   );
 }
 
@@ -192,14 +183,7 @@ export function PermissionsExamples({
   const shared = { statusLabel, requestLabel, openSettingsLabel };
 
   return (
-    <ThemedView colorToken="surface-secondary" className="gap-sm rounded-panel p-base">
-      <View className="gap-2xs">
-        <ThemedText variant="global-body-small-bold">{title}</ThemedText>
-        <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          {description}
-        </ThemedText>
-      </View>
-
+    <SettingsPanel title={title} description={description}>
       {labels.microphone ? (
         <PermissionRow
           {...shared}
@@ -261,6 +245,6 @@ export function PermissionsExamples({
           onRequest={ensureMediaLibraryPermission}
         />
       ) : null}
-    </ThemedView>
+    </SettingsPanel>
   );
 }

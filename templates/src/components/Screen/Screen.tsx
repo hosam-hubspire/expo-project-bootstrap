@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
+import { useContext, type ReactNode } from "react";
 import { ScrollView, View, type ViewProps } from "react-native";
+import { HeaderHeightContext } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedView } from "@/components/ThemedView";
@@ -11,7 +12,12 @@ export type ScreenProps = ViewProps & {
   children: ReactNode;
   /** Extra content pinned below the main area (e.g. primary CTA). Inherits horizontal + bottom insets. */
   footer?: ReactNode;
-  /** Which edges receive inset padding. Default: all four. Tab screens usually omit `bottom`. */
+  /**
+   * Which edges receive inset padding. Default: all four.
+   * Tab screens usually omit `bottom` (tab bar clears the home indicator).
+   * Top is skipped automatically when a React Navigation header is shown
+   * (`headerShown: true`) so content is not double-padded under the header.
+   */
   edges?: SafeAreaEdge[];
   /** Background token for the outer shell. */
   colorToken?: ColorTokenName;
@@ -22,6 +28,12 @@ export type ScreenProps = ViewProps & {
 };
 
 const DEFAULT_EDGES: SafeAreaEdge[] = ["top", "right", "bottom", "left"];
+
+/** True when a parent navigator is rendering a header above this screen. */
+function useHasNavigationHeader(): boolean {
+  const headerHeight = useContext(HeaderHeightContext);
+  return (headerHeight ?? 0) > 0;
+}
 
 /**
  * Screen shell using [`useSafeAreaInsets`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets).
@@ -40,9 +52,10 @@ export function Screen({
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
   const edgeSet = new Set(edges);
+  const hasNavigationHeader = useHasNavigationHeader();
 
   const insetStyle = {
-    paddingTop: edgeSet.has("top") ? insets.top : 0,
+    paddingTop: edgeSet.has("top") && !hasNavigationHeader ? insets.top : 0,
     paddingRight: edgeSet.has("right") ? insets.right : 0,
     paddingBottom: edgeSet.has("bottom") ? insets.bottom : 0,
     paddingLeft: edgeSet.has("left") ? insets.left : 0,

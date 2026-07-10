@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 import { Screen } from "@/components/Screen";
-import { ThemedText } from "@/components/ThemedText";
+import { SettingsFooterButton } from "@/components/SettingsUI";
 import { useSession } from "@/providers/session-provider";
 
 /**
@@ -14,15 +14,12 @@ export function SignOutButton() {
   const { signOut } = useSession();
 
   return (
-    <Pressable
+    <SettingsFooterButton
+      label={t("settings.signOut")}
       onPress={() => {
         signOut();
       }}
-      className="items-center rounded-button border border-stroke-default px-base py-sm active:opacity-80"
-      accessibilityRole="button"
-    >
-      <ThemedText variant="global-body-small-bold">{t("settings.signOut")}</ThemedText>
-    </Pressable>
+    />
   );
 }
 

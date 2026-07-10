@@ -1,15 +1,20 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
 /* Size/spacing tokens — mobile-first (base default, md ≥768px, lg ≥1024px) */
 
-:root {
+/* Uniwind/Tailwind utilities: gap-*, p-*, m-*, rounded-* from these theme keys */
+@theme {
+  --radius-button: 8px;
   --radius-input: 4px;
   --radius-panel: 8px;
-  --responsive-max-content-width: 800px;
   --spacing-2xs: 4px;
   --spacing-base: 16px;
   --spacing-lg: 20px;
   --spacing-sm: 12px;
   --spacing-xs: 8px;
+}
+
+:root {
+  --responsive-max-content-width: 800px;
 }
 
 @media (min-width: 1024px) {

@@ -180,7 +180,7 @@ When any permission is selected, also:
 3. Keep only `labels` keys for selected toggles (e.g. omit `camera` / `mediaLibrary` when Image picker is off).
 4. Trim unused imports and rows inside `PermissionsExamples.tsx` so missing packages do not break the build.
 
-Toast examples are always on Settings via `ToastExamples` (core).
+Toast examples are always on Settings via `ToastExamples` (core). Both demos use `src/components/SettingsUI/` (copy with Settings / ToastExamples).
 
 ## API pattern
 

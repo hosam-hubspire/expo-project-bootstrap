@@ -1,8 +1,12 @@
 import { useMutation, useQuery, useSubscription } from "@apollo/client/react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
+import {
+  SettingsActionButton,
+  SettingsDetailRow,
+  SettingsPanel,
+} from "@/components/SettingsUI";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import {
   ExampleMutationDocument,
   ExampleQueryDocument,
@@ -40,25 +44,23 @@ function QueryExample({
   const { data, loading, error, refetch } = useQuery(ExampleQueryDocument);
 
   return (
-    <View className="gap-xs border-t border-stroke-default pt-sm">
-      <ThemedText variant="global-body-small-bold">{label}</ThemedText>
-      <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
-        {loading
+    <SettingsDetailRow
+      title={label}
+      subtitle={
+        loading
           ? loadingLabel
           : error
             ? `${errorLabel}: ${error.message}`
-            : `data: ${JSON.stringify(data ?? null)}`}
-      </ThemedText>
-      <Pressable
+            : `data: ${JSON.stringify(data ?? null)}`
+      }
+    >
+      <SettingsActionButton
+        label={label}
         onPress={() => {
           void refetch();
         }}
-        className="min-h-10 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-        accessibilityRole="button"
-      >
-        <ThemedText variant="global-body-small-bold">{label}</ThemedText>
-      </Pressable>
-    </View>
+      />
+    </SettingsDetailRow>
   );
 }
 
@@ -74,42 +76,37 @@ function MutationExample({
   const [runMutation, { loading, data, error }] = useMutation(ExampleMutationDocument);
 
   return (
-    <View className="gap-xs border-t border-stroke-default pt-sm">
-      <ThemedText variant="global-body-small-bold">{label}</ThemedText>
-      <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
-        {hint}
-      </ThemedText>
-      <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
-        {error
-          ? error.message
-          : data
-            ? `data: ${JSON.stringify(data)}`
-            : loading
-              ? "…"
-              : "—"}
-      </ThemedText>
-      <Pressable
-        disabled={loading}
-        onPress={() => {
-          void runMutation()
-            .then((result) => {
-              if (result.error) {
-                toast.error(label, result.error.message);
-                return;
-              }
-              toast.success(label, JSON.stringify(result.data ?? {}));
-            })
-            .catch((err: unknown) => {
-              const message = err instanceof Error ? err.message : String(err);
-              toast.error(label, message);
-            });
-        }}
-        className="min-h-10 items-center justify-center rounded-input border border-stroke-default bg-surface-default px-sm py-xs active:opacity-80"
-        accessibilityRole="button"
-      >
-        <ThemedText variant="global-body-small-bold">{runLabel}</ThemedText>
-      </Pressable>
-    </View>
+    <SettingsDetailRow title={label} subtitle={hint}>
+      <View className="gap-xs">
+        <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
+          {error
+            ? error.message
+            : data
+              ? `data: ${JSON.stringify(data)}`
+              : loading
+                ? "…"
+                : "—"}
+        </ThemedText>
+        <SettingsActionButton
+          label={runLabel}
+          disabled={loading}
+          onPress={() => {
+            void runMutation()
+              .then((result) => {
+                if (result.error) {
+                  toast.error(label, result.error.message);
+                  return;
+                }
+                toast.success(label, JSON.stringify(result.data ?? {}));
+              })
+              .catch((err: unknown) => {
+                const message = err instanceof Error ? err.message : String(err);
+                toast.error(label, message);
+              });
+          }}
+        />
+      </View>
+    </SettingsDetailRow>
   );
 }
 
@@ -133,11 +130,7 @@ function SubscriptionExample({
   }
 
   return (
-    <View className="gap-xs border-t border-stroke-default pt-sm">
-      <ThemedText variant="global-body-small-bold">{label}</ThemedText>
-      <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
-        {hint}
-      </ThemedText>
+    <SettingsDetailRow title={label} subtitle={hint}>
       <ThemedText variant="global-body-xxs" colorToken="text-text-secondary">
         {error
           ? error.message
@@ -147,7 +140,7 @@ function SubscriptionExample({
               ? listeningLabel
               : idleLabel}
       </ThemedText>
-    </View>
+    </SettingsDetailRow>
   );
 }
 
@@ -171,14 +164,7 @@ export function GraphQLExamples({
   subscriptionHint,
 }: GraphQLExamplesProps) {
   return (
-    <ThemedView colorToken="surface-secondary" className="w-full gap-sm rounded-panel p-base">
-      <View className="gap-2xs">
-        <ThemedText variant="global-body-small-bold">{title}</ThemedText>
-        <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          {description}
-        </ThemedText>
-      </View>
-
+    <SettingsPanel title={title} description={description}>
       <QueryExample label={queryLabel} loadingLabel={queryLoading} errorLabel={queryError} />
       <MutationExample label={mutationLabel} runLabel={mutationRun} hint={mutationHint} />
       <SubscriptionExample
@@ -187,6 +173,6 @@ export function GraphQLExamples({
         idleLabel={subscriptionIdle}
         hint={subscriptionHint}
       />
-    </ThemedView>
+    </SettingsPanel>
   );
 }

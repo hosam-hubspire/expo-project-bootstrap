@@ -1,38 +1,18 @@
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
+import {
+  SettingsButtonRow,
+  SettingsFooterButton,
+  SettingsOptionChip,
+  SettingsPanel,
+} from "@/components/SettingsUI";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { ToastExamples } from "@/components/ToastExamples";
 // When any permission toggle is on at intake, uncomment:
 // import { PermissionsExamples } from "@/components/PermissionsExamples";
 import { type ThemePreference, usePreferencesStore } from "@/stores/preferences-store";
-
-type OptionButtonProps = {
-  label: string;
-  value: ThemePreference;
-  selected: boolean;
-  onSelect: (value: ThemePreference) => void;
-};
-
-function OptionButton({ label, value, selected, onSelect }: OptionButtonProps) {
-  return (
-    <Pressable
-      onPress={() => onSelect(value)}
-      className={`min-h-10 flex-1 flex-row items-center justify-center gap-2xs rounded-input border px-sm py-xs active:opacity-80 ${
-        selected
-          ? "border-button-button-primary bg-surface-tertiary"
-          : "border-transparent bg-surface-default"
-      }`}
-      accessibilityRole="button"
-      accessibilityState={{ selected }}
-    >
-      {selected ? <Icon name="check" size={14} colorToken="button-button-primary" /> : null}
-      <ThemedText variant="global-body-small-bold">{label}</ThemedText>
-    </Pressable>
-  );
-}
 
 export default function SettingsScreen() {
   const themePreference = usePreferencesStore((state) => state.themePreference);
@@ -56,19 +36,14 @@ export default function SettingsScreen() {
         <ThemedText variant="heading-app-section">Settings</ThemedText>
       </View>
 
-      <ThemedView colorToken="surface-secondary" className="gap-sm rounded-panel p-base">
-        <View className="gap-2xs">
-          <View className="flex-row items-center gap-xs">
-            <Icon name="appearance" size={18} colorToken="text-text-default" />
-            <ThemedText variant="global-body-small-bold">Appearance</ThemedText>
-          </View>
-          <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-            Choose light, dark, or match the system setting.
-          </ThemedText>
-        </View>
-        <View className="flex-row gap-xs">
+      <SettingsPanel
+        title="Appearance"
+        description="Choose light, dark, or match the system setting."
+        icon="appearance"
+      >
+        <SettingsButtonRow>
           {themeOptions.map((option) => (
-            <OptionButton
+            <SettingsOptionChip
               key={option.value}
               label={option.label}
               value={option.value}
@@ -76,8 +51,8 @@ export default function SettingsScreen() {
               onSelect={setThemePreference}
             />
           ))}
-        </View>
-      </ThemedView>
+        </SettingsButtonRow>
+      </SettingsPanel>
 
       <ToastExamples
         title="Toasts"
@@ -109,15 +84,12 @@ export default function SettingsScreen() {
       />
       */}
 
-      <Pressable
+      <SettingsFooterButton
+        label="Replay onboarding"
         onPress={() => {
           resetOnboarding();
         }}
-        className="items-center rounded-button border border-stroke-default px-base py-sm active:opacity-80"
-        accessibilityRole="button"
-      >
-        <ThemedText variant="global-body-small-bold">Replay onboarding</ThemedText>
-      </Pressable>
+      />
     </Screen>
   );
 }

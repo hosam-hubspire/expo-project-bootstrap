@@ -128,7 +128,8 @@ export const spacingTokens = {
 
 export const radiusTokens = {
   "radius-panel": 8,
-  "radius-input": 4
+  "radius-input": 4,
+  "radius-button": 8
 } as const;
 
 export const sizePrimitiveGroups = {} as const;
