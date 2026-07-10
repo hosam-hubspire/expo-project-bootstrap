@@ -171,6 +171,17 @@ Defaults live in `ios-strings.ts`. With CNG / prebuild, config plugins write the
 5. Regenerate `index.ts` exports to match copied modules (remove unused exports).
 6. Run `bunx expo prebuild` after plugin changes.
 
+## Settings demo
+
+When any permission is selected, also:
+
+1. Copy `templates/src/components/PermissionsExamples/` → `src/components/PermissionsExamples/`.
+2. In Settings (`(tabs)/settings.tsx`, flat `navigation/screens/settings.tsx`, and minimal settings if used): uncomment the `PermissionsExamples` import and JSX block.
+3. Keep only `labels` keys for selected toggles (e.g. omit `camera` / `mediaLibrary` when Image picker is off).
+4. Trim unused imports and rows inside `PermissionsExamples.tsx` so missing packages do not break the build.
+
+Toast examples are always on Settings via `ToastExamples` (core).
+
 ## API pattern
 
 Each runtime permission exposes:

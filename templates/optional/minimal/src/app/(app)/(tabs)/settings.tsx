@@ -4,6 +4,9 @@ import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { ToastExamples } from "@/components/ToastExamples";
+// When any permission toggle is on at intake, uncomment:
+// import { PermissionsExamples } from "@/components/PermissionsExamples";
 import { type ThemePreference, usePreferencesStore } from "@/stores/preferences-store";
 
 type OptionButtonProps = {
@@ -48,7 +51,10 @@ export default function SettingsScreen() {
       scroll
       contentClassName="w-full max-w-content gap-base self-center px-lg pb-base pt-base"
     >
-      <ThemedText variant="heading-app-section">Settings</ThemedText>
+      <View className="flex-row items-center gap-xs">
+        <Icon name="settings" size={22} colorToken="text-text-default" />
+        <ThemedText variant="heading-app-section">Settings</ThemedText>
+      </View>
 
       <ThemedView colorToken="surface-secondary" className="gap-sm rounded-panel p-base">
         <View className="gap-2xs">
@@ -72,6 +78,36 @@ export default function SettingsScreen() {
           ))}
         </View>
       </ThemedView>
+
+      <ToastExamples
+        title="Toasts"
+        description="Sample success, error, and info toasts via @/utils/toast."
+        successLabel="Success"
+        errorLabel="Error"
+        infoLabel="Info"
+      />
+
+      {/*
+        When any permission toggle is on at intake, uncomment and keep only labels
+        for selected capabilities (also trim unused imports in PermissionsExamples):
+
+      <PermissionsExamples
+        title="Permissions"
+        description="Check status and request access for capabilities selected at bootstrap."
+        statusLabel="Status"
+        requestLabel="Request"
+        openSettingsLabel="Open settings"
+        labels={{
+          microphone: "Microphone",
+          locationForeground: "Location (foreground)",
+          locationBackground: "Location (background)",
+          locationServices: "Device location services",
+          notifications: "Notifications",
+          camera: "Camera",
+          mediaLibrary: "Photos & videos",
+        }}
+      />
+      */}
 
       <Pressable
         onPress={() => {

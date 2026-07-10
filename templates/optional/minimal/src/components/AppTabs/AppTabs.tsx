@@ -8,6 +8,8 @@ import {
   typographyClassName,
 } from "@/theme/typography";
 
+import { TabBarIcon } from "@/components/AppTabs/tab-bar-icons";
+
 const StyledNativeTabs = withUniwind(NativeTabs);
 
 export default function AppTabs() {
@@ -30,16 +32,14 @@ export default function AppTabs() {
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require("@/assets/images/tabIcons/home.png")}
-          renderingMode="template"
+          src={<NativeTabs.Trigger.VectorIcon family={TabBarIcon} name="home" />}
         />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="settings">
         <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require("@/assets/images/tabIcons/settings.png")}
-          renderingMode="template"
+          src={<NativeTabs.Trigger.VectorIcon family={TabBarIcon} name="settings" />}
         />
       </NativeTabs.Trigger>
     </StyledNativeTabs>

@@ -8,7 +8,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 2. Install deps (below) — skip groups for unchecked stack items. **Expo packages:** `bunx expo install` (SDK-compatible). **All other packages:** `bun add …@latest`. Never copy version pins from this repo.
 3. Add template files: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
 4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js` **only when Sync design tokens is on** at intake. **Always** copy `src/theme/tokens/raw/` — template stub JSON when sync is off; empty `raw/` (README only) when sync is on. When off (default), also copy pre-built `src/theme/tokens/generated/`; no `tokens:discover` / `tokens:generate` in `package.json`.
-5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Merge `assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/` — the default Expo scaffold ships `home.png` but not `settings.png`.
+5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tab bar icons use the nano icon font built from `assets/icons/*.svg` (`home`, `settings`) — no separate `tabIcons` PNGs.
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
 8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
@@ -21,7 +21,9 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 
 **Safe area** — screens use the `Screen` component (`src/components/Screen`), which applies [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) on an outer `style` and keeps Uniwind classes on `contentClassName`. Do not use `SafeAreaView`. Tab routes: `edges={["top","left","right"]}`. Full-screen flows (onboarding, auth): default edges + `footer` for the primary CTA.
 
-**Toasts** — `<AppToast />` is mounted in the root `_layout.tsx` (core, always). Call `toast.success()`, `toast.error()`, or `toast.info()` from `@/utils/toast` anywhere in the app.
+**Toasts** — `<AppToast />` is mounted in the root `_layout.tsx` (core, always). Call `toast.success()`, `toast.error()`, or `toast.info()` from `@/utils/toast` anywhere in the app. Settings includes a **ToastExamples** panel with sample buttons.
+
+**Permissions demos** — when any permission toggle is on, copy `src/components/PermissionsExamples/`, enable the commented block in Settings (import + `<PermissionsExamples />`), and keep only `labels` keys (plus matching imports/rows in `PermissionsExamples.tsx`) for selected capabilities. See [`src/utils/permissions/README.md`](./src/utils/permissions/README.md).
 
 ## Installs
 
@@ -118,6 +120,8 @@ Copy into the app:
 
 Merge iOS usage strings from `IOS_PERMISSION_STRINGS` in `ios-strings.ts` into each plugin block. Trim `index.ts` exports to match copied modules.
 
+Also copy `src/components/PermissionsExamples/` and enable the Settings demo block (uncomment import + `<PermissionsExamples />` in settings screens). Pass only `labels` for selected toggles; trim unused imports/rows in `PermissionsExamples.tsx`.
+
 ### Default stack (unless unchecked)
 
 ```bash
@@ -167,7 +171,7 @@ Add token scripts to `package.json` **only when Sync design tokens is on**:
 
 Sample SVGs + glyphmap in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
 
-Tab bar PNGs: scaffold provides `home.png`; merge `settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/`.
+Tab bar icons use the same nano icon font (`TabBarIcon` in `src/components/AppTabs/tab-bar-icons.ts`) — `home` and `settings` glyphs from `assets/icons/home.svg` and `assets/icons/settings.svg`. Do not rely on Expo scaffold `tabIcons/*.png`.
 
 ## Stub tokens (sync off — default)
 

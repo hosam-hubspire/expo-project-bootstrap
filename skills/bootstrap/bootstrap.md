@@ -14,7 +14,7 @@
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
    - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **do not** copy token scripts; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
    - **Token sync on:** copy token scripts + empty `src/theme/tokens/raw/` (README only); add `tokens:discover` / `tokens:generate` to `package.json`. Figma URL collected at intake — real exports land in `raw/` during Phase B.
-   - **Tab icons (when tabs on):** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — default Expo scaffold has `home.png` but not `settings.png`.
+   - **Tab icons (when tabs on):** use nano icon font from `assets/icons/*.svg` via `AppTabs` + `tab-bar-icons.ts` (`home`, `settings`) — do not merge scaffold `tabIcons` PNGs for settings.
    - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
 5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
@@ -22,7 +22,7 @@
    - **GraphQL + auth:** Apollo client already includes a SecureStore auth link (`SetContextLink` + WS `connectionParams`) keyed by `SESSION_STORAGE_KEY` — do not read the token from React context in the link.
    - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README (`@react-navigation/drawer` + gesture/reanimated/worklets).
    - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
-   - **Permissions on:** copy selected modules from `templates/src/utils/permissions/` per [`src/utils/permissions/README.md`](../../templates/src/utils/permissions/README.md); install packages; merge `app.json` plugins with iOS usage strings from `ios-strings.ts`; trim `index.ts` to exported modules only.
+   - **Permissions on:** copy selected modules from `templates/src/utils/permissions/` per [`src/utils/permissions/README.md`](../../templates/src/utils/permissions/README.md); install packages; merge `app.json` plugins with iOS usage strings from `ios-strings.ts`; trim `index.ts` to exported modules only; copy `src/components/PermissionsExamples/` and enable the Settings permissions demo (uncomment import + `<PermissionsExamples />`, keep only selected `labels` / trim unused rows).
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
 7. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` (not `generate-types` — that command does not exist).
 8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` (or `bunx biome check --write .`) so Argent MCP JSON matches Biome before Phase C.
