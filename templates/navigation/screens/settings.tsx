@@ -43,6 +43,7 @@ export default function SettingsScreen() {
   const setThemePreference = usePreferencesStore((state) => state.setThemePreference);
   const language = usePreferencesStore((state) => state.language);
   const setLanguage = usePreferencesStore((state) => state.setLanguage);
+  const resetOnboarding = usePreferencesStore((state) => state.resetOnboarding);
 
   const themeOptions: { value: ThemePreference; label: string }[] = [
     { value: "system", label: t("settings.themeSystem") },
@@ -101,6 +102,16 @@ export default function SettingsScreen() {
             ))}
           </View>
         </ThemedView>
+
+        <Pressable
+          onPress={() => {
+            resetOnboarding();
+          }}
+          className="items-center rounded-button border border-stroke-default px-base py-sm active:opacity-80"
+          accessibilityRole="button"
+        >
+          <ThemedText variant="global-body-small-bold">{t("settings.replayOnboarding")}</ThemedText>
+        </Pressable>
       </SafeAreaView>
     </ThemedView>
   );

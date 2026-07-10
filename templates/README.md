@@ -8,13 +8,14 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 2. Install deps (below) — skip groups for unchecked stack items. **Expo packages:** `bunx expo install` (SDK-compatible). **All other packages:** `bun add …@latest`. Never copy version pins from this repo.
 3. Add template files: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
 4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js` **only when Sync design tokens is on** at intake. **Always** copy `src/theme/tokens/raw/` — template stub JSON when sync is off; empty `raw/` (README only) when sync is on. When off (default), also copy pre-built `src/theme/tokens/generated/`; no `tokens:discover` / `tokens:generate` in `package.json`.
-5. Replace demo routes with template `src/app/`. Merge `assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/` — the default Expo scaffold ships `home.png` but not `settings.png`.
-6. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
-7. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
-8. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
-9. Argent — `bunx @swmansion/argent init -y`.
-10. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
-11. Design tokens (if enabled at intake) — **after C2** — collect Figma URL at intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Merge `assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) from `templates/assets/images/tabIcons/` — the default Expo scaffold ships `home.png` but not `settings.png`.
+6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
+7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
+8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
+9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
+10. Argent — `bunx @swmansion/argent init -y`.
+11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
+12. Design tokens (if enabled at intake) — **after C2** — collect Figma URL at intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 
 **`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`.
 
@@ -43,6 +44,25 @@ bunx biome migrate --write
 ```bash
 bunx expo install expo-dev-client
 ```
+
+### Navigation (when toggles enabled at intake)
+
+```bash
+# Drawer on — SDK 56+ drawer is in expo-router; ensure gesture/reanimated/worklets present
+bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets
+
+# Protected / auth on — secure session persistence (see navigation/auth/)
+bunx expo install expo-secure-store
+```
+
+Copy auth files into the app:
+
+| From `navigation/auth/` | To |
+|-------------------------|-----|
+| `session-provider.tsx` | `src/providers/session-provider.tsx` |
+| `use-storage-state.ts` | `src/lib/use-storage-state.ts` |
+| `sign-in.tsx` | `src/app/sign-in.tsx` |
+| `sign-out-button.tsx` | use in Settings (optional) |
 
 ### Default stack (unless unchecked)
 

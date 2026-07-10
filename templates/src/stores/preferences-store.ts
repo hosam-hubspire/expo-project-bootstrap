@@ -10,8 +10,13 @@ export type ThemePreference = "system" | "light" | "dark";
 type PreferencesState = {
   themePreference: ThemePreference;
   language: SupportedLanguage;
+  hasCompletedOnboarding: boolean;
+  _hasHydrated: boolean;
   setThemePreference: (preference: ThemePreference) => void;
   setLanguage: (language: SupportedLanguage) => void;
+  completeOnboarding: () => void;
+  resetOnboarding: () => void;
+  setHasHydrated: (value: boolean) => void;
 };
 
 function applyPreferences(themePreference: ThemePreference, language: SupportedLanguage) {
@@ -24,6 +29,8 @@ export const usePreferencesStore = create<PreferencesState>()(
     (set) => ({
       themePreference: "system",
       language: "en",
+      hasCompletedOnboarding: false,
+      _hasHydrated: false,
       setThemePreference: (preference) => {
         Uniwind.setTheme(preference);
         set({ themePreference: preference });
@@ -32,6 +39,15 @@ export const usePreferencesStore = create<PreferencesState>()(
         void i18n.changeLanguage(language);
         set({ language });
       },
+      completeOnboarding: () => {
+        set({ hasCompletedOnboarding: true });
+      },
+      resetOnboarding: () => {
+        set({ hasCompletedOnboarding: false });
+      },
+      setHasHydrated: (value) => {
+        set({ _hasHydrated: value });
+      },
     }),
     {
       name: "preferences",
@@ -39,11 +55,16 @@ export const usePreferencesStore = create<PreferencesState>()(
       partialize: (state) => ({
         themePreference: state.themePreference,
         language: state.language,
+        hasCompletedOnboarding: state.hasCompletedOnboarding,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
           applyPreferences(state.themePreference, state.language);
         }
+        // Defer so the store finishes rehydration before marking ready
+        queueMicrotask(() => {
+          usePreferencesStore.getState().setHasHydrated(true);
+        });
       },
     },
   ),

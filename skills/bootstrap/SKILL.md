@@ -2,9 +2,9 @@
 name: bootstrap
 description: >-
   Bootstrap a new Expo React Native app from architectural templates (Uniwind,
-  Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook). Use when
-  the user asks to scaffold, bootstrap, or create a new Expo app or React Native
-  project.
+  Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook, mixable Expo
+  Router navigation). Use when the user asks to scaffold, bootstrap, or create a
+  new Expo app or React Native project.
 disable-model-invocation: true
 ---
 
@@ -41,6 +41,7 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | Sync design tokens | off (template `generated/` + `raw/` stubs) |
 | Stack toggles | i18n, GraphQL, Storybook (all on) |
 | GraphQL subscriptions | off |
+| **Navigation** | **Tabs on · Drawer off · Intro on · Protected/auth off** |
 | Android smoke test | off (iOS simulator only) |
 
 When the user chose defaults, **do not** re-ask those fields — proceed to [bootstrap.md](bootstrap.md).
@@ -57,6 +58,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | Sync design tokens | Yes | Phase B after C2 — **off by default** |
 | Figma design tokens URL | When sync on | Required — `figma.com/design/…` or `figma.com/file/…` link to the token source file |
 | Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
+| **Navigation toggles** | Yes | Orthogonal mix — see below |
 | Android smoke test | Yes | Argent on Android emulator — **off by default** (iOS only) |
 
 **Setup EAS** — when **on** (default), run Phase A2 and C2 uses an EAS `development-simulator` cloud build installed on the iOS Simulator, then Argent smoke test. When **off**, skip Phase A2 entirely; C2 uses **local** `expo run:ios` / `expo run:android` + Argent.
@@ -73,6 +75,19 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 
 Also ask: **GraphQL subscriptions** — off by default.
 
+**Navigation toggles** — `allow_multiple: true`. These combine freely (tabs+drawer, auth+tabs, intro+auth+drawer, …). Pre-check **Tabs** and **Intro**; leave Drawer and Protected unchecked unless the user asks.
+
+| Toggle | Default | Meaning |
+|--------|---------|---------|
+| **Tabs** | on | Bottom tabs under `(app)/(tabs)/` |
+| **Drawer** | off | Side drawer; nests tabs when both on |
+| **Intro screens** | on | `(onboarding)/` after splash, once until completed |
+| **Protected / auth routes** | off | `sign-in` + `Stack.Protected` around `(app)` |
+
+At least one of **Tabs** or **Drawer** should be on for a main shell; if both off, use a flat Stack under `(app)/` (`navigation/screens/` + `app-layout-flat-stack.tsx`).
+
+Assembly rules and file map: [`templates/navigation/README.md`](../../templates/navigation/README.md). Expo docs: [Protected routes](https://docs.expo.dev/router/advanced/protected/), [Authentication](https://docs.expo.dev/router/advanced/authentication/), [Drawer](https://docs.expo.dev/router/advanced/drawer/), [Tabs](https://docs.expo.dev/router/advanced/tabs/).
+
 **Android smoke test** — when **off** (default), run Argent C2 on **iOS simulator only**. When **on**, also boot an Android emulator and run the same checks after iOS passes.
 
 Then follow **[bootstrap.md](bootstrap.md)**.
@@ -81,7 +96,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 
 ```
 - [ ] 0 — Intake
-- [ ] A — Scaffold (latest deps, templates, uniwind types, bun install exit 0)
+- [ ] A — Scaffold (latest deps, templates, nav assembly, uniwind types, bun install exit 0)
 - [ ] A2 — EAS configure (if enabled at intake)
 - [ ] C — lint, test, tsc (stub tokens OK)
 - [ ] C2 — Argent smoke test (EAS simulator build if A2; else local build)
@@ -97,10 +112,11 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - No `move_agent_to_root` during bootstrap
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
+- **Navigation:** start from `templates/src/app/` (tabs + intro); assemble drawer/auth/flat screens from `templates/navigation/` per intake — never leave unused route groups in the app
 - **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C
 - **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`
-- **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — scaffold lacks `settings.png`
+- **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) when tabs on — scaffold lacks `settings.png`
 - **`app.json` merge:** follow checklist in [bootstrap.md](bootstrap.md) — `experiments` and `extra.eas` are siblings under `expo`
 - **GraphQL on:** copy `.env.example`; create local `.env` with `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` before C2; gitignore `.env`
 - **EAS only when intake enabled:** merge `templates/eas.json`; set `expo.owner` (default `hubspire`); install `expo-dev-client`; `bunx eas-cli init --non-interactive`. If project exists, merge `projectId` from `eas project:info` — do not `--force`
@@ -116,6 +132,6 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, token sync on/off (+ Figma URL when on), Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **navigation toggles** (tabs/drawer/intro/auth), token sync on/off (+ Figma URL when on), Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
 
-**Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [templates/README.md](../../templates/README.md)
+**Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [templates/README.md](../../templates/README.md) · **Navigation:** [templates/navigation/README.md](../../templates/navigation/README.md)

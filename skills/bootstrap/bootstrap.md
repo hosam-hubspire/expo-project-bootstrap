@@ -4,6 +4,8 @@
 
 **Templates:** https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
 
+**Navigation assembly:** [`templates/navigation/README.md`](../../templates/navigation/README.md)
+
 ## Scaffold
 
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
@@ -12,12 +14,17 @@
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
    - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **do not** copy token scripts; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
    - **Token sync on:** copy token scripts + empty `src/theme/tokens/raw/` (README only); add `tokens:discover` / `tokens:generate` to `package.json`. Figma URL collected at intake — real exports land in `raw/` during Phase B.
-   - **Tab icons:** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — default Expo scaffold has `home.png` but not `settings.png`.
+   - **Tab icons (when tabs on):** merge `templates/assets/images/tabIcons/settings.png` (+ `@2x`/`@3x`) — default Expo scaffold has `home.png` but not `settings.png`.
    - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
-5. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
-6. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
-7. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
-8. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
+5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
+   - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
+   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `lib/use-storage-state.ts`, `app/sign-in.tsx`; wrap `SessionProvider`; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings.
+   - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README.
+   - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
+6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
+7. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts`
+8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test).
+9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
 
 ### `app.json` merge checklist
 
@@ -75,6 +82,8 @@ All included unless unchecked at intake:
 
 Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · i18n · GraphQL · Storybook
 
+**Default navigation:** tabs + intro onboarding (drawer off, auth off). Other combos via intake + `templates/navigation/`.
+
 When **Setup EAS** is on: also EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
 
 Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). With **token sync off** (default), typography uses template stub tokens and `--font-family-*` vars — not `font-sans`/`font-mono`. Real fonts arrive in Phase B when sync is enabled.
@@ -87,7 +96,7 @@ Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` o
 bun run lint && bun test && bunx tsc --noEmit
 ```
 
-Requires Uniwind types generated in Phase A step 6.
+Requires Uniwind types generated in Phase A step 7.
 
 ### Argent smoke test (Phase C2)
 
@@ -105,13 +114,23 @@ Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor
    - Boot a simulator first via Argent `boot-device` if none is running
 3. **Start Metro** — `bun run start` (dev client needs bundler; keep running in background)
 4. **Dev client** — tap the Metro server entry if the launcher appears
-5. **Argent verify** — `launch-app` → no redbox, home screen renders, tab navigation (home + settings) → `describe` or screenshot
+5. **Argent verify** — `launch-app` → no redbox → then navigation checks below
 
 **When Setup EAS is off** (local path):
 
 1. `list-devices` → boot simulator if needed
 2. **Local build** — `bunx expo run:ios` (builds, installs, starts Metro)
 3. **Argent verify** — same checks as above
+
+#### Navigation checks (match intake)
+
+| Feature | Verify |
+|---------|--------|
+| Intro on | First launch shows onboarding; complete flow → main shell |
+| Tabs on | Home ↔ Settings |
+| Drawer on | Open drawer; navigate to a drawer item |
+| Auth on | Signed out → sign-in; Sign in → app; Sign out → sign-in |
+| Intro off | Lands on main shell (or sign-in if auth on) without onboarding |
 
 #### Android (opt-in at intake)
 
@@ -144,4 +163,4 @@ Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins
+Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app

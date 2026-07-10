@@ -3,6 +3,13 @@
     "home": "Home",
     "settings": "Settings"
   },
+  "drawer": {
+    "home": "Home",
+    "settings": "Settings",
+    "about": "About",
+    "aboutTitle": "About",
+    "aboutSubtitle": "Drawer-only sample screen. Replace with product content."
+  },
   "home": {
     "title": "Welcome",
     "subtitle": "Your app shell is ready. Replace this screen with your product UI."
@@ -18,6 +25,21 @@
     "language": "Language",
     "languageDescription": "Choose your preferred language.",
     "languageEnglish": "English",
-    "languageSpanish": "Spanish"
+    "languageSpanish": "Spanish",
+    "replayOnboarding": "Replay onboarding",
+    "signOut": "Sign out"
+  },
+  "onboarding": {
+    "welcomeTitle": "Welcome",
+    "welcomeSubtitle": "A short intro shown once after install. Replace these screens with your product onboarding.",
+    "featuresTitle": "You are set",
+    "featuresSubtitle": "Finish to enter the app. This flow is gated with Stack.Protected until completed.",
+    "continue": "Continue",
+    "getStarted": "Get started"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signInSubtitle": "Mock auth for the bootstrap shell. Wire your real provider into SessionProvider.",
+    "signInAction": "Sign in"
   }
 }

@@ -3,6 +3,13 @@
     "home": "Inicio",
     "settings": "Ajustes"
   },
+  "drawer": {
+    "home": "Inicio",
+    "settings": "Ajustes",
+    "about": "Acerca de",
+    "aboutTitle": "Acerca de",
+    "aboutSubtitle": "Pantalla de ejemplo del drawer. Reemplázala con el contenido del producto."
+  },
   "home": {
     "title": "Bienvenido",
     "subtitle": "El shell de la app está listo. Reemplaza esta pantalla con la UI de tu producto."
@@ -18,6 +25,21 @@
     "language": "Idioma",
     "languageDescription": "Elige tu idioma preferido.",
     "languageEnglish": "Inglés",
-    "languageSpanish": "Español"
+    "languageSpanish": "Español",
+    "replayOnboarding": "Repetir onboarding",
+    "signOut": "Cerrar sesión"
+  },
+  "onboarding": {
+    "welcomeTitle": "Bienvenido",
+    "welcomeSubtitle": "Intro corta que se muestra una vez tras la instalación. Sustituye estas pantallas por tu onboarding.",
+    "featuresTitle": "Listo",
+    "featuresSubtitle": "Termina para entrar en la app. Este flujo usa Stack.Protected hasta completarse.",
+    "continue": "Continuar",
+    "getStarted": "Empezar"
+  },
+  "auth": {
+    "signInTitle": "Iniciar sesión",
+    "signInSubtitle": "Auth de ejemplo del shell. Conecta tu proveedor real en SessionProvider.",
+    "signInAction": "Iniciar sesión"
   }
 }

@@ -33,6 +33,7 @@ function OptionButton({ label, value, selected, onSelect }: OptionButtonProps) {
 export default function SettingsScreen() {
   const themePreference = usePreferencesStore((state) => state.themePreference);
   const setThemePreference = usePreferencesStore((state) => state.setThemePreference);
+  const resetOnboarding = usePreferencesStore((state) => state.resetOnboarding);
 
   const themeOptions: { value: ThemePreference; label: string }[] = [
     { value: "system", label: "System" },
@@ -65,6 +66,16 @@ export default function SettingsScreen() {
             ))}
           </View>
         </ThemedView>
+
+        <Pressable
+          onPress={() => {
+            resetOnboarding();
+          }}
+          className="items-center rounded-button border border-stroke-default px-base py-sm active:opacity-80"
+          accessibilityRole="button"
+        >
+          <ThemedText variant="global-body-small-bold">Replay onboarding</ThemedText>
+        </Pressable>
       </SafeAreaView>
     </ThemedView>
   );
