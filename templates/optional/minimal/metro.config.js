@@ -5,6 +5,7 @@ const { withUniwindConfig } = require("uniwind/metro");
 const config = getDefaultConfig(__dirname);
 
 module.exports = withUniwindConfig(config, {
-  cssEntryFile: "./src/theme/global.css",
+  // CSS entry under src/ so Tailwind auto-scans all app classNames (not nested in theme/).
+  cssEntryFile: "./src/global.css",
   dtsFile: "./src/uniwind-types.d.ts",
 });

@@ -1,4 +1,4 @@
-import "@/theme/global.css";
+import "@/global.css";
 import "@/stores/preferences-store";
 
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";

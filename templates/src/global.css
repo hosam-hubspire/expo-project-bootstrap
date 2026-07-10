@@ -5,11 +5,11 @@
  * Design system tokens (from Figma via bun run tokens:generate)
  */
 
-@import "./tokens/generated/spacing.css";
-@import "./tokens/generated/primitives.css";
-@import "./tokens/generated/typography-primitives.css";
-@import "./tokens/generated/font-families.css";
-@import "./tokens/generated/theme.css";
+@import "./theme/tokens/generated/spacing.css";
+@import "./theme/tokens/generated/primitives.css";
+@import "./theme/tokens/generated/typography-primitives.css";
+@import "./theme/tokens/generated/font-families.css";
+@import "./theme/tokens/generated/theme.css";
 
 @theme {
   /*

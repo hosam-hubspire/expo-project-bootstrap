@@ -1,4 +1,4 @@
-import "@/theme/global.css";
+import "@/global.css";
 import "@/i18n";
 import "@/stores/preferences-store";
 

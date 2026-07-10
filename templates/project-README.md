@@ -37,7 +37,7 @@ bun install
 Generate Uniwind types (required after CSS / token changes):
 
 ```bash
-bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts
+bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts
 ```
 
 ## Scripts

@@ -1,6 +1,6 @@
 /**
  * Design system — tokens and typography utilities.
- * CSS entry: src/theme/global.css
+ * CSS entry: src/global.css (must live under src/ — not theme/ — so Uniwind scans all classNames)
  * Regenerate tokens: bun run tokens:generate
  */
 
