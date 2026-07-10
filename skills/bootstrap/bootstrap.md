@@ -9,7 +9,7 @@
 ## Scaffold
 
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
-2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, web files. Move `app/` → `src/app/` if needed; wire `@/` in `tsconfig.json`.
+2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, **all web files** (`+html.tsx`, web entry/assets). Move `app/` → `src/app/` if needed; wire `@/` in `tsconfig.json`. Apps are **iOS/Android only** — never add `Platform.OS === "web"`, `localStorage`, or other web-only code.
 3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo packages:** `bun add …@latest`. Never copy version pins from templates. `bun install --verbose` must exit **0**.
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
    - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **do not** copy token scripts; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
@@ -18,7 +18,7 @@
    - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
 5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
-   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `lib/use-storage-state.ts`, `app/sign-in.tsx`; wrap `SessionProvider`; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings.
+   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts`, `app/sign-in.tsx`; wrap `SessionProvider`; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings. Custom hooks always go under `src/hooks/` — never `src/lib/`.
    - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README (`@react-navigation/drawer` + gesture/reanimated/worklets).
    - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
@@ -163,4 +163,4 @@ Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app · prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView` ([docs](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets))
+Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app · prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView` ([docs](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets)) · **native only** (iOS/Android) — no web platform code

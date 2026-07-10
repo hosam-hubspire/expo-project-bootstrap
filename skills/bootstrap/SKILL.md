@@ -113,6 +113,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Grouped installs — `templates/README.md`; skip unchecked stack groups
 - Full templates by default; strip — `templates/optional/minimal/README.md`
 - **Navigation:** start from `templates/src/app/` (tabs + intro); assemble drawer/auth/flat screens from `templates/navigation/` per intake — never leave unused route groups in the app
+- **Hooks:** place React hooks under `src/hooks/` (e.g. auth `use-storage-state.ts`) — never under `src/lib/` (`lib/` is for non-hook utilities like `mmkv`)
 - **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
 - **Drawer on:** `bunx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated react-native-worklets` — `expo-router/drawer` still needs `@react-navigation/drawer`
 - **Uniwind types in Phase A:** `bunx uniwind generate-artifacts --css ./src/theme/global.css --dts ./src/uniwind-types.d.ts` before Phase C (CLI has no `generate-types`)
@@ -126,7 +127,8 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - Expo MCP (`build_run`, `build_list`, …) may be used when EAS is enabled and MCP is authenticated; prefer `eas` CLI for bootstrap reliability
 - **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
-- No one-off bridge scripts under `scripts/`; iOS/Android only; Bun only
+- No one-off bridge scripts under `scripts/`; **iOS/Android only** — no web target, no `Platform.OS === "web"` branches, no `localStorage` / DOM APIs, no web-only packages or polyfills; Bun only
+- Remove scaffold web files during Phase A (e.g. `src/app/+html.tsx`, web entry/assets); do not reintroduce web support later
 - **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (NativeTabs clears the home indicator). Pin primary CTAs with `footer`.
 - **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
 - **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too

@@ -62,7 +62,7 @@ Copy auth files into the app:
 | From `navigation/auth/` | To |
 |-------------------------|-----|
 | `session-provider.tsx` | `src/providers/session-provider.tsx` |
-| `use-storage-state.ts` | `src/lib/use-storage-state.ts` |
+| `use-storage-state.ts` | `src/hooks/use-storage-state.ts` |
 | `sign-in.tsx` | `src/app/sign-in.tsx` |
 | `sign-out-button.tsx` | use in Settings (optional) |
 
