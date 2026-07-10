@@ -128,7 +128,7 @@ Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor
 |---------|--------|
 | Intro on | First launch shows onboarding; complete flow → main shell |
 | Tabs on | Home ↔ Settings |
-| Drawer on | Open drawer; navigate to a drawer item |
+| Drawer on | Menu icon visible in header on Home/tabs; open drawer (tap or swipe); navigate to a drawer item |
 | Auth on | Signed out → sign-in; Sign in → app; Sign out → sign-in |
 | Intro off | Lands on main shell (or sign-in if auth on) without onboarding |
 
