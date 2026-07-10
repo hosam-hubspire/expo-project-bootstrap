@@ -1,4 +1,9 @@
-# Placeholder operation — replace with project queries after setting EXPO_PUBLIC_GRAPHQL_URL.
+# Dev sample against Rick and Morty — replace with project queries after setting EXPO_PUBLIC_GRAPHQL_URL.
 query ExampleQuery {
-  __typename
+  character(id: 1) {
+    id
+    name
+    status
+    species
+  }
 }

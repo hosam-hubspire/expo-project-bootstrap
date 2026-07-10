@@ -13,18 +13,11 @@
   "home": {
     "title": "Welcome",
     "subtitle": "Your app shell is ready. Replace this screen with your product UI.",
-    "graphqlTitle": "GraphQL examples",
-    "graphqlDescription": "Apollo query, mutation, and subscription wiring. Replace operations under src/services/graphql/operations/ with your schema.",
+    "graphqlTitle": "GraphQL example",
+    "graphqlDescription": "Apollo query against the Rick and Morty API. Replace operations under src/services/graphql/operations/ with your schema.",
     "graphqlQuery": "Refetch query",
     "graphqlQueryLoading": "Loading…",
-    "graphqlQueryError": "Query error",
-    "graphqlMutation": "Mutation",
-    "graphqlMutationRun": "Run mutation",
-    "graphqlMutationHint": "Placeholder ExampleMutation — expects a Mutation root on your schema (countries.dev will error).",
-    "graphqlSubscription": "Subscription",
-    "graphqlSubscriptionListening": "Listening…",
-    "graphqlSubscriptionIdle": "Waiting for events…",
-    "graphqlSubscriptionHint": "Shown when EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true. Needs a WS endpoint that supports ExampleSubscription."
+    "graphqlQueryError": "Query error"
   },
   "settings": {
     "title": "Settings",

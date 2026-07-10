@@ -72,10 +72,10 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 **Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
 
 - **i18n** — `i18next`, localized tabs, language toggle
-- **GraphQL** — Apollo, `ExampleQuery` / `ExampleMutation` / `ExampleSubscription`, Home `<GraphQLExamples />`, codegen; needs `EXPO_PUBLIC_GRAPHQL_URL` (dev placeholder: `https://countries.trevorblades.com/`)
+- **GraphQL** — Apollo, `ExampleQuery`, Home `<GraphQLExamples />`, codegen; needs `EXPO_PUBLIC_GRAPHQL_URL` (dev placeholder: `https://rickandmortyapi.com/graphql`)
 - **Storybook** — on-device, token + component stories
 
-Also ask: **GraphQL subscriptions** — off by default (gates subscription transport + Home subscription demo via `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED`).
+Also ask: **GraphQL subscriptions** — off by default (gates WS subscription transport via `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED`).
 
 **Navigation toggles** — `allow_multiple: true`. These combine freely (tabs+drawer, auth+tabs, intro+auth+drawer, …). Pre-check **Tabs** and **Intro**; leave Drawer and Protected unchecked unless the user asks.
 
@@ -137,7 +137,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`. Template ignores Argent MCP/settings paths; after `argent init`, run `lint:fix` before Phase C
 - **Tab icons:** Expo Router JS `Tabs` with nano `Icon` (`home` / `settings` SVGs) — not `unstable-native-tabs`
 - **`app.json` merge:** follow checklist in [bootstrap.md](bootstrap.md) — `experiments` and `extra.eas` are siblings under `expo`
-- **GraphQL on:** copy `.env.example`; create local `.env` with `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` before C2; gitignore `.env`
+- **GraphQL on:** copy `.env.example`; create local `.env` with `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql` before C2; gitignore `.env`
 - **EAS only when intake enabled:** merge `templates/eas.json`; set `expo.owner` (default `hubspire`); install `expo-dev-client`; `bunx eas-cli init --non-interactive`. If project exists, merge `projectId` from `eas project:info` — do not `--force`
 - **C2 with EAS:** `development-simulator` cloud build → `eas build:run` (no `--non-interactive`) → Metro → tap server in dev client → Argent. **C2 without EAS:** local `expo run:ios` (+ `expo run:android` if Android opted in) → Argent
 - After `eas build:run`, start Metro (`bun run start`) before Argent launch — dev client needs the bundler

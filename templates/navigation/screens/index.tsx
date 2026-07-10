@@ -32,13 +32,6 @@ export default function HomeScreen() {
         queryLabel={t("home.graphqlQuery")}
         queryLoading={t("home.graphqlQueryLoading")}
         queryError={t("home.graphqlQueryError")}
-        mutationLabel={t("home.graphqlMutation")}
-        mutationRun={t("home.graphqlMutationRun")}
-        mutationHint={t("home.graphqlMutationHint")}
-        subscriptionLabel={t("home.graphqlSubscription")}
-        subscriptionListening={t("home.graphqlSubscriptionListening")}
-        subscriptionIdle={t("home.graphqlSubscriptionIdle")}
-        subscriptionHint={t("home.graphqlSubscriptionHint")}
       />
     </Screen>
   );

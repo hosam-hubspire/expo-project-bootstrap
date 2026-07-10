@@ -142,14 +142,14 @@ GraphQL’s Apollo client includes a SecureStore auth link (`SESSION_STORAGE_KEY
 When GraphQL is enabled, add `.env.example` and a local `.env` (gitignored) before C2:
 
 ```bash
-EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/
+EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql
 ```
 
-The bundled `ExampleQuery` (`__typename`) works against any GraphQL endpoint. `ExampleMutation` / `ExampleSubscription` are wiring demos — replace them with your schema (countries.dev has no Mutation/Subscription roots). Home shows `<GraphQLExamples />` (query + mutation always; subscription UI only when `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`).
+The bundled `ExampleQuery` fetches a character from the Rick and Morty API. Home shows `<GraphQLExamples />` with that query. Add mutations/subscriptions under `src/services/graphql/operations/` when your schema supports them.
 
-Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`).
+Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`) enables the WS link in the Apollo client.
 
-Run `graphql:generate` when `.graphql` ops change (requires `EXPO_PUBLIC_GRAPHQL_URL`). Against countries.dev, temporarily exclude mutation/subscription documents or point at your real schema first.
+Run `graphql:generate` when `.graphql` ops change (requires `EXPO_PUBLIC_GRAPHQL_URL`).
 
 **Fonts:** after Phase B, install packages matching exported Figma families; load via `expo-font`. See `font-families.css` from `tokens:generate`.
 

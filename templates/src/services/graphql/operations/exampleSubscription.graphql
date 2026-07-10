@@ -1,6 +1,0 @@
-# Placeholder — replace with project subscriptions after enabling WS + your schema.
-# Only used when EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true.
-# Against the countries.dev placeholder this will error; it demonstrates useSubscription wiring.
-subscription ExampleSubscription {
-  __typename
-}

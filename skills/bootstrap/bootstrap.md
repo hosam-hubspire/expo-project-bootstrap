@@ -95,7 +95,7 @@ When **Setup EAS** is on: also EAS (`hubspire`) · `expo-dev-client` · `eas.jso
 
 Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). With **token sync off** (default), typography uses template stub tokens and `--font-family-*` vars — not `font-sans`/`font-mono`. Real fonts arrive in Phase B when sync is enabled.
 
-**GraphQL dev placeholder** (when GraphQL enabled): set `EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/` in local `.env` before C2. The bundled `ExampleQuery` (`__typename`) works against any endpoint. Home includes `<GraphQLExamples />` for query + mutation; subscription demo appears only when subscriptions are enabled at intake (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`).
+**GraphQL dev placeholder** (when GraphQL enabled): set `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql` in local `.env` before C2. The bundled `ExampleQuery` fetches Rick and Morty characters. Home includes `<GraphQLExamples />` for that query.
 
 ## Verify (Phase C — stub tokens OK)
 

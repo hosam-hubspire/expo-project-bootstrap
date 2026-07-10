@@ -21,7 +21,7 @@ Navigation assembly (tabs / drawer / intro / auth) is independent — follow [`n
 - Keep `SessionProvider` if Protected routes were enabled (lives under `providers/session-provider.tsx`); keep `src/constants/session.ts` for the SecureStore key
 - Note: with GraphQL omitted there is no Apollo auth link — session is still persisted via SecureStore for route guards
 
-When GraphQL is on but **subscriptions are off**: keep mutation/query examples; subscription UI stays hidden unless `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`. Optionally delete `operations/exampleSubscription.graphql` and trim generated stubs.
+When GraphQL is on but **subscriptions are off**: query example still works; WS subscription transport stays disabled unless `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`.
 
 ## Omit Storybook
 
