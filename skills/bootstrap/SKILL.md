@@ -127,6 +127,7 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
 - Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
 - No one-off bridge scripts under `scripts/`; iOS/Android only; Bun only
+- **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (NativeTabs clears the home indicator). Pin primary CTAs with `footer`.
 - **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
 - **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too
 - **C2 defaults to iOS only** — do not boot or build Android unless intake selected Android smoke test

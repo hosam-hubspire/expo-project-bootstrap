@@ -163,4 +163,4 @@ Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app
+Latest Expo default template · merge templates into scaffold · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app · prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView` ([docs](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets))

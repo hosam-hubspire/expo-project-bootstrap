@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Icon } from "@/components/Icon";
+import { Screen } from "@/components/Screen";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import type { SupportedLanguage } from "@/i18n";
@@ -24,14 +24,15 @@ function OptionButton<T extends string>({
   return (
     <Pressable
       onPress={() => onSelect(value)}
-      className={`rounded-input border px-base py-xs active:opacity-80 ${
+      className={`min-h-10 flex-1 flex-row items-center justify-center gap-2xs rounded-input border px-sm py-xs active:opacity-80 ${
         selected
           ? "border-button-button-primary bg-surface-tertiary"
-          : "border-transparent bg-surface-secondary"
+          : "border-transparent bg-surface-default"
       }`}
       accessibilityRole="button"
       accessibilityState={{ selected }}
     >
+      {selected ? <Icon name="check" size={14} colorToken="button-button-primary" /> : null}
       <ThemedText variant="global-body-small-bold">{label}</ThemedText>
     </Pressable>
   );
@@ -57,11 +58,15 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <ThemedView className="flex-1">
-      <SafeAreaView className="w-full max-w-content flex-1 gap-base self-center px-lg pb-base pt-base ios:pb-[66px] android:pb-[96px]">
-        <ThemedText variant="heading-app-section">{t("settings.title")}</ThemedText>
+    <Screen
+      edges={["top", "left", "right"]}
+      scroll
+      contentClassName="w-full max-w-content gap-base self-center px-lg pb-base pt-base"
+    >
+      <ThemedText variant="heading-app-section">{t("settings.title")}</ThemedText>
 
-        <ThemedView colorToken="surface-secondary" className="gap-xs rounded-panel p-base">
+      <ThemedView colorToken="surface-secondary" className="gap-sm rounded-panel p-base">
+        <View className="gap-2xs">
           <View className="flex-row items-center gap-xs">
             <Icon name="appearance" size={18} colorToken="text-text-default" />
             <ThemedText variant="global-body-small-bold">{t("settings.appearance")}</ThemedText>
@@ -69,20 +74,22 @@ export default function SettingsScreen() {
           <ThemedText variant="global-body-small" colorToken="text-text-secondary">
             {t("settings.appearanceDescription")}
           </ThemedText>
-          <View className="flex-row flex-wrap gap-xs">
-            {themeOptions.map((option) => (
-              <OptionButton
-                key={option.value}
-                label={option.label}
-                value={option.value}
-                selected={themePreference === option.value}
-                onSelect={setThemePreference}
-              />
-            ))}
-          </View>
-        </ThemedView>
+        </View>
+        <View className="flex-row gap-xs">
+          {themeOptions.map((option) => (
+            <OptionButton
+              key={option.value}
+              label={option.label}
+              value={option.value}
+              selected={themePreference === option.value}
+              onSelect={setThemePreference}
+            />
+          ))}
+        </View>
+      </ThemedView>
 
-        <ThemedView colorToken="surface-secondary" className="gap-xs rounded-panel p-base">
+      <ThemedView colorToken="surface-secondary" className="gap-sm rounded-panel p-base">
+        <View className="gap-2xs">
           <View className="flex-row items-center gap-xs">
             <Icon name="language" size={18} colorToken="text-text-default" />
             <ThemedText variant="global-body-small-bold">{t("settings.language")}</ThemedText>
@@ -90,29 +97,29 @@ export default function SettingsScreen() {
           <ThemedText variant="global-body-small" colorToken="text-text-secondary">
             {t("settings.languageDescription")}
           </ThemedText>
-          <View className="flex-row flex-wrap gap-xs">
-            {languageOptions.map((option) => (
-              <OptionButton
-                key={option.value}
-                label={option.label}
-                value={option.value}
-                selected={language === option.value}
-                onSelect={setLanguage}
-              />
-            ))}
-          </View>
-        </ThemedView>
+        </View>
+        <View className="flex-row gap-xs">
+          {languageOptions.map((option) => (
+            <OptionButton
+              key={option.value}
+              label={option.label}
+              value={option.value}
+              selected={language === option.value}
+              onSelect={setLanguage}
+            />
+          ))}
+        </View>
+      </ThemedView>
 
-        <Pressable
-          onPress={() => {
-            resetOnboarding();
-          }}
-          className="items-center rounded-button border border-stroke-default px-base py-sm active:opacity-80"
-          accessibilityRole="button"
-        >
-          <ThemedText variant="global-body-small-bold">{t("settings.replayOnboarding")}</ThemedText>
-        </Pressable>
-      </SafeAreaView>
-    </ThemedView>
+      <Pressable
+        onPress={() => {
+          resetOnboarding();
+        }}
+        className="items-center rounded-button border border-stroke-default px-base py-sm active:opacity-80"
+        accessibilityRole="button"
+      >
+        <ThemedText variant="global-body-small-bold">{t("settings.replayOnboarding")}</ThemedText>
+      </Pressable>
+    </Screen>
   );
 }

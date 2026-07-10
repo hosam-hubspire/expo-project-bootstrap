@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { Pressable } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Pressable, View } from "react-native";
 
+import { Screen } from "@/components/Screen";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { useSession } from "@/providers/session-provider";
 
 /**
@@ -30,10 +29,10 @@ export function SignOutButton() {
 /** Minimal wrapper if you need a full screen — usually prefer SignOutButton in Settings. */
 export default function SignOutScreen() {
   return (
-    <ThemedView className="flex-1" colorToken="surface-default">
-      <SafeAreaView className="flex-1 justify-center p-base">
+    <Screen contentClassName="w-full max-w-content self-center justify-center px-lg">
+      <View className="gap-base">
         <SignOutButton />
-      </SafeAreaView>
-    </ThemedView>
+      </View>
+    </Screen>
   );
 }
