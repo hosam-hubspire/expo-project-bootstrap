@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+import { GraphQLExamples } from "@/components/GraphQLExamples";
 import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
 import { ThemedText } from "@/components/ThemedText";
@@ -11,7 +12,7 @@ export default function HomeScreen() {
   const { t } = useTranslation();
 
   return (
-    <Screen contentClassName="w-full max-w-content self-center justify-center gap-base px-lg py-base">
+    <Screen scroll contentClassName="w-full max-w-content self-center gap-base px-lg py-base">
       <ThemedView
         colorToken="surface-secondary"
         className="h-16 w-16 items-center justify-center rounded-panel"
@@ -24,6 +25,21 @@ export default function HomeScreen() {
           {t("home.subtitle")}
         </ThemedText>
       </View>
+
+      <GraphQLExamples
+        title={t("home.graphqlTitle")}
+        description={t("home.graphqlDescription")}
+        queryLabel={t("home.graphqlQuery")}
+        queryLoading={t("home.graphqlQueryLoading")}
+        queryError={t("home.graphqlQueryError")}
+        mutationLabel={t("home.graphqlMutation")}
+        mutationRun={t("home.graphqlMutationRun")}
+        mutationHint={t("home.graphqlMutationHint")}
+        subscriptionLabel={t("home.graphqlSubscription")}
+        subscriptionListening={t("home.graphqlSubscriptionListening")}
+        subscriptionIdle={t("home.graphqlSubscriptionIdle")}
+        subscriptionHint={t("home.graphqlSubscriptionHint")}
+      />
     </Screen>
   );
 }

@@ -1,0 +1,5 @@
+# Placeholder — replace with project mutations after pointing EXPO_PUBLIC_GRAPHQL_URL at your schema.
+# Against the countries.dev placeholder this will error at runtime; it demonstrates useMutation wiring.
+mutation ExampleMutation {
+  __typename
+}

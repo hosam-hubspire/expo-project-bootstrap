@@ -72,10 +72,10 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 **Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
 
 - **i18n** — `i18next`, localized tabs, language toggle
-- **GraphQL** — Apollo, `ExampleQuery`, codegen; needs `EXPO_PUBLIC_GRAPHQL_URL` (dev placeholder: `https://countries.trevorblades.com/`)
+- **GraphQL** — Apollo, `ExampleQuery` / `ExampleMutation` / `ExampleSubscription`, Home `<GraphQLExamples />`, codegen; needs `EXPO_PUBLIC_GRAPHQL_URL` (dev placeholder: `https://countries.trevorblades.com/`)
 - **Storybook** — on-device, token + component stories
 
-Also ask: **GraphQL subscriptions** — off by default.
+Also ask: **GraphQL subscriptions** — off by default (gates subscription transport + Home subscription demo via `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED`).
 
 **Navigation toggles** — `allow_multiple: true`. These combine freely (tabs+drawer, auth+tabs, intro+auth+drawer, …). Pre-check **Tabs** and **Intro**; leave Drawer and Protected unchecked unless the user asks.
 

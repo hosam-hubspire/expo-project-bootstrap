@@ -144,9 +144,11 @@ When GraphQL is enabled, add `.env.example` and a local `.env` (gitignored) befo
 EXPO_PUBLIC_GRAPHQL_URL=https://countries.trevorblades.com/
 ```
 
-The bundled `ExampleQuery` (`__typename`) works against any GraphQL endpoint. Replace with your project URL before shipping. Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`).
+The bundled `ExampleQuery` (`__typename`) works against any GraphQL endpoint. `ExampleMutation` / `ExampleSubscription` are wiring demos — replace them with your schema (countries.dev has no Mutation/Subscription roots). Home shows `<GraphQLExamples />` (query + mutation always; subscription UI only when `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true`).
 
-Run `graphql:generate` when `.graphql` ops change (requires `EXPO_PUBLIC_GRAPHQL_URL`).
+Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`).
+
+Run `graphql:generate` when `.graphql` ops change (requires `EXPO_PUBLIC_GRAPHQL_URL`). Against countries.dev, temporarily exclude mutation/subscription documents or point at your real schema first.
 
 **Fonts:** after Phase B, install packages matching exported Figma families; load via `expo-font`. See `font-families.css` from `tokens:generate`.
 
