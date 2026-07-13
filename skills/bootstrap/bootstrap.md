@@ -12,8 +12,8 @@
 2. **Remove cruft** — demo routes, stock helpers, non-Bun lockfiles, and any web leftovers (`*.web.*`, `web` script/config, favicon / tutorial-web assets). Current default scaffold usually already uses `src/app/` and `@/` — only move `app/` → `src/app/` or add path aliases if missing. Apps are **iOS/Android only**.
 3. **Install** — grouped commands in [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md); skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo:** `bun add …@latest` (except `jest` / `@types/jest` — derive from `jest-expo`). Never copy version pins from templates. `bun install --verbose` must exit **0**.
 4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on. Strip unchecked items — [optional/minimal/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/minimal/README.md).
-   - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub `raw/` — **do not** copy token scripts or add `tokens:*` scripts.
-   - **Token sync on:** copy token scripts + empty `raw/` (README only); add `tokens:discover` / `tokens:generate`. Figma URL from intake — real exports in Phase B.
+   - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub `raw/` — **do not** copy token sync scripts or add `tokens:*` scripts.
+   - **Token sync on:** copy `scripts/sync-design-tokens.mjs` (pin intake GitHub URL), stub `generated/` for Phase C, add `tokens:sync`. Phase B implements transform → Uniwind `generated/` (see TOKEN_SYNC.md). Do not require hand-written `raw/` mapping.
    - **Tab icons (when tabs on):** Expo Router JS `Tabs` + nano `Icon` from `assets/icons/*.svg`.
    - **API GraphQL (default):** copy GraphQL services/provider/examples + `codegen.ts`; `.env` with Rick and Morty URL.
    - **API REST:** follow [optional/rest/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) — axios client, RestExamples, REST `_layout`/Home; **do not** copy GraphQL stack; `.env` with JSONPlaceholder `EXPO_PUBLIC_API_URL`.
@@ -114,15 +114,14 @@ After iOS passes: boot emulator → `bunx expo run:android` (or EAS `preview` wh
 
 ### Design token sync (Phase B — after C2 when C2 ran, else after C)
 
-Only when **Sync design tokens** is on — [FIGMA_EXPORT.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/FIGMA_EXPORT.md). Requires Figma URL from intake.
+Only when **Sync design tokens** is on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md). Requires **Design tokens GitHub URL** from intake.
 
-1. Export from intake Figma URL → `src/theme/tokens/raw/`
-2. User confirms exports
-3. `node scripts/discover-figma-raw.mjs`
-4. Adapt `scripts/generate-design-tokens.mjs` if needed
-5. `bun run tokens:generate` → re-run Phase C
+1. Review the intake GitHub repo (clone shallow / `gh`) — inventory export layout
+2. Implement `scripts/sync-design-tokens.mjs` (`transformAndWrite`) so it fetches that repo and writes Uniwind files under `src/theme/tokens/generated/`
+3. `bun run tokens:sync` → uniwind artifacts → re-run Phase C
+4. Confirm with user; leave the script as the supported re-sync path (`bun run tokens:sync`)
 
-**Gate:** real token counts; lint/test/tsc pass before Phase D. If export blocked, keep stubs; document pending work — do not mark B complete.
+**Gate:** real generated tokens; lint/test/tsc pass before Phase D. If the GitHub URL is missing, private, or the export format cannot be automated yet, keep stubs; document pending work — do not mark B complete.
 
 **Before commit:** filled project README (not stock Expo). Commit on `main`; push if GitHub repo provided. Completion summary + mandatory **Run report** as an agent chat message (no report file) — [SKILL.md](SKILL.md) Phase R.
 

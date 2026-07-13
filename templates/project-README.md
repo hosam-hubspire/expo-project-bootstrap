@@ -80,11 +80,11 @@ Bootstrap agent — fill placeholders then delete this comment block:
 {{API}}          — GraphQL (subscriptions on|off) | REST (axios) | none
 {{STORYBOOK}}    — on | off
 {{EAS}}          — on (owner: …) | off
-{{TOKENS}}       — stub tokens | Figma sync (URL)
+{{TOKENS}}       — stub tokens | GitHub sync via `tokens:sync` (URL)
 {{NAVIGATION}}   — e.g. Tabs + Intro · Drawer off · Auth off
 {{PERMISSIONS}}  — none | comma-separated list from intake
 {{ENV_SECTION}}  — GraphQL or REST `.env` block when API on; otherwise omit
-{{EXTRA_SCRIPTS}}— rows for graphql:generate / storybook / tokens:* when enabled
+{{EXTRA_SCRIPTS}}— rows for graphql:generate / storybook / tokens:sync when enabled
 
 Write the result to the app root as README.md (overwrite create-expo-app README).
 -->

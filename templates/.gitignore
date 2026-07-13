@@ -35,6 +35,7 @@ yarn-error.*
 # test artifacts
 .test-screenshots/
 coverage/
+.tokens-cache/
 
 # macOS
 .DS_Store

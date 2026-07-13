@@ -1,14 +1,12 @@
-# Raw Figma exports
+# Raw design-token exports
 
-Place Figma variable and text-style JSON here — **any file or folder layout**.
+Used when **Sync design tokens is off** — stub JSON so CI / local theme work before a GitHub sync script exists.
 
-The generator discovers exports by JSON shape and hints (`collection` name, folder path, variable `type`, mode count). Standard names like `color-tokens.json` are **not** required.
+When **sync is on**, tokens come from `bun run tokens:sync` (GitHub plugin exports → Uniwind `src/theme/tokens/generated/`). Do not treat hand-edited `raw/` as the Phase B deliverable — see [`TOKEN_SYNC.md`](../../../../TOKEN_SYNC.md).
 
-After copying exports, run:
+Legacy local generator path (optional reference only):
 
 ```bash
 node scripts/discover-figma-raw.mjs
-bun run tokens:generate
+node scripts/generate-design-tokens.mjs
 ```
-
-Template stubs (`color-tokens.json`, etc.) let CI and Argent run before real tokens arrive. Replace them in Phase B.

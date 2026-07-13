@@ -7,7 +7,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 1. Merge scaffold with templates — don't bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. Install deps (below) — skip groups for unchecked stack items. **Expo packages:** `bunx expo install` (SDK-compatible). **All other packages:** `bun add …@latest`. Never copy version pins from this repo.
 3. Add template files: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake.
-4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js` **only when Sync design tokens is on** at intake. **Always** copy `src/theme/tokens/raw/` — template stub JSON when sync is off; empty `raw/` (README only) when sync is on. When off (default), also copy pre-built `src/theme/tokens/generated/`; no `tokens:discover` / `tokens:generate` in `package.json`.
+4. **Token scripts** — when **Sync design tokens is on** at intake: copy `scripts/sync-design-tokens.mjs`, pin the intake GitHub URL in the script (or document `TOKENS_GITHUB_URL`), add `tokens:sync` to `package.json`, and copy stub `generated/` so Phase C passes before B. Do **not** require `tokens:discover` / `tokens:generate` or empty `raw/` for the sync-on path. When **off** (default): copy stub `generated/` **and** stub `raw/` JSON; no `tokens:*` scripts. Legacy `discover-figma-raw.mjs` / `generate-design-tokens.mjs` remain in the bootstrap repo as optional emitter reference only — see [`TOKEN_SYNC.md`](./TOKEN_SYNC.md).
 5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tabs use Expo Router JS `Tabs` (`AppTabs`) with nano icons from `assets/icons/*.svg` (`home`, `settings`).
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md). When **API client is REST**, assemble via [`optional/rest/README.md`](./optional/rest/README.md) instead of the default GraphQL Home/provider.
@@ -15,10 +15,10 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`. CSS entry must be `src/global.css`; `withUniwindConfig` must be the outermost Metro wrapper.
 10. Argent — **only when any smoke is on at intake** (iOS and/or Android): `bunx @swmansion/argent init -y`, then `bun run lint:fix`. Before C2 CLI use: `argent server status` → relink if token rotated → `argent tools` must not 401. **Skip Argent init when both smokes are off.** Template `biome.json` ignores Argent MCP/settings paths (harmless when Argent is absent).
 11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
-12. Design tokens (if enabled at intake) — **after C2 when iOS smoke on, else after Phase C** — Figma URL from intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+12. Design tokens (if enabled at intake) — **after C2 when iOS smoke on, else after Phase C** — Design-tokens GitHub URL from intake; implement + run `tokens:sync` per [`TOKEN_SYNC.md`](./TOKEN_SYNC.md).
 13. **Project README** — replace stock Expo `README.md` with a filled [`project-README.md`](./project-README.md) from intake (before Phase D commit).
 
-**`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`.
+**`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`, and `.tokens-cache/` when token sync is on.
 
 **Safe area** — screens use the `Screen` component (`src/components/Screen`), which applies [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) on an outer `style` and keeps Uniwind classes on `contentClassName`. Do not use `SafeAreaView`. Tab routes: `edges={["top","left","right"]}`. When a navigator header is visible (`headerShown: true`, e.g. Drawer), `Screen` skips the top inset automatically so content is not double-padded. Full-screen flows (onboarding, auth): default edges + `footer` for the primary CTA.
 
@@ -163,7 +163,7 @@ EXPO_PUBLIC_API_URL=https://jsonplaceholder.typicode.com
 
 Home shows `<RestExamples />` (`GET /todos/1` via `fetchExampleTodo`). Replace with your base URL and endpoints under `src/services/rest/`.
 
-**Fonts:** after Phase B, install packages matching exported Figma families; load via `expo-font`. See `font-families.css` from `tokens:generate`.
+**Fonts:** after Phase B, install packages matching exported Figma families; load via `expo-font`. See `font-families.css` from `tokens:sync`.
 
 ## Scripts
 
@@ -171,16 +171,14 @@ Home shows `<RestExamples />` (`GET /todos/1` via `fetchExampleTodo`). Replace w
 |--------|------|
 | `lint` / `lint:fix` / `lint:a11y` | always |
 | `test` / `test:watch` | always |
-| `tokens:discover` | token sync enabled — Phase B |
-| `tokens:generate` | token sync enabled — Phase B |
+| `tokens:sync` | token sync enabled — fetch GitHub tokens repo → Uniwind `generated/` |
 | `graphql:generate` | GraphQL enabled |
 | `storybook` / `storybook-generate` | Storybook enabled |
 
-Add token scripts to `package.json` **only when Sync design tokens is on**:
+Add the sync script to `package.json` **only when Sync design tokens is on**:
 
 ```json
-"tokens:discover": "node scripts/discover-figma-raw.mjs",
-"tokens:generate": "node scripts/generate-design-tokens.mjs"
+"tokens:sync": "node scripts/sync-design-tokens.mjs"
 ```
 
 ## Icons
@@ -197,4 +195,4 @@ Keep `templates/` Biome-clean (same rules as shipped `biome.json`). After editin
 
 ## Stub tokens (sync off — default)
 
-When **Sync design tokens** is off at intake (default), ship pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/`. No token scripts, no `tokens:*` scripts in `package.json`. Enable sync later via intake + Phase B — [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+When **Sync design tokens** is off at intake (default), ship pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/`. No token scripts, no `tokens:*` scripts in `package.json`. Enable sync later via intake + Phase B — [`TOKEN_SYNC.md`](./TOKEN_SYNC.md).

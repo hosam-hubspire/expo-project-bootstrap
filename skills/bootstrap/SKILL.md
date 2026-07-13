@@ -63,7 +63,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | Setup EAS | Yes | Link project, `eas.json`, cloud simulator build in C2 — **off by default** |
 | Expo account owner | No | Only when EAS on — **`hubspire` by default** (`expo.owner` in `app.json`) |
 | Sync design tokens | Yes | Phase B after C2 — **off by default** |
-| Figma design tokens URL | When sync on | Required — `figma.com/design/…` or `figma.com/file/…` link to the token source file |
+| Design tokens GitHub URL | When sync on | Required — GitHub repo (or tree/path URL) with Figma token exports from any plugin |
 | Stack toggles | Yes | i18n, Storybook — **all on by default** |
 | **API client** | Yes | **GraphQL (default)** · REST (axios) · none — mutually exclusive |
 | GraphQL subscriptions | When GraphQL | **off by default** |
@@ -76,7 +76,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 
 **Expo account owner** — only ask when **Setup EAS** is on. Set `expo.owner` in `app.json` before `eas init`. Default **`hubspire`** unless intake provides another account slug.
 
-**Sync design tokens** — when **off** (default), copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **no** token scripts and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake; at scaffold copy token scripts + empty `raw/` (README only); run Phase B after C2 using that URL (see [FIGMA_EXPORT.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/FIGMA_EXPORT.md)).
+**Sync design tokens** — when **off** (default), copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **no** token scripts and **no** `tokens:*` scripts in `package.json`. When **on**, ask for **Design tokens GitHub URL** at intake; at scaffold copy `scripts/sync-design-tokens.mjs` + stub `generated/` (Phase C OK before B); add `tokens:sync`. Phase B: review that GitHub repo, implement the sync script’s transform so it writes Uniwind `generated/` output, run it once — users re-run `bun run tokens:sync` later (see [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)). Do **not** hand-map exports into `raw/` as the Phase B deliverable.
 
 **Stack toggles** — `allow_multiple: true`, pre-check i18n and Storybook unless user said to skip:
 
@@ -159,7 +159,7 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 - **Navigation:** start from `templates/src/app/`; assemble from `templates/navigation/` per intake — never leave unused route groups
 - **Hooks / constants:** auth hook `use-storage-state.ts` → `src/hooks/` (create folder when auth on; base template has no `hooks/`). Constants like `SESSION_STORAGE_KEY` → `src/constants/`. Never put hooks under `src/lib/`
 - **Providers:** GraphQL + auth → nest `SessionProvider` **inside** `AppApolloProvider`. REST + auth → `SessionProvider` only (axios interceptor uses SecureStore)
-- **Token scripts / `tokens:*`** only when sync is on; otherwise copy stub `generated/` + `raw/`
+- **Token scripts / `tokens:sync`** only when sync is on; otherwise copy stub `generated/` + `raw/`
 - **Drawer on:** install gesture-handler / reanimated / worklets only — drawer is in `expo-router`; do **not** install `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation` (template `Screen` already does)
 - **Uniwind:** CSS entry `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` before Phase C
 - **Biome:** install `@biomejs/biome@latest`, `bunx biome migrate --write`; `lint:fix` after `argent init` only when any smoke is on. **`useFilenamingConvention` is off** — keep names like `SettingsUI.tsx`. Templates should already be Biome-formatted — Phase C must not require a first-pass `lint:fix` just to normalize copied sources
@@ -175,7 +175,7 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **API client** (GraphQL / REST / none), **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ Figma URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings. Then deliver the **Run report** below in the same or following chat message.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **API client** (GraphQL / REST / none), **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ design-tokens GitHub URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings. Then deliver the **Run report** below in the same or following chat message.
 
 ## Run report (Phase R — mandatory)
 
