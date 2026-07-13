@@ -1,9 +1,9 @@
 import * as ImagePicker from "expo-image-picker";
 
 import {
-  toPermissionOutcome,
   type MediaLibraryAccessOptions,
   type PermissionOutcome,
+  toPermissionOutcome,
 } from "./types";
 
 export async function getCameraPermission(): Promise<PermissionOutcome> {
@@ -34,9 +34,7 @@ export async function requestMediaLibraryPermission(
   options: MediaLibraryAccessOptions = {},
 ): Promise<PermissionOutcome> {
   return toPermissionOutcome(
-    await ImagePicker.requestMediaLibraryPermissionsAsync(
-      options.writeOnly ?? false,
-    ),
+    await ImagePicker.requestMediaLibraryPermissionsAsync(options.writeOnly ?? false),
   );
 }
 

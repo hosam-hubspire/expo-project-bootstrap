@@ -1,1 +1,1 @@
-export { Screen, type SafeAreaEdge, type ScreenProps } from "./Screen";
+export { type SafeAreaEdge, Screen, type ScreenProps } from "./Screen";

@@ -114,10 +114,8 @@ export function PermissionsExamples({
   labels,
 }: PermissionsExamplesProps) {
   const [microphone, setMicrophone] = useState<PermissionOutcome | null>(null);
-  const [locationForeground, setLocationForeground] =
-    useState<PermissionOutcome | null>(null);
-  const [locationBackground, setLocationBackground] =
-    useState<PermissionOutcome | null>(null);
+  const [locationForeground, setLocationForeground] = useState<PermissionOutcome | null>(null);
+  const [locationBackground, setLocationBackground] = useState<PermissionOutcome | null>(null);
   const [servicesEnabled, setServicesEnabled] = useState<boolean | null>(null);
   const [notifications, setNotifications] = useState<PermissionOutcome | null>(null);
   const [camera, setCamera] = useState<PermissionOutcome | null>(null);

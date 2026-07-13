@@ -7,9 +7,7 @@ export type PermissionOutcome = {
   canAskAgain: boolean;
 };
 
-export function toPermissionOutcome(
-  response: PermissionResponse,
-): PermissionOutcome {
+export function toPermissionOutcome(response: PermissionResponse): PermissionOutcome {
   return {
     granted: response.granted,
     status: response.status,

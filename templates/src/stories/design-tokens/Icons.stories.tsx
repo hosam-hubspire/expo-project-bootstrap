@@ -13,7 +13,8 @@ function IconsShowcase() {
       <View className="gap-xs">
         <ThemedText variant="heading-app-section">Icons</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
-          All {sampleIcons.length} sample icons (replace SVGs in assets/icons/ and prebuild to update)
+          All {sampleIcons.length} sample icons (replace SVGs in assets/icons/ and prebuild to
+          update)
         </ThemedText>
       </View>
 

@@ -1,5 +1,5 @@
-import Toast, { type ToastConfig } from "react-native-toast-message";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Toast, { type ToastConfig } from "react-native-toast-message";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -36,11 +36,7 @@ function ToastContent({ title, message, accentClassName }: ToastContentProps) {
 
 const toastConfig: ToastConfig = {
   success: ({ text1, text2 }) => (
-    <ToastContent
-      accentClassName="border-l-button-button-primary"
-      message={text2}
-      title={text1}
-    />
+    <ToastContent accentClassName="border-l-button-button-primary" message={text2} title={text1} />
   ),
   error: ({ text1, text2 }) => (
     <ToastContent accentClassName="border-l-[#DC2626]" message={text2} title={text1} />

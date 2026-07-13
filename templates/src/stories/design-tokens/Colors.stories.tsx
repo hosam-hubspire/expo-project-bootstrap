@@ -69,8 +69,8 @@ function ColorsShowcase() {
         <ThemedText variant="heading-app-section">Color Tokens</ThemedText>
         <ThemedText variant="global-body-small" colorToken="text-text-secondary">
           {tokenCounts.colorTokens} semantic tokens · {tokenCounts.colorPrimitives} color primitives
-          · {tokenCounts.figmaTotal} total tokens in code ·{" "}
-          {theme === "dark" ? "dark" : "light"} mode
+          · {tokenCounts.figmaTotal} total tokens in code · {theme === "dark" ? "dark" : "light"}{" "}
+          mode
         </ThemedText>
       </View>
 

@@ -36,7 +36,10 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <Screen scroll contentClassName="w-full max-w-content gap-base self-center px-lg pb-base pt-base">
+    <Screen
+      scroll
+      contentClassName="w-full max-w-content gap-base self-center px-lg pb-base pt-base"
+    >
       <View className="flex-row items-center gap-xs">
         <Icon name="settings" size={22} colorToken="text-text-default" />
         <ThemedText variant="heading-app-section">{t("settings.title")}</ThemedText>

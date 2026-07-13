@@ -1,6 +1,6 @@
-import { useContext, type ReactNode } from "react";
-import { ScrollView, View, type ViewProps } from "react-native";
 import { HeaderHeightContext } from "expo-router/react-navigation";
+import { type ReactNode, useContext } from "react";
+import { ScrollView, View, type ViewProps } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedView } from "@/components/ThemedView";

@@ -31,9 +31,7 @@ const subscriptionsEnabled = process.env.EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABL
 
 const wsUri =
   process.env.EXPO_PUBLIC_GRAPHQL_WS_URL?.trim() ??
-  (GRAPHQL_URI
-    ? GRAPHQL_URI.replace(/^http:/, "ws:").replace(/^https:/, "wss:")
-    : "");
+  (GRAPHQL_URI ? GRAPHQL_URI.replace(/^http:/, "ws:").replace(/^https:/, "wss:") : "");
 
 const errorLink = new ErrorLink(({ error }) => {
   if (CombinedGraphQLErrors.is(error)) {

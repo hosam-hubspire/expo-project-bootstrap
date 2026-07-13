@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  SettingsActionButton,
-  SettingsDetailRow,
-  SettingsPanel,
-} from "@/components/SettingsUI";
-import { fetchExampleTodo, type ExampleTodo } from "@/services/rest/client";
+import { SettingsActionButton, SettingsDetailRow, SettingsPanel } from "@/components/SettingsUI";
+import { type ExampleTodo, fetchExampleTodo } from "@/services/rest/client";
 
 type RestExamplesProps = {
   title: string;

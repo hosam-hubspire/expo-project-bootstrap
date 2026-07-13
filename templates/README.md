@@ -11,7 +11,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tabs use Expo Router JS `Tabs` (`AppTabs`) with nano icons from `assets/icons/*.svg` (`home`, `settings`).
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md). When **API client is REST**, assemble via [`optional/rest/README.md`](./optional/rest/README.md) instead of the default GraphQL Home/provider.
-8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI). `useFilenamingConvention` is **off** — keep template names such as `SettingsUI.tsx`; do not rename to match exports.
+8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI). `useFilenamingConvention` is **off** — keep template names such as `SettingsUI.tsx`; do not rename to match exports. Keep this `templates/` tree Biome-formatted when editing so Phase C does not need a first-pass `lint:fix` only to normalize copies.
 9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`. CSS entry must be `src/global.css`; `withUniwindConfig` must be the outermost Metro wrapper.
 10. Argent — **only when any smoke is on at intake** (iOS and/or Android): `bunx @swmansion/argent init -y`, then `bun run lint:fix`. Before C2 CLI use: `argent server status` → relink if token rotated → `argent tools` must not 401. **Skip Argent init when both smokes are off.** Template `biome.json` ignores Argent MCP/settings paths (harmless when Argent is absent).
 11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
@@ -188,6 +188,12 @@ Add token scripts to `package.json` **only when Sync design tokens is on**:
 Sample SVGs + glyphmap in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
 
 Tab bar uses Expo Router JS [`Tabs`](https://docs.expo.dev/router/advanced/tabs/) (`src/components/AppTabs`) with nano `Icon` glyphs from `assets/icons/home.svg` and `assets/icons/settings.svg` (not scaffold PNG tab icons).
+
+**`ColorValue` vs string:** Expo Router `tabBarIcon` passes `color` as RN [`ColorValue`](https://reactnative.dev/docs/colors). `react-native-nano-icons` expects a `string`. Template `Icon` accepts `ColorValue` and coerces to string before calling nano-icons — do not narrow `Icon`’s `color` prop back to `string` only, or Phase C `tsc` fails on `AppTabs`.
+
+## Template formatting
+
+Keep `templates/` Biome-clean (same rules as shipped `biome.json`). After editing template sources, from a bootstrapped app (or with `@biomejs/biome` available) run `biome check --write` against the touched template files so Phase C does not need a first-pass `lint:fix` just to normalize imports/format.
 
 ## Stub tokens (sync off — default)
 

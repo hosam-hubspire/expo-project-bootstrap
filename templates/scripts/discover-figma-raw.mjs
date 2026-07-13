@@ -117,9 +117,14 @@ function scoreRole(role, entry) {
     return score;
   }
 
-  if (types.has("STRING") || /font|typography|leading|weight|family|body|heading|link/.test(names)) {
-    if (role === "typographyPrimitives") score += isPrimitive ? 30 : /family|leading|weight|size\//.test(names) ? 25 : 8;
-    if (role === "typographyTokens") score += isToken ? 30 : /body|heading|link|global/.test(names) ? 25 : 10;
+  if (
+    types.has("STRING") ||
+    /font|typography|leading|weight|family|body|heading|link/.test(names)
+  ) {
+    if (role === "typographyPrimitives")
+      score += isPrimitive ? 30 : /family|leading|weight|size\//.test(names) ? 25 : 8;
+    if (role === "typographyTokens")
+      score += isToken ? 30 : /body|heading|link|global/.test(names) ? 25 : 10;
     if (role === "typographyTokens" && modes.length >= 2) score += 12;
     if (!role.startsWith("typography")) score -= 40;
     return score;
@@ -200,8 +205,7 @@ export function suggestModeConstants(matched) {
     const modes = color.modes;
     const lightPref = ["Default", "Light", "Mode 1"];
     const darkPref = ["Dark", "Rider Tools", "Dark Mode"];
-    suggestions.LIGHT_MODE =
-      modes.find((m) => lightPref.includes(m)) ?? modes[0] ?? "Default";
+    suggestions.LIGHT_MODE = modes.find((m) => lightPref.includes(m)) ?? modes[0] ?? "Default";
     suggestions.DARK_MODE =
       modes.find((m) => darkPref.includes(m) && m !== suggestions.LIGHT_MODE) ??
       (modes.length === 2 ? modes.find((m) => m !== suggestions.LIGHT_MODE) : null) ??
@@ -221,7 +225,8 @@ export function suggestModeConstants(matched) {
     suggestions.TYPO_MODE_SM = modes.find((m) => m === "sm") ?? modes[0];
     suggestions.TYPO_MODE_MD = modes.find((m) => m === "md") ?? null;
     suggestions.TYPO_MODE_SM_MD = modes.find((m) => /sm\s*\/\s*md|sm\/md/i.test(m)) ?? null;
-    suggestions.TYPO_MODE_LG = modes.find((m) => /lg\+?/i.test(m)) ?? modes[modes.length - 1] ?? null;
+    suggestions.TYPO_MODE_LG =
+      modes.find((m) => /lg\+?/i.test(m)) ?? modes[modes.length - 1] ?? null;
   }
 
   return suggestions;

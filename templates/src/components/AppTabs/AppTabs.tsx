@@ -33,9 +33,7 @@ export default function AppTabs() {
         name="settings"
         options={{
           title: t("tabs.settings"),
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="settings" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <Icon name="settings" color={color} size={size} />,
         }}
       />
     </Tabs>

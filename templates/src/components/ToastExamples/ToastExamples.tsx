@@ -1,8 +1,4 @@
-import {
-  SettingsActionButton,
-  SettingsButtonRow,
-  SettingsPanel,
-} from "@/components/SettingsUI";
+import { SettingsActionButton, SettingsButtonRow, SettingsPanel } from "@/components/SettingsUI";
 import { toast } from "@/utils/toast";
 
 type ToastExamplesProps = {

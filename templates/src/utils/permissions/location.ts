@@ -1,7 +1,7 @@
 import * as Location from "expo-location";
 import { Platform } from "react-native";
 
-import { toPermissionOutcome, type PermissionOutcome } from "./types";
+import { type PermissionOutcome, toPermissionOutcome } from "./types";
 
 export type LocationReadyOutcome = PermissionOutcome & {
   servicesEnabled: boolean;
@@ -23,9 +23,7 @@ export async function getForegroundLocationPermission(): Promise<PermissionOutco
 }
 
 export async function requestForegroundLocationPermission(): Promise<PermissionOutcome> {
-  return toPermissionOutcome(
-    await Location.requestForegroundPermissionsAsync(),
-  );
+  return toPermissionOutcome(await Location.requestForegroundPermissionsAsync());
 }
 
 export async function ensureForegroundLocationPermission(): Promise<PermissionOutcome> {
@@ -41,9 +39,7 @@ export async function getBackgroundLocationPermission(): Promise<PermissionOutco
 }
 
 export async function requestBackgroundLocationPermission(): Promise<PermissionOutcome> {
-  return toPermissionOutcome(
-    await Location.requestBackgroundPermissionsAsync(),
-  );
+  return toPermissionOutcome(await Location.requestBackgroundPermissionsAsync());
 }
 
 /**

@@ -1,7 +1,8 @@
-export { IOS_PERMISSION_STRINGS, type IosPermissionKey } from "./ios-strings";
-export { openAppSettings } from "./open-settings";
-export type { MediaLibraryAccessOptions, PermissionOutcome } from "./types";
-
+export {
+  type DocumentAccessInfo,
+  getDocumentAccessInfo,
+  platformRequiresStoragePermission,
+} from "./documents";
 export {
   ensureCameraPermission,
   ensureMediaLibraryPermission,
@@ -10,14 +11,9 @@ export {
   requestCameraPermission,
   requestMediaLibraryPermission,
 } from "./image-picker";
-
+export { IOS_PERMISSION_STRINGS, type IosPermissionKey } from "./ios-strings";
 export {
-  ensureMicrophonePermission,
-  getMicrophonePermission,
-  requestMicrophonePermission,
-} from "./microphone";
-
-export {
+  type EnsureLocationReadyOptions,
   ensureBackgroundLocationPermission,
   ensureForegroundLocationPermission,
   ensureLocationReady,
@@ -25,21 +21,21 @@ export {
   getForegroundLocationPermission,
   getLocationProviderStatus,
   isLocationServicesEnabled,
+  type LocationReadyOutcome,
   promptAndroidNetworkLocationProvider,
   requestBackgroundLocationPermission,
   requestForegroundLocationPermission,
-  type EnsureLocationReadyOptions,
-  type LocationReadyOutcome,
 } from "./location";
 
+export {
+  ensureMicrophonePermission,
+  getMicrophonePermission,
+  requestMicrophonePermission,
+} from "./microphone";
 export {
   ensureNotificationPermission,
   getNotificationPermission,
   requestNotificationPermission,
 } from "./notifications";
-
-export {
-  getDocumentAccessInfo,
-  platformRequiresStoragePermission,
-  type DocumentAccessInfo,
-} from "./documents";
+export { openAppSettings } from "./open-settings";
+export type { MediaLibraryAccessOptions, PermissionOutcome } from "./types";

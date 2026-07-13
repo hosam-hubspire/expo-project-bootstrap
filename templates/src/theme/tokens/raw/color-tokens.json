@@ -1,9 +1,6 @@
 {
   "collection": "Color Tokens",
-  "modes": [
-    "Dark",
-    "Default"
-  ],
+  "modes": ["Dark", "Default"],
   "variables": [
     {
       "name": "text/text-default",

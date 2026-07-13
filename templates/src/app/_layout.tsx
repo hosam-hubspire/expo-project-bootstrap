@@ -5,9 +5,8 @@ import "@/stores/preferences-store";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useUniwind } from "uniwind";
-
-import { IconFontLoader } from "@/components/IconFontLoader";
 import { AppToast } from "@/components/AppToast";
+import { IconFontLoader } from "@/components/IconFontLoader";
 import { SplashScreenController } from "@/components/SplashScreenController";
 import { AppApolloProvider } from "@/providers/apollo-provider";
 import { usePreferencesStore } from "@/stores/preferences-store";

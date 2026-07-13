@@ -1,10 +1,6 @@
 import { useQuery } from "@apollo/client/react";
 
-import {
-  SettingsActionButton,
-  SettingsDetailRow,
-  SettingsPanel,
-} from "@/components/SettingsUI";
+import { SettingsActionButton, SettingsDetailRow, SettingsPanel } from "@/components/SettingsUI";
 import { ExampleQueryDocument } from "@/services/graphql/generated/graphql";
 
 type GraphQLExamplesProps = {

@@ -1,7 +1,7 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
-import { toPermissionOutcome, type PermissionOutcome } from "./types";
+import { type PermissionOutcome, toPermissionOutcome } from "./types";
 
 export async function getNotificationPermission(): Promise<PermissionOutcome> {
   return toPermissionOutcome(await Notifications.getPermissionsAsync());

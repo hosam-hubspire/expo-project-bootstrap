@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Pressable, View, type PressableProps } from "react-native";
+import { Pressable, type PressableProps, View } from "react-native";
 
 import { Icon, type IconName } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";

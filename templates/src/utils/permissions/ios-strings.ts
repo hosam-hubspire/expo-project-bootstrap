@@ -24,10 +24,8 @@ export const IOS_PERMISSION_STRINGS = {
   imagePicker: {
     photosPermission:
       "Allow $(PRODUCT_NAME) to access your photos to let you choose images and videos.",
-    cameraPermission:
-      "Allow $(PRODUCT_NAME) to access your camera to take photos and videos.",
-    microphonePermission:
-      "Allow $(PRODUCT_NAME) to access your microphone when recording video.",
+    cameraPermission: "Allow $(PRODUCT_NAME) to access your camera to take photos and videos.",
+    microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone when recording video.",
   },
 } as const;
 
