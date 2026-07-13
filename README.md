@@ -46,7 +46,7 @@ API client (default GraphQL): GraphQL | REST (axios) | none
 GraphQL subscriptions: off by default (only when GraphQL)
 Navigation toggles (default: tabs + intro): Tabs, Drawer, Intro screens, Protected/auth
 Permission toggles (default: all off): Microphone, Location foreground, Location background, Notifications, Image picker (camera + photos/videos), Documents/file system
-iOS Argent smoke (C2): on by default
+iOS Argent smoke (C2): off by default
 Android smoke test: off by default
 Platforms: iOS and Android only
 ```

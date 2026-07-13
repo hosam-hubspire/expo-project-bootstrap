@@ -47,8 +47,8 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | **API client** | **GraphQL (Apollo)** |
 | GraphQL subscriptions | off |
 | **Navigation** | **Tabs on · Drawer off · Intro on · Protected/auth off** |
-| **iOS Argent smoke (C2)** | **on** |
-| Android smoke test | off |
+| **iOS Argent smoke (C2)** | **off** |
+| Android smoke test | **off** |
 | **Permissions** | **all off** (microphone, location foreground, location background, notifications, image picker, documents) |
 
 When the user chose defaults, **do not** re-ask those fields — proceed to [bootstrap.md](bootstrap.md).
@@ -69,7 +69,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | GraphQL subscriptions | When GraphQL | **off by default** |
 | **Navigation toggles** | Yes | Orthogonal mix — see below |
 | **Permission toggles** | Yes | Device capabilities — see below; **all off by default** |
-| **iOS Argent smoke (C2)** | Yes | Device verify on iOS simulator — **on by default** |
+| **iOS Argent smoke (C2)** | Yes | Device verify on iOS simulator — **off by default** |
 | Android smoke test | Yes | Also run Argent on Android emulator after iOS — **off by default** |
 
 **Setup EAS** — when **on** (default), run Phase A2 and C2 (if iOS smoke on) uses an EAS `development-simulator` cloud build on the iOS Simulator. When **off**, skip Phase A2; C2 uses local `expo run:ios` / `expo run:android` when those smokes are on.
@@ -125,7 +125,7 @@ Customize iOS permission copy in `app.json` plugins before shipping. Re-run preb
 
 | Toggle | Default | Effect |
 |--------|---------|--------|
-| **iOS Argent smoke (C2)** | on | Run Phase C2 on iOS simulator (EAS cloud build if EAS on, else local `expo run:ios`) |
+| **iOS Argent smoke (C2)** | off | Run Phase C2 on iOS simulator (EAS cloud build if EAS on, else local `expo run:ios`) |
 | **Android smoke test** | off | After iOS C2 passes, also verify on Android emulator |
 
 When **both off**: skip Phase C2 and skip prebuild in Phase A; Phase C (`lint` / `test` / `tsc`) is enough. User can prebuild later before the first device build. Phrases like “smoke tests all off” mean both toggles off.
