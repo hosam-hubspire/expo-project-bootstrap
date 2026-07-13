@@ -31,7 +31,7 @@
      1. `argent server status` — `health: ok`; if not running, `argent server start` (background).
      2. **Relink after restart** — each `server start` rotates the bearer token. If the server was started or restarted this session, relink: `printf 'y\n' | argent unlink` then `argent link argent://<token>@127.0.0.1:3001 --yes` (token from `server start` output).
      3. Verify: `argent tools` exits 0 — not `401 Unauthorized`.
-9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects).
+9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects). **Skip when both smoke tests are off** (iOS C2 skipped and Android smoke test off): Phase C (`lint` / `test` / `tsc`) does not need `ios/` / `android/`, and templates already ship nano-icons glyphmap/font stubs. Run prebuild later before the first local or EAS device build, or when config plugins / `assets/icons/*.svg` change.
 10. **Project README** — replace the stock Expo `README.md` with a project-specific one from [`templates/project-README.md`](../../templates/project-README.md). Fill placeholders from intake (app name, stack/nav/permission toggles, EAS, tokens, env, scripts). Do this in Phase A (or before Phase D) — **never commit the default create-expo-app README**.
 
 ### `app.json` merge checklist

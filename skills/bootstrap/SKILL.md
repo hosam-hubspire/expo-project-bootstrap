@@ -144,7 +144,8 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - After `eas build:run`, start Metro (`bun run start`) before Argent launch — dev client needs the bundler
 - Expo MCP (`build_run`, `build_list`, …) may be used when EAS is enabled and MCP is authenticated; prefer `eas` CLI for bootstrap reliability
 - **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
-- Icons: SVGs to `assets/icons/` → `bunx expo prebuild`
+- **Prebuild:** run `bunx expo prebuild` when any device smoke test is on (C2 needs native projects). **Skip when both iOS and Android smoke tests are off** — Phase C does not need `ios/` / `android/`; template nano-icons glyphmap/font stubs are enough until the first device build. Run later before `expo run:*` / EAS install, or after plugin / SVG changes
+- Icons: SVGs to `assets/icons/` → `bunx expo prebuild` (when prebuild runs)
 - **Toasts:** copy `src/components/AppToast/` + `src/utils/toast.ts` + `src/components/ToastExamples/` + `src/components/SettingsUI/`; keep `<AppToast />` in root `_layout.tsx` and ToastExamples on Settings when composing auth/drawer navigators
 - **Permissions demos:** when any permission on, copy `PermissionsExamples` and enable the Settings block; trim to selected capabilities
 - No one-off bridge scripts under `scripts/`; **iOS/Android only** — no web target, no `Platform.OS === "web"` branches, no `localStorage` / DOM APIs, no web-only packages or polyfills; Bun only
