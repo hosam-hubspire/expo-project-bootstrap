@@ -124,8 +124,8 @@ Only when **Sync design tokens** is on — [FIGMA_EXPORT.md](https://github.com/
 
 **Gate:** real token counts; lint/test/tsc pass before Phase D. If export blocked, keep stubs; document pending work — do not mark B complete.
 
-**Before commit:** filled project README (not stock Expo). Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md](SKILL.md).
+**Before commit:** filled project README (not stock Expo). Commit on `main`; push if GitHub repo provided. Completion summary + mandatory **Run report** as an agent chat message (no report file) — [SKILL.md](SKILL.md) Phase R.
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · replace stock README before Phase D · token generate only when sync on · never hand-edit `generated/*` · C2/B gates per intake · EAS A2 only when EAS on · resolve versions at install time · assemble navigation from modules · `Screen` + insets over `SafeAreaView` · no `@react-navigation/*` app imports · native only
+Latest Expo default template · merge templates into scaffold · replace stock README before Phase D · token generate only when sync on · never hand-edit `generated/*` · C2/B gates per intake · EAS A2 only when EAS on · resolve versions at install time · assemble navigation from modules · `Screen` + insets over `SafeAreaView` · no `@react-navigation/*` app imports · native only · always post Phase R run report in chat (timing, incidents, security review; secrets redacted; no `.md` report file)

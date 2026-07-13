@@ -36,7 +36,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 | Jest / `@types/jest` | After `jest-expo` — derive from its `babel-jest` dep | **Never `@latest`** — Jest 30 breaks `jest-expo` |
 | Everything else | `bun add <pkg>@latest` or `bun add -d <pkg>@latest` | `@latest` always |
 
-**Never pass `--verbose` to `bunx expo install`** — it is not supported. Use `--verbose` on `bun add` only.
+**Never pass `--verbose` to `bunx expo install`** — it is not supported. Prefer `bun install --verbose` for the required exit-0 gate. On `bun add`, avoid `--verbose` when possible: it can print registry `Authorization` Bearer headers into logs. If a verbose `bun add` hangs, kill and retry without `--verbose`.
 
 ### Core (always)
 
@@ -45,8 +45,8 @@ bunx expo install expo-localization expo-font jest-expo
 # Pin Jest to jest-expo's stack — never jest@latest (Jest 30 breaks jest-expo)
 JEST_RANGE=$(node -p "require('jest-expo/package.json').dependencies['babel-jest']")
 bun add -d jest@${JEST_RANGE} @types/jest@${JEST_RANGE}
-bun add --verbose uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest react-native-toast-message@latest
-bun add -d --verbose @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest
+bun add uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest react-native-toast-message@latest
+bun add -d @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest
 bunx biome migrate --write
 ```
 
@@ -127,15 +127,15 @@ Also copy `src/components/PermissionsExamples/` and enable the Settings demo blo
 ### Default stack (unless unchecked)
 
 ```bash
-bun add --verbose i18next@latest react-i18next@latest
+bun add i18next@latest react-i18next@latest
 # API client: GraphQL (default) — skip this block when REST or none
-bun add --verbose @apollo/client@latest graphql@latest graphql-ws@latest apollo3-cache-persist@latest @graphql-typed-document-node/core@latest
+bun add @apollo/client@latest graphql@latest graphql-ws@latest apollo3-cache-persist@latest @graphql-typed-document-node/core@latest
 bunx expo install expo-secure-store
-bun add -d --verbose @graphql-codegen/cli@latest @graphql-codegen/client-preset@latest
+bun add -d @graphql-codegen/cli@latest @graphql-codegen/client-preset@latest
 # API client: REST — use instead of GraphQL block (mutually exclusive)
-# bun add --verbose axios@latest
+# bun add axios@latest
 # bunx expo install expo-secure-store
-bun add -d --verbose storybook@latest @storybook/react-native@latest @storybook/addon-ondevice-actions@latest @storybook/addon-ondevice-backgrounds@latest @storybook/addon-ondevice-controls@latest @storybook/addon-ondevice-notes@latest
+bun add -d storybook@latest @storybook/react-native@latest @storybook/addon-ondevice-actions@latest @storybook/addon-ondevice-backgrounds@latest @storybook/addon-ondevice-controls@latest @storybook/addon-ondevice-notes@latest
 bun install --verbose
 ```
 

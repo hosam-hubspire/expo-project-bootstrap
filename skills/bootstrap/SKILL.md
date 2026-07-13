@@ -142,7 +142,10 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - [ ] C2 — Argent smoke (if iOS smoke on; + Android if opted in)
 - [ ] B — Design token sync (if enabled) — after C2 when C2 ran; after C when smokes off
 - [ ] D — Commit (+ push if repo provided) — project README must already replace stock Expo README
+- [ ] R — Run report (always — agent chat message after all other phases for this session)
 ```
+
+**Timing:** from Phase 0 onward, record wall-clock start/end (or duration) per phase and per notable sub-step (create-expo-app, installs, template merge, biome/uniwind, Phase C commands, C2, token sync, commit). Approximate is fine if exact timestamps were not captured — say so.
 
 ## Rules
 
@@ -150,7 +153,7 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 
 - `bunx create-expo-app@latest --template default` — never hand-roll `package.json`
 - **Package versions:** `bunx expo install` for Expo/SDK packages (no `@latest`); `bun add <pkg>@latest` / `bun add -d <pkg>@latest` otherwise. **Exception:** pin `jest` / `@types/jest` from `jest-expo`'s `babel-jest` range — never `jest@latest`. Never copy version pins from templates.
-- **Never pass `--verbose` to `bunx expo install`** — only on `bun add`
+- **Never pass `--verbose` to `bunx expo install`**. Prefer `bun install --verbose` for the exit-0 gate. On `bun add`, `--verbose` may dump registry `Authorization` headers — if a verbose add hangs or floods logs, kill it and retry **without** `--verbose`; never paste auth headers into chat or the run report
 - No `move_agent_to_root` during bootstrap
 - Grouped installs + strip unchecked stack — templates README / `optional/minimal/`
 - **Navigation:** start from `templates/src/app/`; assemble from `templates/navigation/` per intake — never leave unused route groups
@@ -168,9 +171,55 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 - **Argent only with smoke:** `argent init` runs in A **only when iOS and/or Android smoke is on**; verify in C2. Never init Argent when both smokes are off
 - **Commit gate:** no commit/push until C2 passes when iOS smoke on (and Android when opted in), and Phase B complete when token sync on. When both smokes off, Phase C (+ B if sync) is enough — ask before D
 - **Project README:** fill [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) before Phase D
+- **Run report (always):** after all applicable phases finish (including skipped ones noted as skipped), post the **Run report** as an **agent chat message** (not a file). Do this even when Phase D was declined or deferred. Redact secrets (tokens, passwords, Bearer headers, `.env` values) — never paste them into the report
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **API client** (GraphQL / REST / none), **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ Figma URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **API client** (GraphQL / REST / none), **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ Figma URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings. Then deliver the **Run report** below in the same or following chat message.
+
+## Run report (Phase R — mandatory)
+
+Always post as an **agent message** after the bootstrap session’s work is done — **do not** write `BOOTSTRAP_REPORT.md` or any other report file. Purpose: improve this skill from real runs.
+
+Use this structure in the chat message:
+
+```markdown
+# Bootstrap run report — {{APP_NAME}}
+
+- Date (ISO): …
+- Total wall time: …
+- Intake: defaults | custom (brief)
+- Outcome: success | partial | failed
+
+## Timing by phase / task
+
+| Phase / task | Duration | Notes |
+|--------------|----------|-------|
+| 0 Intake | … | |
+| A create-expo-app | … | |
+| A template merge + cruft removal | … | |
+| A dependency installs | … | |
+| A biome / uniwind / README | … | |
+| A2 EAS | … or skipped | |
+| C lint / test / tsc | … | |
+| C2 Argent smoke | … or skipped | |
+| B token sync | … or skipped | |
+| D commit / push | … or skipped / deferred | |
+
+## What went wrong or sideways
+
+For each incident: symptom → probable cause → fixes tried → final resolution (or open).
+If none: say “None.”
+
+## Security / secret-handling review
+
+Did the agent (or a tool it ran) expose, log, or paste secrets (npm/GitHub/EAS tokens, Bearer headers, `.env` values, credentials)?
+- List each finding (redacted), severity, and mitigation taken or recommended.
+- If none: say “No secret exposure observed.”
+
+## Skill improvement notes
+
+Concrete suggestions for SKILL.md / bootstrap.md / templates (commands to change, hangs to document, missing steps, ambiguous intake, etc.).
+```
 
 **Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [README](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md) · **Navigation:** [navigation/README](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md)

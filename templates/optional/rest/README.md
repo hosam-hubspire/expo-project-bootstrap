@@ -4,7 +4,7 @@ Use when intake **API client** is **REST**. Mutually exclusive with GraphQL — 
 
 Default `templates/src/app/` is GraphQL. For REST:
 
-1. **Install** — `bun add --verbose axios@latest` and `bunx expo install expo-secure-store` (Bearer interceptor uses SecureStore even when auth routes are off).
+1. **Install** — `bun add axios@latest` and `bunx expo install expo-secure-store` (Bearer interceptor uses SecureStore even when auth routes are off).
 2. **Copy** — `templates/src/services/rest/` → `src/services/rest/`; `templates/src/components/RestExamples/` → `src/components/RestExamples/`.
 3. **Do not copy** GraphQL — skip `src/services/graphql/`, `src/providers/apollo-provider.tsx`, `src/components/GraphQLExamples/`, `codegen.ts`, GraphQL installs/scripts.
 4. **Root layout** — copy [`src/app/_layout.tsx`](./src/app/_layout.tsx) (no `AppApolloProvider`). When auth is on, nest `SessionProvider` inside `GestureHandlerRootView` (same as GraphQL-off + auth in [`optional/minimal`](../minimal/README.md)).
