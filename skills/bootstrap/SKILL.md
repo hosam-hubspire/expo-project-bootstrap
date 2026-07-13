@@ -2,9 +2,9 @@
 name: bootstrap
 description: >-
   Bootstrap a new Expo React Native app from architectural templates (Uniwind,
-  Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook, mixable Expo
-  Router navigation). Use when the user asks to scaffold, bootstrap, or create a
-  new Expo app or React Native project.
+  Bun, Biome, design tokens, nano-icons, i18n, GraphQL or REST, Storybook,
+  mixable Expo Router navigation). Use when the user asks to scaffold,
+  bootstrap, or create a new Expo app or React Native project.
 disable-model-invocation: true
 ---
 
@@ -43,7 +43,8 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | Setup EAS | on |
 | Expo account owner | `hubspire` |
 | Sync design tokens | off (template `generated/` + `raw/` stubs) |
-| Stack toggles | i18n, GraphQL, Storybook (all on) |
+| Stack toggles | i18n, Storybook (all on) |
+| **API client** | **GraphQL (Apollo)** |
 | GraphQL subscriptions | off |
 | **Navigation** | **Tabs on · Drawer off · Intro on · Protected/auth off** |
 | **iOS Argent smoke (C2)** | **on** |
@@ -63,7 +64,9 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | Expo account owner | No | Only when EAS on — **`hubspire` by default** (`expo.owner` in `app.json`) |
 | Sync design tokens | Yes | Phase B after C2 — **off by default** |
 | Figma design tokens URL | When sync on | Required — `figma.com/design/…` or `figma.com/file/…` link to the token source file |
-| Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
+| Stack toggles | Yes | i18n, Storybook — **all on by default** |
+| **API client** | Yes | **GraphQL (default)** · REST (axios) · none — mutually exclusive |
+| GraphQL subscriptions | When GraphQL | **off by default** |
 | **Navigation toggles** | Yes | Orthogonal mix — see below |
 | **Permission toggles** | Yes | Device capabilities — see below; **all off by default** |
 | **iOS Argent smoke (C2)** | Yes | Device verify on iOS simulator — **on by default** |
@@ -75,13 +78,22 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 
 **Sync design tokens** — when **off** (default), copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **no** token scripts and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake; at scaffold copy token scripts + empty `raw/` (README only); run Phase B after C2 using that URL (see [FIGMA_EXPORT.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/FIGMA_EXPORT.md)).
 
-**Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
+**Stack toggles** — `allow_multiple: true`, pre-check i18n and Storybook unless user said to skip:
 
 - **i18n** — `i18next`, localized tabs, language toggle
-- **GraphQL** — Apollo, `ExampleQuery`, Home `<GraphQLExamples />`, codegen; needs `EXPO_PUBLIC_GRAPHQL_URL` (dev placeholder: `https://rickandmortyapi.com/graphql`)
 - **Storybook** — on-device, token + component stories
 
-Also ask: **GraphQL subscriptions** — off by default (gates WS subscription transport via `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED`).
+**API client** — single choice (not multi-select). Default **GraphQL**. Do not ship GraphQL and REST together.
+
+| Choice | Default | Meaning |
+|--------|---------|---------|
+| **GraphQL** | yes | Apollo, `ExampleQuery`, Home `<GraphQLExamples />`, codegen; `EXPO_PUBLIC_GRAPHQL_URL` (dev: Rick and Morty) |
+| **REST** | no | axios, `src/services/rest/`, Home `<RestExamples />`; `EXPO_PUBLIC_API_URL` (dev: JSONPlaceholder). Assemble via [optional/rest/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) |
+| **none** | no | Strip both API stacks (minimal omit GraphQL + skip REST) |
+
+When **GraphQL**: also ask **GraphQL subscriptions** — off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED`). Install `expo-secure-store` for the Apollo auth link.
+
+When **REST**: install `axios` + `expo-secure-store` (Bearer interceptor). No codegen script.
 
 **Navigation toggles** — `allow_multiple: true`. These combine freely. Pre-check **Tabs** and **Intro**; leave Drawer and Protected unchecked unless the user asks.
 
@@ -143,13 +155,13 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 - Grouped installs + strip unchecked stack — templates README / `optional/minimal/`
 - **Navigation:** start from `templates/src/app/`; assemble from `templates/navigation/` per intake — never leave unused route groups
 - **Hooks / constants:** auth hook `use-storage-state.ts` → `src/hooks/` (create folder when auth on; base template has no `hooks/`). Constants like `SESSION_STORAGE_KEY` → `src/constants/`. Never put hooks under `src/lib/`
-- **Providers:** GraphQL + auth → nest `SessionProvider` **inside** `AppApolloProvider`
+- **Providers:** GraphQL + auth → nest `SessionProvider` **inside** `AppApolloProvider`. REST + auth → `SessionProvider` only (axios interceptor uses SecureStore)
 - **Token scripts / `tokens:*`** only when sync is on; otherwise copy stub `generated/` + `raw/`
 - **Drawer on:** install gesture-handler / reanimated / worklets only — drawer is in `expo-router`; do **not** install `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation` (template `Screen` already does)
 - **Uniwind:** CSS entry `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` before Phase C
 - **Biome:** install `@biomejs/biome@latest`, `bunx biome migrate --write`, `lint:fix` after `argent init`. **`useFilenamingConvention` is off** — keep names like `SettingsUI.tsx`
 - **Tabs:** Expo Router JS `Tabs` + nano `Icon` SVGs under `assets/icons/`
-- **GraphQL on:** `.env.example` + local `.env` with Rick and Morty placeholder; gitignore `.env`
+- **API client:** GraphQL → Rick and Morty `.env` + Apollo stack. REST → assemble [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder `.env`. None → strip GraphQL (minimal) and skip REST. Always gitignore `.env`
 - **EAS / C2 / Phase B / prebuild / Argent CLI:** follow [bootstrap.md](bootstrap.md) — skip A2 when EAS off; skip C2 + prebuild when both smokes off
 - **Toasts + permissions demos:** core toasts always; PermissionsExamples when any permission on
 - **Native only** (iOS/Android): remove scaffold web leftovers if present (`web` script/config, `*.web.*`, favicon/`tutorial-web` assets); no `Platform.OS === "web"`, `localStorage`, or web-only packages. Prefer template `Screen` + `useSafeAreaInsets()` over `SafeAreaView`
@@ -159,6 +171,6 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ Figma URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **API client** (GraphQL / REST / none), **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ Figma URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings.
 
 **Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [README](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md) · **Navigation:** [navigation/README](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md)

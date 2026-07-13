@@ -15,10 +15,12 @@
    - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub `raw/` — **do not** copy token scripts or add `tokens:*` scripts.
    - **Token sync on:** copy token scripts + empty `raw/` (README only); add `tokens:discover` / `tokens:generate`. Figma URL from intake — real exports in Phase B.
    - **Tab icons (when tabs on):** Expo Router JS `Tabs` + nano `Icon` from `assets/icons/*.svg`.
-   - **GraphQL on:** copy `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
+   - **API GraphQL (default):** copy GraphQL services/provider/examples + `codegen.ts`; `.env` with Rick and Morty URL.
+   - **API REST:** follow [optional/rest/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) — axios client, RestExamples, REST `_layout`/Home; **do not** copy GraphQL stack; `.env` with JSONPlaceholder `EXPO_PUBLIC_API_URL`.
+   - **API none:** omit GraphQL (minimal) and skip REST copy.
 5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
-   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts` (create `src/hooks/`), `app/sign-in.tsx`; ensure `src/constants/session.ts`; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL is on; `bunx expo install expo-secure-store`; Sign out on Settings.
+   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts` (create `src/hooks/`), `app/sign-in.tsx`; ensure `src/constants/session.ts`; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL; when REST or API none, wrap with `SessionProvider` alone; `bunx expo install expo-secure-store`; Sign out on Settings.
    - **GraphQL + auth:** Apollo SecureStore auth link uses `SESSION_STORAGE_KEY` — do not wire the link to React context.
    - **Drawer on:** copy drawer layout into `(app)/_layout.tsx`; install gesture-handler / reanimated / worklets only — no `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation`.
    - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`.
@@ -66,13 +68,13 @@ CLI: `bunx eas-cli build -p ios -e development-simulator --non-interactive --wai
 
 ## Default stack
 
-Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y · Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · toasts · i18n · GraphQL · Storybook (omit via intake + minimal strip).
+Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y · Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · toasts · i18n · **API: GraphQL (default) or REST (axios)** · Storybook (omit via intake + minimal/rest strip).
 
 **Default navigation:** tabs + intro (drawer off, auth off).
 
 When **Setup EAS** is on: EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
 
-Subscriptions off by default. Token sync off → stub tokens. GraphQL placeholder: `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql` in `.env` before C2 when GraphQL and iOS smoke are on.
+Subscriptions off by default (GraphQL only). Token sync off → stub tokens. GraphQL placeholder: `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql`. REST placeholder: `EXPO_PUBLIC_API_URL=https://jsonplaceholder.typicode.com`.
 
 ## Verify (Phase C — stub tokens OK)
 

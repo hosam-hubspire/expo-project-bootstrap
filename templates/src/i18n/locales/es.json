@@ -17,7 +17,12 @@
     "graphqlDescription": "Query Apollo contra la API de Rick and Morty. Sustituye las operaciones en src/services/graphql/operations/ por tu schema.",
     "graphqlQuery": "Volver a consultar",
     "graphqlQueryLoading": "Cargando…",
-    "graphqlQueryError": "Error de query"
+    "graphqlQueryError": "Error de query",
+    "restTitle": "Ejemplo REST",
+    "restDescription": "GET con axios contra JSONPlaceholder. Sustituye fetchExampleTodo en src/services/rest/ por tus endpoints.",
+    "restFetch": "Volver a pedir",
+    "restFetchLoading": "Cargando…",
+    "restFetchError": "Error de petición"
   },
   "settings": {
     "title": "Ajustes",

@@ -17,7 +17,12 @@
     "graphqlDescription": "Apollo query against the Rick and Morty API. Replace operations under src/services/graphql/operations/ with your schema.",
     "graphqlQuery": "Refetch query",
     "graphqlQueryLoading": "Loading…",
-    "graphqlQueryError": "Query error"
+    "graphqlQueryError": "Query error",
+    "restTitle": "REST example",
+    "restDescription": "Axios GET against JSONPlaceholder. Replace fetchExampleTodo in src/services/rest/ with your endpoints.",
+    "restFetch": "Refetch",
+    "restFetchLoading": "Loading…",
+    "restFetchError": "Request error"
   },
   "settings": {
     "title": "Settings",

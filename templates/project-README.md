@@ -11,7 +11,7 @@ Expo React Native app (iOS & Android) scaffolded with the Hubspire bootstrap sta
 | Quality | TypeScript strict · Biome · ESLint a11y · Jest · CI |
 | State | Zustand + MMKV |
 | i18n | {{I18N}} |
-| GraphQL | {{GRAPHQL}} |
+| API | {{API}} |
 | Storybook | {{STORYBOOK}} |
 | EAS | {{EAS}} |
 | Design tokens | {{TOKENS}} |
@@ -77,13 +77,13 @@ Bootstrap agent — fill placeholders then delete this comment block:
 
 {{APP_NAME}}     — intake app name / display name
 {{I18N}}         — on | off
-{{GRAPHQL}}      — on (subscriptions on|off) | off
+{{API}}          — GraphQL (subscriptions on|off) | REST (axios) | none
 {{STORYBOOK}}    — on | off
 {{EAS}}          — on (owner: …) | off
 {{TOKENS}}       — stub tokens | Figma sync (URL)
 {{NAVIGATION}}   — e.g. Tabs + Intro · Drawer off · Auth off
 {{PERMISSIONS}}  — none | comma-separated list from intake
-{{ENV_SECTION}}  — GraphQL `.env` block when GraphQL on; otherwise omit the heading
+{{ENV_SECTION}}  — GraphQL or REST `.env` block when API on; otherwise omit
 {{EXTRA_SCRIPTS}}— rows for graphql:generate / storybook / tokens:* when enabled
 
 Write the result to the app root as README.md (overwrite create-expo-app README).

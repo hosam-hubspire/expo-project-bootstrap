@@ -10,7 +10,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 4. **Token scripts** — copy `scripts/discover-figma-raw.mjs`, `scripts/generate-design-tokens.mjs`, `scripts/figma-export-helpers.js` **only when Sync design tokens is on** at intake. **Always** copy `src/theme/tokens/raw/` — template stub JSON when sync is off; empty `raw/` (README only) when sync is on. When off (default), also copy pre-built `src/theme/tokens/generated/`; no `tokens:discover` / `tokens:generate` in `package.json`.
 5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tabs use Expo Router JS `Tabs` (`AppTabs`) with nano icons from `assets/icons/*.svg` (`home`, `settings`).
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
-7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
+7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md). When **API client is REST**, assemble via [`optional/rest/README.md`](./optional/rest/README.md) instead of the default GraphQL Home/provider.
 8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI). `useFilenamingConvention` is **off** — keep template names such as `SettingsUI.tsx`; do not rename to match exports.
 9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`. CSS entry must be `src/global.css`; `withUniwindConfig` must be the outermost Metro wrapper.
 10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix`. Before C2 (when iOS smoke on) CLI use: `argent server status` → relink if token rotated → `argent tools` must not 401. Template `biome.json` ignores Argent MCP/settings paths.
@@ -128,28 +128,40 @@ Also copy `src/components/PermissionsExamples/` and enable the Settings demo blo
 
 ```bash
 bun add --verbose i18next@latest react-i18next@latest
+# API client: GraphQL (default) — skip this block when REST or none
 bun add --verbose @apollo/client@latest graphql@latest graphql-ws@latest apollo3-cache-persist@latest @graphql-typed-document-node/core@latest
 bunx expo install expo-secure-store
 bun add -d --verbose @graphql-codegen/cli@latest @graphql-codegen/client-preset@latest
+# API client: REST — use instead of GraphQL block (mutually exclusive)
+# bun add --verbose axios@latest
+# bunx expo install expo-secure-store
 bun add -d --verbose storybook@latest @storybook/react-native@latest @storybook/addon-ondevice-actions@latest @storybook/addon-ondevice-backgrounds@latest @storybook/addon-ondevice-controls@latest @storybook/addon-ondevice-notes@latest
 bun install --verbose
 ```
 
-GraphQL’s Apollo client includes a SecureStore auth link (`SESSION_STORAGE_KEY` in `src/constants/session.ts`) — install `expo-secure-store` whenever GraphQL is on (even if Protected/auth is off; the link no-ops without a token).
+**GraphQL:** Apollo SecureStore auth link (`SESSION_STORAGE_KEY`) — install `expo-secure-store` whenever GraphQL is on (even if Protected/auth is off).
+
+**REST:** axios request interceptor uses the same `SESSION_STORAGE_KEY` — install `expo-secure-store` whenever REST is on. Assemble files per [`optional/rest/README.md`](./optional/rest/README.md). Do not copy GraphQL services/provider/examples/codegen.
 
 ### GraphQL dev placeholder
 
-When GraphQL is enabled, add `.env.example` and a local `.env` (gitignored) before C2:
+When API client is GraphQL, add `.env.example` and a local `.env` (gitignored) before C2:
 
 ```bash
 EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql
 ```
 
-The bundled `ExampleQuery` fetches a character from the Rick and Morty API. Home shows `<GraphQLExamples />` with that query. Add mutations/subscriptions under `src/services/graphql/operations/` when your schema supports them.
+The bundled `ExampleQuery` fetches a character from the Rick and Morty API. Home shows `<GraphQLExamples />`. Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`). Run `graphql:generate` when `.graphql` ops change.
 
-Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`) enables the WS link in the Apollo client.
+### REST dev placeholder
 
-Run `graphql:generate` when `.graphql` ops change (requires `EXPO_PUBLIC_GRAPHQL_URL`).
+When API client is REST:
+
+```bash
+EXPO_PUBLIC_API_URL=https://jsonplaceholder.typicode.com
+```
+
+Home shows `<RestExamples />` (`GET /todos/1` via `fetchExampleTodo`). Replace with your base URL and endpoints under `src/services/rest/`.
 
 **Fonts:** after Phase B, install packages matching exported Figma families; load via `expo-font`. See `font-families.css` from `tokens:generate`.
 
