@@ -1,6 +1,6 @@
 # Expo project bootstrap
 
-Agent skill + templates for Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook, mixable Expo Router navigation). Stub tokens ship for CI/Argent; real Figma exports are copied to `raw/` after device smoke tests.
+Agent skill + templates for Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, i18n, GraphQL, Storybook, mixable Expo Router navigation). Stub tokens ship for CI; real Figma exports land in `raw/` in Phase B (after C2 when smoke tests run, else after Phase C).
 
 ## Quick start
 
@@ -43,9 +43,12 @@ Stack toggles (default all on): i18n, GraphQL, Storybook
 GraphQL subscriptions: off by default
 Navigation toggles (default: tabs + intro): Tabs, Drawer, Intro screens, Protected/auth
 Permission toggles (default: all off): Microphone, Location foreground, Location background, Notifications, Image picker (camera + photos/videos), Documents/file system
-Android smoke test: off by default (iOS only via Argent)
+iOS Argent smoke (C2): on by default
+Android smoke test: off by default
 Platforms: iOS and Android only
 ```
+
+**Global skill install:** `skills add -g` copies only `skills/bootstrap/`. Agents must use a local clone’s `templates/` or the GitHub `templates/` URL — relative `../../templates` does not resolve from `~/.agents/skills/`.
 
 ## Local skill install
 

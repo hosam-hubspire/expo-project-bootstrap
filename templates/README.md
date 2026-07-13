@@ -11,11 +11,11 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 5. Replace demo routes with template `src/app/` (**default nav: tabs + intro**). Tabs use Expo Router JS `Tabs` (`AppTabs`) with nano icons from `assets/icons/*.svg` (`home`, `settings`).
 6. **Navigation assembly** — apply intake toggles (tabs / drawer / intro / auth) per [`navigation/README.md`](./navigation/README.md). Copy modules from `navigation/auth/`, `navigation/drawer/`, `navigation/screens/` only when needed; compose `RootNavigator` guards.
 7. Strip unchecked stack — [`optional/minimal/README.md`](./optional/minimal/README.md).
-8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI).
-9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` (CLI has no `generate-types`). CSS entry must be `src/global.css` (not under `theme/`) so Tailwind scans all of `src/`; `withUniwindConfig` must be the outermost Metro wrapper.
-10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix` (or `bunx biome check --write .`) so generated MCP JSON is Biome-clean before Phase C. Before C2 CLI smoke tests: `argent server status` → relink if token rotated → `argent tools` must not 401. Template `biome.json` also ignores Argent MCP/settings paths.
+8. **Biome** — after copying `biome.json`, run `bunx biome migrate --write` (installs schema matching the installed CLI). `useFilenamingConvention` is **off** — keep template names such as `SettingsUI.tsx`; do not rename to match exports.
+9. **Uniwind types** — `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`. CSS entry must be `src/global.css`; `withUniwindConfig` must be the outermost Metro wrapper.
+10. Argent — `bunx @swmansion/argent init -y`, then `bun run lint:fix`. Before C2 (when iOS smoke on) CLI use: `argent server status` → relink if token rotated → `argent tools` must not 401. Template `biome.json` ignores Argent MCP/settings paths.
 11. EAS (when enabled at intake) — merge `eas.json`, set `expo.owner`, `bunx expo install expo-dev-client`, `bunx eas-cli init --non-interactive` (see bootstrap skill Phase A2).
-12. Design tokens (if enabled at intake) — **after C2** — collect Figma URL at intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
+12. Design tokens (if enabled at intake) — **after C2 when iOS smoke on, else after Phase C** — Figma URL from intake; export per [`FIGMA_EXPORT.md`](./FIGMA_EXPORT.md).
 13. **Project README** — replace stock Expo `README.md` with a filled [`project-README.md`](./project-README.md) from intake (before Phase D commit).
 
 **`.gitignore` merge** — add to scaffold `.gitignore` (do not replace): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`.
@@ -175,7 +175,7 @@ Add token scripts to `package.json` **only when Sync design tokens is on**:
 
 Sample SVGs + glyphmap in `assets/icons/`. Replace SVGs from Figma → `bunx expo prebuild`.
 
-Tab bar uses Expo Router JS [`Tabs`](https://docs.expo.dev/router/advanced/tabs/) (`src/components/AppTabs`) with nano `Icon` glyphs from `assets/icons/home.svg` and `assets/icons/settings.svg`. Do not use `expo-router/unstable-native-tabs` or scaffold `tabIcons/*.png`.
+Tab bar uses Expo Router JS [`Tabs`](https://docs.expo.dev/router/advanced/tabs/) (`src/components/AppTabs`) with nano `Icon` glyphs from `assets/icons/home.svg` and `assets/icons/settings.svg` (not scaffold PNG tab icons).
 
 ## Stub tokens (sync off — default)
 

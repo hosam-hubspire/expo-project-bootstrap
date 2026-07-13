@@ -2,37 +2,33 @@
 
 **Intake:** [SKILL.md](SKILL.md) — do not start until confirmed. Step 1: app name. Step 2: use defaults? (skips remaining questions when yes).
 
-**Templates:** https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates
+**Templates:** https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates — prefer a local repo clone; GitHub if the skill is installed without `templates/` beside it.
 
-**Navigation assembly:** [`templates/navigation/README.md`](../../templates/navigation/README.md)
+**Navigation assembly:** [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md)
 
 ## Scaffold
 
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
-2. **Remove cruft** — demo routes, `components/ui/*`, stock helpers, non-Bun lockfiles, **all web files** (`+html.tsx`, web entry/assets). Move `app/` → `src/app/` if needed; wire `@/` in `tsconfig.json`. Apps are **iOS/Android only** — never add `Platform.OS === "web"`, `localStorage`, or other web-only code.
-3. **Install** — grouped commands in `templates/README.md`; skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo packages:** `bun add …@latest` (except `jest` / `@types/jest` — derive from `jest-expo`). Never copy version pins from templates. `bun install --verbose` must exit **0**.
-4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on at intake. Strip unchecked items — [`optional/minimal/README.md`](../../templates/optional/minimal/README.md).
-   - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **do not** copy token scripts; **do not** add `tokens:discover` / `tokens:generate` to `package.json`.
-   - **Token sync on:** copy token scripts + empty `src/theme/tokens/raw/` (README only); add `tokens:discover` / `tokens:generate` to `package.json`. Figma URL collected at intake — real exports land in `raw/` during Phase B.
-   - **Tab icons (when tabs on):** Expo Router JS `Tabs` (`expo-router`) with nano `Icon` (`home` / `settings` from `assets/icons/*.svg`) — not Native Tabs.
-   - **GraphQL on:** copy `templates/.env.example` → `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
-5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [`navigation/README.md`](../../templates/navigation/README.md):
+2. **Remove cruft** — demo routes, stock helpers, non-Bun lockfiles, and any web leftovers (`*.web.*`, `web` script/config, favicon / tutorial-web assets). Current default scaffold usually already uses `src/app/` and `@/` — only move `app/` → `src/app/` or add path aliases if missing. Apps are **iOS/Android only**.
+3. **Install** — grouped commands in [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md); skip unchecked stack groups. **Expo packages:** `bunx expo install`. **Non-Expo:** `bun add …@latest` (except `jest` / `@types/jest` — derive from `jest-expo`). Never copy version pins from templates. `bun install --verbose` must exit **0**.
+4. **Apply templates** — merge (don't bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. Include `eas.json` only when **Setup EAS** is on. Strip unchecked items — [optional/minimal/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/minimal/README.md).
+   - **Token sync off (default):** copy pre-built `src/theme/tokens/generated/` **and** template stub `raw/` — **do not** copy token scripts or add `tokens:*` scripts.
+   - **Token sync on:** copy token scripts + empty `raw/` (README only); add `tokens:discover` / `tokens:generate`. Figma URL from intake — real exports in Phase B.
+   - **Tab icons (when tabs on):** Expo Router JS `Tabs` + nano `Icon` from `assets/icons/*.svg`.
+   - **GraphQL on:** copy `.env.example`; create local `.env` with dev placeholder URL (gitignore `.env`).
+5. **Navigation assembly** — start from `templates/src/app/` (default: **tabs + intro**). Apply intake toggles using [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md):
    - **Intro off:** delete `(onboarding)/`; remove onboarding `Stack.Protected` from root navigator.
-   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts`, `app/sign-in.tsx`; ensure `src/constants/session.ts` (`SESSION_STORAGE_KEY`) is present; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL is on (so auth can use mutations); when GraphQL is off, wrap with `SessionProvider` alone; use auth-aware `RootNavigator`; `bunx expo install expo-secure-store`; add Sign out on Settings. Custom hooks always go under `src/hooks/` — never `src/lib/`. Constants go under `src/constants/`.
-   - **GraphQL + auth:** Apollo client already includes a SecureStore auth link (`SetContextLink` + WS `connectionParams`) keyed by `SESSION_STORAGE_KEY` — do not read the token from React context in the link.
-   - **Drawer on:** copy drawer layout into `(app)/_layout.tsx` (tabs nested vs flat); copy `about.tsx` if desired; install drawer deps from README (`react-native-gesture-handler` + `react-native-reanimated` + `react-native-worklets` only — no `@react-navigation/drawer` on SDK 56+).
-   - **SDK 56+:** never import `@react-navigation/*` in app code — use `expo-router` re-exports (e.g. `HeaderHeightContext` from `expo-router/react-navigation`). Keep template `Screen` as-is; do not reintroduce `@react-navigation/elements`.
-   - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`; use flat drawer or flat stack layout.
-   - **Permissions on:** copy selected modules from `templates/src/utils/permissions/` per [`src/utils/permissions/README.md`](../../templates/src/utils/permissions/README.md); install packages; merge `app.json` plugins with iOS usage strings from `ios-strings.ts`; trim `index.ts` to exported modules only; copy `src/components/PermissionsExamples/` and enable the Settings permissions demo (uncomment import + `<PermissionsExamples />`, keep only selected `labels` / trim unused rows).
-6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`.
-7. **Uniwind** — CSS entry is **`src/global.css`** (not `src/theme/global.css`). Uniwind/Tailwind scan classNames from the CSS entry directory; nesting under `theme/` misses `app/` + `components/` and ships an unstyled app. Import `@/global.css` in root `_layout`. Metro: **`withUniwindConfig` must be the outermost wrapper** (wrap Storybook, not the reverse) — see [Uniwind quickstart](https://docs.uniwind.dev/quickstart). Then `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` (not `generate-types` — that command does not exist).
-8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` (or `bunx biome check --write .`) so Argent MCP JSON matches Biome before Phase C.
-   - **CLI smoke prep (before C2):** when C2 will use `argent run` / `argent tools` (MCP unavailable or prefer CLI), ensure the tool-server is healthy and the CLI token matches:
-     1. `argent server status` — `health: ok`; if not running, `argent server start` (background).
-     2. **Relink after restart** — each `server start` rotates the bearer token. If the server was started or restarted this session, relink: `printf 'y\n' | argent unlink` then `argent link argent://<token>@127.0.0.1:3001 --yes` (token from `server start` output).
-     3. Verify: `argent tools` exits 0 — not `401 Unauthorized`.
-9. **Prebuild** — `bunx expo prebuild` (nano-icons, native projects). **Skip when both smoke tests are off** (iOS C2 skipped and Android smoke test off): Phase C (`lint` / `test` / `tsc`) does not need `ios/` / `android/`, and templates already ship nano-icons glyphmap/font stubs. Run prebuild later before the first local or EAS device build, or when config plugins / `assets/icons/*.svg` change.
-10. **Project README** — replace the stock Expo `README.md` with a project-specific one from [`templates/project-README.md`](../../templates/project-README.md). Fill placeholders from intake (app name, stack/nav/permission toggles, EAS, tokens, env, scripts). Do this in Phase A (or before Phase D) — **never commit the default create-expo-app README**.
+   - **Auth on:** copy `navigation/auth/*` → `providers/session-provider.tsx`, `hooks/use-storage-state.ts` (create `src/hooks/`), `app/sign-in.tsx`; ensure `src/constants/session.ts`; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL is on; `bunx expo install expo-secure-store`; Sign out on Settings.
+   - **GraphQL + auth:** Apollo SecureStore auth link uses `SESSION_STORAGE_KEY` — do not wire the link to React context.
+   - **Drawer on:** copy drawer layout into `(app)/_layout.tsx`; install gesture-handler / reanimated / worklets only — no `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation`.
+   - **Tabs off:** remove `(tabs)/` + `AppTabs`; place `navigation/screens/` under `(app)/`.
+   - **Permissions on:** copy selected modules per [permissions/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md); install packages; merge plugins; enable Settings `PermissionsExamples` for selected toggles.
+6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`. Template ships `useFilenamingConvention: off` — do not rename files like `SettingsUI.tsx`.
+7. **Uniwind** — CSS entry **`src/global.css`**. Import `@/global.css` in root `_layout`. Metro: **`withUniwindConfig` outermost** ([docs](https://docs.uniwind.dev/quickstart)). Then `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`.
+8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` so Argent MCP JSON matches Biome before Phase C.
+   - **CLI smoke prep (before C2, when iOS smoke on and using CLI):** `argent server status` → relink if token rotated → `argent tools` must not 401.
+9. **Prebuild** — `bunx expo prebuild` when **any** smoke test is on (iOS and/or Android). **Skip when both smokes are off**: Phase C does not need `ios/` / `android/`; glyphmap/font stubs are enough until the first device build.
+10. **Project README** — replace stock Expo `README.md` with a filled [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) from intake (Phase A or before Phase D).
 
 ### `app.json` merge checklist
 
@@ -42,61 +38,41 @@ Merge into the scaffold `app.json` under `expo` — do not replace the whole fil
 |-----|------|-------|
 | `name`, `slug`, `scheme` | always | from intake |
 | `owner` | EAS on | default `hubspire` |
-| `plugins` | always | append `expo-localization`, `react-native-nano-icons` config; append permission plugins when selected at intake |
+| `plugins` | always | append `expo-localization`, `react-native-nano-icons` config; append permission plugins when selected |
 | `experiments` | always | `typedRoutes`, `reactCompiler` from template |
 | `extra.eas.projectId` | EAS on | from `eas init` or existing project lookup |
 
-Keep scaffold keys (`ios`, `android`, `icon`, splash config). **`experiments` and `extra` are siblings** — never nest one inside the other.
+Keep scaffold keys (`ios`, `android`, `icon`, splash config). **`experiments` and `extra` are siblings** — never nest one inside the other. Drop scaffold `web` config when present.
 
 ## EAS configure (Phase A2 — only when Setup EAS is on at intake)
 
 Skip this entire phase when intake disabled **Setup EAS**.
 
-1. **Set owner** — add `"owner": "<EXPO_OWNER>"` to `app.json` (`expo` key). Default **`hubspire`** from intake unless user provided another account slug.
-2. **Merge `templates/eas.json`** — default profiles:
-   - `development` — dev client, internal distribution (devices)
-   - `development-simulator` — dev client for **iOS Simulator** (`ios.simulator: true`) — **used in C2**
-   - `preview` — internal Android APK
-   - `production` — store builds with auto-increment
-3. **Install dev client** — `bunx expo install expo-dev-client`
-4. **Link EAS project** — `bunx eas-cli whoami` (must be logged in); then `bunx eas-cli init --non-interactive`. Writes `extra.eas.projectId` to `app.json`.
+1. **Set owner** — `"owner": "<EXPO_OWNER>"` on `expo` (default **`hubspire`**).
+2. **Merge `templates/eas.json`** — profiles: `development`, `development-simulator` (C2), `preview`, `production`.
+3. **Install** — `bunx expo install expo-dev-client`
+4. **Link** — `bunx eas-cli whoami`; `bunx eas-cli init --non-interactive`.
 
-**Project already exists** — if `eas init` reports an existing project (same slug under the owner), skip `--force`. Look up the project ID:
-
-```bash
-bunx eas-cli project:info --json
-```
-
-Merge `extra.eas.projectId` into `app.json` manually. Do not stop bootstrap.
-
-If login fails, stop and ask the user to run `bunx eas-cli login`.
-
-### Default `eas.json` profiles
+**Project already exists** — skip `--force`. Use `bunx eas-cli project:info --json` and merge `extra.eas.projectId`. If login fails, ask the user to run `bunx eas-cli login`.
 
 | Profile | Use |
 |---------|-----|
-| `development-simulator` | **C2 smoke test** — iOS Simulator dev client (no Apple Developer account required) |
-| `development` | Physical iOS/Android dev clients |
-| `preview` | Internal QA (APK on Android) |
-| `production` | App Store / Play Store |
+| `development-simulator` | **C2** — iOS Simulator dev client |
+| `development` | Physical device dev clients |
+| `preview` | Internal QA (Android APK) |
+| `production` | Store builds |
 
-Trigger via CLI: `bunx eas-cli build -p ios -e development-simulator --non-interactive --wait`
-
-Or via **Expo MCP** when Cursor has `expo` MCP authenticated: `build_run` with profile `development-simulator` (requires GitHub connected for remote `build_run`; CLI works without GitHub).
+CLI: `bunx eas-cli build -p ios -e development-simulator --non-interactive --wait`. Expo MCP `build_run` is optional when authenticated; prefer `eas` CLI for reliability.
 
 ## Default stack
 
-All included unless unchecked at intake:
+Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y · Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · toasts · i18n · GraphQL · Storybook (omit via intake + minimal strip).
 
-Expo Router · Uniwind + Tailwind v4 · Bun · Biome + ESLint a11y + Jest + CI · TypeScript strict · Zustand + MMKV · nano-icons · toasts · i18n · GraphQL · Storybook
+**Default navigation:** tabs + intro (drawer off, auth off).
 
-**Default navigation:** tabs + intro onboarding (drawer off, auth off). Other combos via intake + `templates/navigation/`.
+When **Setup EAS** is on: EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
 
-When **Setup EAS** is on: also EAS (`hubspire`) · `expo-dev-client` · `eas.json`.
-
-Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` only when selected). With **token sync off** (default), typography uses template stub tokens and `--font-family-*` vars — not `font-sans`/`font-mono`. Real fonts arrive in Phase B when sync is enabled.
-
-**GraphQL dev placeholder** (when GraphQL enabled): set `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql` in local `.env` before C2. The bundled `ExampleQuery` fetches Rick and Morty characters. Home includes `<GraphQLExamples />` for that query.
+Subscriptions off by default. Token sync off → stub tokens. GraphQL placeholder: `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql` in `.env` before C2 when GraphQL and iOS smoke are on.
 
 ## Verify (Phase C — stub tokens OK)
 
@@ -104,75 +80,50 @@ Subscriptions off by default (`EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` o
 bun run lint && bun test && bunx tsc --noEmit
 ```
 
-Requires Uniwind types generated in Phase A step 7.
+Requires Uniwind types from Phase A step 7.
 
 ### Argent smoke test (Phase C2)
 
-Required when `mcp__argent__*` tools or `argent` CLI is available. Read `.cursor/rules/argent.md` and `argent-device-interact` skill first.
+**Skip entirely when iOS Argent smoke is off at intake.** Android smoke alone is not supported — turn iOS smoke on if Android is on.
 
-**CLI pre-flight:** if using `argent run` (not MCP), confirm tool-server health and relink when the token rotated — see Phase A step 8.
+When iOS smoke is on and Argent MCP/CLI is available: read `.cursor/rules/argent.md` and `argent-device-interact` skill first. CLI pre-flight: Phase A step 8.
 
-**Default: iOS simulator only.** Android is opt-in at intake.
+#### iOS (when iOS smoke on)
 
-#### iOS (always)
+**EAS on:** cloud `development-simulator` build → `eas build:run` → Metro (`bun run start`) → tap server in dev client → Argent verify.
 
-**When Setup EAS is on** (EAS path):
-
-1. **Cloud build** — `bunx eas-cli build -p ios -e development-simulator --non-interactive --wait`
-   - Or Expo MCP `build_run` with profile `development-simulator` when MCP is authenticated
-2. **Install on simulator** — `bunx eas-cli build:run -p ios --latest -e development-simulator`
-   - Boot a simulator first via Argent `boot-device` if none is running
-3. **Start Metro** — `bun run start` (dev client needs bundler; keep running in background)
-4. **Dev client** — tap the Metro server entry if the launcher appears
-5. **Argent verify** — `launch-app` → no redbox → then navigation checks below
-
-**When Setup EAS is off** (local path):
-
-1. `list-devices` → boot simulator if needed
-2. **Local build** — `bunx expo run:ios` (builds, installs, starts Metro)
-3. **Argent verify** — same checks as above
+**EAS off:** boot simulator → `bunx expo run:ios` → Argent verify.
 
 #### Navigation checks (match intake)
 
 | Feature | Verify |
 |---------|--------|
-| Intro on | First launch shows onboarding; complete flow → main shell |
+| Intro on | First launch shows onboarding; complete → main shell |
 | Tabs on | Home ↔ Settings |
-| Drawer on | Menu icon visible in header on Home/tabs; open drawer (tap or swipe); navigate to a drawer item |
-| Auth on | Signed out → sign-in; Sign in → app; Sign out → sign-in |
-| Intro off | Lands on main shell (or sign-in if auth on) without onboarding |
+| Drawer on | Menu icon on Home/tabs; open drawer; navigate |
+| Auth on | Signed out → sign-in → app; Sign out → sign-in |
+| Intro off | Main shell (or sign-in if auth) without onboarding |
 
-#### Android (opt-in at intake)
+#### Android (when Android smoke on)
 
-When intake enabled **Android smoke test**, after iOS passes:
+After iOS passes: boot emulator → `bunx expo run:android` (or EAS `preview` when EAS on) → same Argent checks.
 
-1. `list-devices` → boot emulator if needed
-2. **EAS on:** local `bunx expo run:android` or EAS `preview` APK
-3. **EAS off:** local `bunx expo run:android`
-4. Same Argent verification steps
+**Gate:** When iOS smoke on, C2 must pass before Phase B (if token sync) or Phase D. When Android opted in, Android must pass too. When **both smokes off**, skip C2; after Phase C (+ B if sync), ask before D if Argent was available but skipped by intake.
 
-**Gate:** C2 must pass on **iOS** before Phase B (when token sync enabled) or Phase D (when off). When Android smoke test was opted in, Android must pass too before proceeding.
+### Design token sync (Phase B — after C2 when C2 ran, else after C)
 
-### Design token sync (Phase B — after C2, before D)
+Only when **Sync design tokens** is on — [FIGMA_EXPORT.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/FIGMA_EXPORT.md). Requires Figma URL from intake.
 
-Only when intake enabled **Sync design tokens** — [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md). Requires **Figma design tokens URL** from intake.
+1. Export from intake Figma URL → `src/theme/tokens/raw/`
+2. User confirms exports
+3. `node scripts/discover-figma-raw.mjs`
+4. Adapt `scripts/generate-design-tokens.mjs` if needed
+5. `bun run tokens:generate` → re-run Phase C
 
-1. Export variable collections and text styles from the intake Figma URL (Figma desktop, plugin, MCP, or designer handoff) → `src/theme/tokens/raw/`
-2. User confirms exports are in `raw/`
-3. `node scripts/discover-figma-raw.mjs` — agent reviews mapping and mode hints
-4. Adapt `scripts/generate-design-tokens.mjs` (`RAW_FILES` pins, mode constants) if needed
-5. `bun run tokens:generate` then re-run Phase C checks
+**Gate:** real token counts; lint/test/tsc pass before Phase D. If export blocked, keep stubs; document pending work — do not mark B complete.
 
-**Gate:** real token counts in generator log; lint/test/tsc pass before Phase D.
-
-If export is blocked, keep template `generated/` stubs; document Figma URL, export inventory, and pending work in the summary. Do not mark Phase B complete.
-
-If Argent unavailable: report in summary, ask user before D.
-
-**Before commit:** ensure root `README.md` is the filled project README (not the stock Expo template). See Phase A step 10.
-
-Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md](SKILL.md).
+**Before commit:** filled project README (not stock Expo). Commit on `main`; push if GitHub repo provided. Completion summary — [SKILL.md](SKILL.md).
 
 ## Constraints
 
-Latest Expo default template · merge templates into scaffold · **replace stock Expo `README.md` with intake-filled `templates/project-README.md` before Phase D** · discover + `tokens:generate` only when token sync enabled · never hand-edit `src/theme/tokens/generated/*` · C2 + Phase B (when enabled) before push · EAS A2 only when Setup EAS is on at intake · resolve package versions at install time, never from template pins · assemble navigation from modules — do not leave unused auth/drawer/onboarding routes in the shipped app · prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView` ([docs](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets)) · **SDK 56+:** no `@react-navigation/*` app imports — use `expo-router/react-navigation` (and related entry points) · **native only** (iOS/Android) — no web platform code
+Latest Expo default template · merge templates into scaffold · replace stock README before Phase D · token generate only when sync on · never hand-edit `generated/*` · C2/B gates per intake · EAS A2 only when EAS on · resolve versions at install time · assemble navigation from modules · `Screen` + insets over `SafeAreaView` · no `@react-navigation/*` app imports · native only

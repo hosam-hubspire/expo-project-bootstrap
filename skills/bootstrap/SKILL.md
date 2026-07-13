@@ -12,9 +12,13 @@ disable-model-invocation: true
 
 **Repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
+**Templates:** use a local clone of that repo (`templates/` next to `skills/`). If the skill is installed without the clone, fetch from [templates on GitHub](https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates). Do not rely on `../../templates` from a global skills folder — that path only works inside the repo checkout.
+
+**Workflow detail:** [bootstrap.md](bootstrap.md)
+
 ## Intake (before any work)
 
-Run intake first — even when the user already gave app name, stack prefs, or token-sync intent. **Two steps only project name is asked before the defaults shortcut.**
+Run intake first — even when the user already gave app name, stack prefs, or token-sync intent. **Two steps only: project name, then the defaults shortcut.**
 
 **Do not** scaffold or install until intake is done.
 
@@ -42,8 +46,9 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | Stack toggles | i18n, GraphQL, Storybook (all on) |
 | GraphQL subscriptions | off |
 | **Navigation** | **Tabs on · Drawer off · Intro on · Protected/auth off** |
-| Android smoke test | off (iOS simulator only) |
-| **Permissions** | **all off** (microphone, location, notifications, image picker, documents) |
+| **iOS Argent smoke (C2)** | **on** |
+| Android smoke test | off |
+| **Permissions** | **all off** (microphone, location foreground, location background, notifications, image picker, documents) |
 
 When the user chose defaults, **do not** re-ask those fields — proceed to [bootstrap.md](bootstrap.md).
 
@@ -61,13 +66,14 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | Stack toggles | Yes | i18n, GraphQL, Storybook — **all on by default** |
 | **Navigation toggles** | Yes | Orthogonal mix — see below |
 | **Permission toggles** | Yes | Device capabilities — see below; **all off by default** |
-| Android smoke test | Yes | Argent on Android emulator — **off by default** (iOS only) |
+| **iOS Argent smoke (C2)** | Yes | Device verify on iOS simulator — **on by default** |
+| Android smoke test | Yes | Also run Argent on Android emulator after iOS — **off by default** |
 
-**Setup EAS** — when **on** (default), run Phase A2 and C2 uses an EAS `development-simulator` cloud build installed on the iOS Simulator, then Argent smoke test. When **off**, skip Phase A2 entirely; C2 uses **local** `expo run:ios` / `expo run:android` + Argent.
+**Setup EAS** — when **on** (default), run Phase A2 and C2 (if iOS smoke on) uses an EAS `development-simulator` cloud build on the iOS Simulator. When **off**, skip Phase A2; C2 uses local `expo run:ios` / `expo run:android` when those smokes are on.
 
 **Expo account owner** — only ask when **Setup EAS** is on. Set `expo.owner` in `app.json` before `eas init`. Default **`hubspire`** unless intake provides another account slug.
 
-**Sync design tokens** — when **off** (default), copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **no** token scripts (`discover-figma-raw.mjs`, `generate-design-tokens.mjs`, `figma-export-helpers.js`) and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake; at scaffold copy token scripts + empty `raw/` (README only); run Phase B after C2 using that URL (Figma MCP / export per [`FIGMA_EXPORT.md`](../../templates/FIGMA_EXPORT.md)) → `discover` → `tokens:generate`.
+**Sync design tokens** — when **off** (default), copy pre-built `src/theme/tokens/generated/` **and** template stub exports in `src/theme/tokens/raw/` — **no** token scripts and **no** `tokens:discover` / `tokens:generate` in `package.json`. When **on**, ask for **Figma design tokens URL** at intake; at scaffold copy token scripts + empty `raw/` (README only); run Phase B after C2 using that URL (see [FIGMA_EXPORT.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/FIGMA_EXPORT.md)).
 
 **Stack toggles** — `allow_multiple: true`, pre-check all three unless user said to skip:
 
@@ -77,7 +83,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 
 Also ask: **GraphQL subscriptions** — off by default (gates WS subscription transport via `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED`).
 
-**Navigation toggles** — `allow_multiple: true`. These combine freely (tabs+drawer, auth+tabs, intro+auth+drawer, …). Pre-check **Tabs** and **Intro**; leave Drawer and Protected unchecked unless the user asks.
+**Navigation toggles** — `allow_multiple: true`. These combine freely. Pre-check **Tabs** and **Intro**; leave Drawer and Protected unchecked unless the user asks.
 
 | Toggle | Default | Meaning |
 |--------|---------|---------|
@@ -88,9 +94,9 @@ Also ask: **GraphQL subscriptions** — off by default (gates WS subscription tr
 
 At least one of **Tabs** or **Drawer** should be on for a main shell; if both off, use a flat Stack under `(app)/` (`navigation/screens/` + `app-layout-flat-stack.tsx`).
 
-Assembly rules and file map: [`templates/navigation/README.md`](../../templates/navigation/README.md). Expo docs: [Protected routes](https://docs.expo.dev/router/advanced/protected/), [Authentication](https://docs.expo.dev/router/advanced/authentication/), [Drawer](https://docs.expo.dev/router/advanced/drawer/), [Tabs](https://docs.expo.dev/router/advanced/tabs/).
+Assembly: [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md). Expo docs: [Protected routes](https://docs.expo.dev/router/advanced/protected/), [Authentication](https://docs.expo.dev/router/advanced/authentication/), [Drawer](https://docs.expo.dev/router/advanced/drawer/), [Tabs](https://docs.expo.dev/router/advanced/tabs/).
 
-**Permission toggles** — `allow_multiple: true`. All unchecked by default. When any are on, copy `src/utils/permissions/` per [`templates/src/utils/permissions/README.md`](../../templates/src/utils/permissions/README.md): install listed packages, merge `app.json` config plugins with iOS usage strings from `ios-strings.ts`, copy only selected modules + shared files, trim `index.ts` exports.
+**Permission toggles** — `allow_multiple: true`. All unchecked by default. When any are on, copy modules per [permissions/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md): install packages, merge `app.json` plugins with iOS strings from `ios-strings.ts`, copy selected modules + shared files, trim `index.ts` exports.
 
 | Toggle | Packages |
 |--------|----------|
@@ -101,9 +107,16 @@ Assembly rules and file map: [`templates/navigation/README.md`](../../templates/
 | **Image picker** (camera + photos/videos) | `expo-image-picker` |
 | **Documents / file system** | `expo-document-picker`, `expo-file-system` |
 
-Customize iOS permission copy in `app.json` plugins before shipping. Re-run prebuild after plugin changes.
+Customize iOS permission copy in `app.json` plugins before shipping. Re-run prebuild after plugin changes (when native projects exist).
 
-**Android smoke test** — when **off** (default), run Argent C2 on **iOS simulator only**. When **on**, also boot an Android emulator and run the same checks after iOS passes.
+**Smoke tests**
+
+| Toggle | Default | Effect |
+|--------|---------|--------|
+| **iOS Argent smoke (C2)** | on | Run Phase C2 on iOS simulator (EAS cloud build if EAS on, else local `expo run:ios`) |
+| **Android smoke test** | off | After iOS C2 passes, also verify on Android emulator |
+
+When **both off**: skip Phase C2 and skip prebuild in Phase A; Phase C (`lint` / `test` / `tsc`) is enough. User can prebuild later before the first device build. Phrases like “smoke tests all off” mean both toggles off.
 
 Then follow **[bootstrap.md](bootstrap.md)**.
 
@@ -114,51 +127,38 @@ Then follow **[bootstrap.md](bootstrap.md)**.
 - [ ] A — Scaffold (latest deps, templates, nav assembly, uniwind types, bun install exit 0, project README)
 - [ ] A2 — EAS configure (if enabled at intake)
 - [ ] C — lint, test, tsc (stub tokens OK)
-- [ ] C2 — Argent smoke test (EAS simulator build if A2; else local build)
-- [ ] B — Design token sync (if enabled) — export from intake Figma URL → raw/, discover, tokens:generate, re-verify
+- [ ] C2 — Argent smoke (if iOS smoke on; + Android if opted in)
+- [ ] B — Design token sync (if enabled) — after C2 when C2 ran; after C when smokes off
 - [ ] D — Commit (+ push if repo provided) — project README must already replace stock Expo README
 ```
 
 ## Rules
 
+Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstrap.md)** and [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md). Do not duplicate long procedure here.
+
 - `bunx create-expo-app@latest --template default` — never hand-roll `package.json`
-- **Package versions:** `bunx expo install` for Expo/SDK packages (no `@latest`); `bun add <pkg>@latest` / `bun add -d <pkg>@latest` for everything else. **Exception:** `jest` / `@types/jest` — derive from `jest-expo`'s `babel-jest` dep after `bunx expo install jest-expo`; never `jest@latest`. Never copy version pins from templates.
+- **Package versions:** `bunx expo install` for Expo/SDK packages (no `@latest`); `bun add <pkg>@latest` / `bun add -d <pkg>@latest` otherwise. **Exception:** pin `jest` / `@types/jest` from `jest-expo`'s `babel-jest` range — never `jest@latest`. Never copy version pins from templates.
 - **Never pass `--verbose` to `bunx expo install`** — only on `bun add`
 - No `move_agent_to_root` during bootstrap
-- Grouped installs — `templates/README.md`; skip unchecked stack groups
-- Full templates by default; strip — `templates/optional/minimal/README.md`
-- **Navigation:** start from `templates/src/app/` (tabs + intro); assemble drawer/auth/flat screens from `templates/navigation/` per intake — never leave unused route groups in the app
-- **Hooks:** place React hooks under `src/hooks/` (e.g. auth `use-storage-state.ts`) — never under `src/lib/` (`lib/` is for non-hook utilities like `mmkv`; `utils/` for optional helpers like permissions)
-- **Constants:** shared string/number constants under `src/constants/` (e.g. `SESSION_STORAGE_KEY`) — not under `src/lib/`
-- **Providers:** when GraphQL and auth are both on, nest `SessionProvider` **inside** `AppApolloProvider`. Apollo auth link reads `SESSION_STORAGE_KEY` from SecureStore (not React context).
-- **Token scripts and `tokens:*` package.json scripts only when sync is on**; when off, copy pre-built `generated/` **and** template `raw/` stubs — never copy or add token scripts
-- **Drawer on (SDK 56+):** `bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets` — drawer is bundled in `expo-router` ([docs](https://docs.expo.dev/router/advanced/drawer/#installation)); do **not** install `@react-navigation/drawer`
-- **SDK 56+ React Navigation imports:** never import from `@react-navigation/*` in app code (Metro rejects it). Use `expo-router` entry points — e.g. `HeaderHeightContext` / `useHeaderHeight` from `expo-router/react-navigation` ([migration](https://docs.expo.dev/router/migrate/sdk-55-to-56)). Template `Screen` already uses this path.
-- **Uniwind:** CSS entry **`src/global.css`** (under `src/`, never nested in `theme/`) so Tailwind auto-scans all app classNames; import `@/global.css` in root layout. Metro: `withUniwindConfig` outermost. Phase A: `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` before Phase C (CLI has no `generate-types`)
-- **Biome:** `bun add -d @biomejs/biome@latest` then `bunx biome migrate --write` after copying `biome.json`. Template ignores Argent MCP/settings paths; after `argent init`, run `lint:fix` before Phase C
-- **Tab icons:** Expo Router JS `Tabs` with nano `Icon` (`home` / `settings` SVGs) — not `unstable-native-tabs`
-- **`app.json` merge:** follow checklist in [bootstrap.md](bootstrap.md) — `experiments` and `extra.eas` are siblings under `expo`
-- **GraphQL on:** copy `.env.example`; create local `.env` with `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql` before C2; gitignore `.env`
-- **EAS only when intake enabled:** merge `templates/eas.json`; set `expo.owner` (default `hubspire`); install `expo-dev-client`; `bunx eas-cli init --non-interactive`. If project exists, merge `projectId` from `eas project:info` — do not `--force`
-- **C2 with EAS:** `development-simulator` cloud build → `eas build:run` (no `--non-interactive`) → Metro → tap server in dev client → Argent. **C2 without EAS:** local `expo run:ios` (+ `expo run:android` if Android opted in) → Argent
-- After `eas build:run`, start Metro (`bun run start`) before Argent launch — dev client needs the bundler
-- Expo MCP (`build_run`, `build_list`, …) may be used when EAS is enabled and MCP is authenticated; prefer `eas` CLI for bootstrap reliability
-- **Phase B after C2 (when sync enabled):** read `templates/FIGMA_EXPORT.md` from bootstrap repo — do not copy into project; use **Figma design tokens URL** from intake to export into `src/theme/tokens/raw/`; wait for user confirm exports are complete; run `discover-figma-raw.mjs`; adapt `generate-design-tokens.mjs`; `tokens:generate`
-- **Prebuild:** run `bunx expo prebuild` when any device smoke test is on (C2 needs native projects). **Skip when both iOS and Android smoke tests are off** — Phase C does not need `ios/` / `android/`; template nano-icons glyphmap/font stubs are enough until the first device build. Run later before `expo run:*` / EAS install, or after plugin / SVG changes
-- Icons: SVGs to `assets/icons/` → `bunx expo prebuild` (when prebuild runs)
-- **Toasts:** copy `src/components/AppToast/` + `src/utils/toast.ts` + `src/components/ToastExamples/` + `src/components/SettingsUI/`; keep `<AppToast />` in root `_layout.tsx` and ToastExamples on Settings when composing auth/drawer navigators
-- **Permissions demos:** when any permission on, copy `PermissionsExamples` and enable the Settings block; trim to selected capabilities
-- No one-off bridge scripts under `scripts/`; **iOS/Android only** — no web target, no `Platform.OS === "web"` branches, no `localStorage` / DOM APIs, no web-only packages or polyfills; Bun only
-- Remove scaffold web files during Phase A (e.g. `src/app/+html.tsx`, web entry/assets); do not reintroduce web support later
-- **Safe area:** prefer [`useSafeAreaInsets()`](https://docs.expo.dev/versions/latest/sdk/safe-area-context/#usesafeareainsets) via the template `Screen` component (`src/components/Screen`) — do **not** use `SafeAreaView`. Insets apply on the outer `style`; Uniwind padding stays on `contentClassName`. Tab screens omit the `bottom` edge (JS `Tabs` bar clears the home indicator). **Top inset is skipped automatically when a navigator header is shown** (`headerShown: true`, e.g. Drawer) via `HeaderHeightContext` from `expo-router/react-navigation` — never `@react-navigation/elements`. Pin primary CTAs with `footer`.
-- **`argent init` ≠ smoke test** — init in Phase A; `lint:fix` after init; launch + verify in C2
-- **Argent CLI (C2):** before `argent run`, check `argent server status` (`health: ok`). If the tool-server was started/restarted this session, relink (`argent unlink` → `argent link` with token from `server start`); verify with `argent tools` (not 401). MCP clients may auto-spawn — relink applies mainly to CLI smoke tests
-- **No commit or push until C2 passes on iOS** (when Argent available) **and** Phase B complete when token sync was enabled; when Android smoke test was opted in, Android must pass too
-- **Project README:** before Phase D, replace the stock Expo `README.md` with a filled copy of [`templates/project-README.md`](../../templates/project-README.md) (app name + intake toggles). Never leave the create-expo-app README in the committed app
-- **C2 defaults to iOS only** — do not boot or build Android unless intake selected Android smoke test
+- Grouped installs + strip unchecked stack — templates README / `optional/minimal/`
+- **Navigation:** start from `templates/src/app/`; assemble from `templates/navigation/` per intake — never leave unused route groups
+- **Hooks / constants:** auth hook `use-storage-state.ts` → `src/hooks/` (create folder when auth on; base template has no `hooks/`). Constants like `SESSION_STORAGE_KEY` → `src/constants/`. Never put hooks under `src/lib/`
+- **Providers:** GraphQL + auth → nest `SessionProvider` **inside** `AppApolloProvider`
+- **Token scripts / `tokens:*`** only when sync is on; otherwise copy stub `generated/` + `raw/`
+- **Drawer on:** install gesture-handler / reanimated / worklets only — drawer is in `expo-router`; do **not** install `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation` (template `Screen` already does)
+- **Uniwind:** CSS entry `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` before Phase C
+- **Biome:** install `@biomejs/biome@latest`, `bunx biome migrate --write`, `lint:fix` after `argent init`. **`useFilenamingConvention` is off** — keep names like `SettingsUI.tsx`
+- **Tabs:** Expo Router JS `Tabs` + nano `Icon` SVGs under `assets/icons/`
+- **GraphQL on:** `.env.example` + local `.env` with Rick and Morty placeholder; gitignore `.env`
+- **EAS / C2 / Phase B / prebuild / Argent CLI:** follow [bootstrap.md](bootstrap.md) — skip A2 when EAS off; skip C2 + prebuild when both smokes off
+- **Toasts + permissions demos:** core toasts always; PermissionsExamples when any permission on
+- **Native only** (iOS/Android): remove scaffold web leftovers if present (`web` script/config, `*.web.*`, favicon/`tutorial-web` assets); no `Platform.OS === "web"`, `localStorage`, or web-only packages. Prefer template `Screen` + `useSafeAreaInsets()` over `SafeAreaView`
+- **`argent init` ≠ smoke test** — init in A; verify in C2 when iOS smoke on
+- **Commit gate:** no commit/push until C2 passes when iOS smoke on (and Android when opted in), and Phase B complete when token sync on. When both smokes off, Phase C (+ B if sync) is enough — ask before D if Argent was available but skipped by intake
+- **Project README:** fill [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) before Phase D
 
 ## Completion summary
 
-Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **navigation toggles** (tabs/drawer/intro/auth), **permission toggles** (when any on), token sync on/off (+ Figma URL when on), Android smoke test on/off, token gate, device verification (EAS simulator or local build; + Android if opted in), custom mappings.
+Path, remote URL, commit SHA, EAS on/off (+ owner + project ID + build ID when on), stack toggles, **navigation toggles**, **permission toggles** (when any on), token sync on/off (+ Figma URL when on), **iOS smoke on/off**, **Android smoke on/off**, token gate, device verification (or skipped), custom mappings.
 
-**Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [templates/README.md](../../templates/README.md) · **Navigation:** [templates/navigation/README.md](../../templates/navigation/README.md)
+**Full workflow:** [bootstrap.md](bootstrap.md) · **Templates:** [README](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md) · **Navigation:** [navigation/README](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md)
