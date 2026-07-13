@@ -38,7 +38,7 @@ Templates: https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/te
 
 App name/slug: <APP_NAME>
 GitHub repo: <URL or local only>
-Setup EAS: on by default (hubspire account; cloud simulator build in C2)
+Setup EAS: off by default (when on: hubspire account; cloud simulator build in C2)
 Expo account owner: hubspire (only when Setup EAS is on)
 Figma design system: <URL or omit>
 Stack toggles (default on): i18n, Storybook

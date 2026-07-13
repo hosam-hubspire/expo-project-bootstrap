@@ -40,7 +40,7 @@ Ask whether to **use defaults for all remaining options** and skip the detailed 
 | Input | Value |
 |-------|-------|
 | GitHub repo | none (local-only) |
-| Setup EAS | on |
+| Setup EAS | off |
 | Expo account owner | `hubspire` |
 | Sync design tokens | off (template `generated/` + `raw/` stubs) |
 | Stack toggles | i18n, Storybook (all on) |
@@ -60,7 +60,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | Input | Required | Notes |
 |-------|----------|-------|
 | GitHub repo | No | Local-only if omitted |
-| Setup EAS | Yes | Link project, `eas.json`, cloud simulator build in C2 — **on by default** |
+| Setup EAS | Yes | Link project, `eas.json`, cloud simulator build in C2 — **off by default** |
 | Expo account owner | No | Only when EAS on — **`hubspire` by default** (`expo.owner` in `app.json`) |
 | Sync design tokens | Yes | Phase B after C2 — **off by default** |
 | Figma design tokens URL | When sync on | Required — `figma.com/design/…` or `figma.com/file/…` link to the token source file |
@@ -72,7 +72,7 @@ When the user chose defaults, **do not** re-ask those fields — proceed to [boo
 | **iOS Argent smoke (C2)** | Yes | Device verify on iOS simulator — **off by default** |
 | Android smoke test | Yes | Also run Argent on Android emulator after iOS — **off by default** |
 
-**Setup EAS** — when **on** (default), run Phase A2 and C2 (if iOS smoke on) uses an EAS `development-simulator` cloud build on the iOS Simulator. When **off**, skip Phase A2; C2 uses local `expo run:ios` / `expo run:android` when those smokes are on.
+**Setup EAS** — when **on**, run Phase A2 and C2 (if iOS smoke on) uses an EAS `development-simulator` cloud build on the iOS Simulator. When **off** (default), skip Phase A2; C2 uses local `expo run:ios` / `expo run:android` when those smokes are on.
 
 **Expo account owner** — only ask when **Setup EAS** is on. Set `expo.owner` in `app.json` before `eas init`. Default **`hubspire`** unless intake provides another account slug.
 
