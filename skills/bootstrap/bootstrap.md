@@ -27,8 +27,8 @@
    - **Permissions on:** copy selected modules per [permissions/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md); install packages; merge plugins; enable Settings `PermissionsExamples` for selected toggles.
 6. **Biome migrate** — `bunx biome migrate --write` after copying `biome.json` and installing `@biomejs/biome@latest`. Template ships `useFilenamingConvention: off` — do not rename files like `SettingsUI.tsx`.
 7. **Uniwind** — CSS entry **`src/global.css`**. Import `@/global.css` in root `_layout`. Metro: **`withUniwindConfig` outermost** ([docs](https://docs.uniwind.dev/quickstart)). Then `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`.
-8. **Argent init** — `bunx @swmansion/argent init -y` when CLI available (setup only — not a smoke test). Then `bun run lint:fix` so Argent MCP JSON matches Biome before Phase C.
-   - **CLI smoke prep (before C2, when iOS smoke on and using CLI):** `argent server status` → relink if token rotated → `argent tools` must not 401.
+8. **Argent init** — **only when any smoke is on at intake** (iOS and/or Android). Run `bunx @swmansion/argent init -y`, then `bun run lint:fix` so Argent MCP JSON matches Biome before Phase C. **Skip entirely when both smokes are off** — do not add Argent MCP/skills/rules to the project.
+   - **CLI smoke prep (before C2, when any smoke is on and using CLI):** `argent server status` → relink if token rotated → `argent tools` must not 401.
 9. **Prebuild** — `bunx expo prebuild` when **any** smoke test is on (iOS and/or Android). **Skip when both smokes are off**: Phase C does not need `ios/` / `android/`; glyphmap/font stubs are enough until the first device build.
 10. **Project README** — replace stock Expo `README.md` with a filled [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) from intake (Phase A or before Phase D).
 
@@ -110,7 +110,7 @@ When iOS smoke is on and Argent MCP/CLI is available: read `.cursor/rules/argent
 
 After iOS passes: boot emulator → `bunx expo run:android` (or EAS `preview` when EAS on) → same Argent checks.
 
-**Gate:** When iOS smoke on, C2 must pass before Phase B (if token sync) or Phase D. When Android opted in, Android must pass too. When **both smokes off**, skip C2; after Phase C (+ B if sync), ask before D if Argent was available but skipped by intake.
+**Gate:** When iOS smoke on, C2 must pass before Phase B (if token sync) or Phase D. When Android opted in, Android must pass too. When **both smokes off**, skip Argent init and C2; after Phase C (+ B if sync), proceed to ask about Phase D (no Argent gate).
 
 ### Design token sync (Phase B — after C2 when C2 ran, else after C)
 

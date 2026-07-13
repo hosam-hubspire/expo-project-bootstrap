@@ -159,14 +159,14 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 - **Token scripts / `tokens:*`** only when sync is on; otherwise copy stub `generated/` + `raw/`
 - **Drawer on:** install gesture-handler / reanimated / worklets only — drawer is in `expo-router`; do **not** install `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation` (template `Screen` already does)
 - **Uniwind:** CSS entry `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts` before Phase C
-- **Biome:** install `@biomejs/biome@latest`, `bunx biome migrate --write`, `lint:fix` after `argent init`. **`useFilenamingConvention` is off** — keep names like `SettingsUI.tsx`
+- **Biome:** install `@biomejs/biome@latest`, `bunx biome migrate --write`; `lint:fix` after `argent init` only when any smoke is on. **`useFilenamingConvention` is off** — keep names like `SettingsUI.tsx`
 - **Tabs:** Expo Router JS `Tabs` + nano `Icon` SVGs under `assets/icons/`
 - **API client:** GraphQL → Rick and Morty `.env` + Apollo stack. REST → assemble [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder `.env`. None → strip GraphQL (minimal) and skip REST. Always gitignore `.env`
-- **EAS / C2 / Phase B / prebuild / Argent CLI:** follow [bootstrap.md](bootstrap.md) — skip A2 when EAS off; skip C2 + prebuild when both smokes off
+- **EAS / C2 / Phase B / prebuild / Argent CLI:** follow [bootstrap.md](bootstrap.md) — skip A2 when EAS off; skip Argent init + C2 + prebuild when both smokes off
 - **Toasts + permissions demos:** core toasts always; PermissionsExamples when any permission on
 - **Native only** (iOS/Android): remove scaffold web leftovers if present (`web` script/config, `*.web.*`, favicon/`tutorial-web` assets); no `Platform.OS === "web"`, `localStorage`, or web-only packages. Prefer template `Screen` + `useSafeAreaInsets()` over `SafeAreaView`
-- **`argent init` ≠ smoke test** — init in A; verify in C2 when iOS smoke on
-- **Commit gate:** no commit/push until C2 passes when iOS smoke on (and Android when opted in), and Phase B complete when token sync on. When both smokes off, Phase C (+ B if sync) is enough — ask before D if Argent was available but skipped by intake
+- **Argent only with smoke:** `argent init` runs in A **only when iOS and/or Android smoke is on**; verify in C2. Never init Argent when both smokes are off
+- **Commit gate:** no commit/push until C2 passes when iOS smoke on (and Android when opted in), and Phase B complete when token sync on. When both smokes off, Phase C (+ B if sync) is enough — ask before D
 - **Project README:** fill [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) before Phase D
 
 ## Completion summary
