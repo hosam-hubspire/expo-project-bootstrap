@@ -12,7 +12,7 @@ type RestExamplesProps = {
 };
 
 /**
- * Home-screen demo for axios GET. Copy with REST stack.
+ * Home-screen demo for axios GET.
  * Dev placeholder: JSONPlaceholder todo — replace `fetchExampleTodo` with your endpoints.
  */
 export function RestExamples({

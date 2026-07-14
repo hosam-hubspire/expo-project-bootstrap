@@ -11,8 +11,6 @@ import {
 } from "@/components/SettingsUI";
 import { ThemedText } from "@/components/ThemedText";
 import { ToastExamples } from "@/components/ToastExamples";
-// When any permission toggle is on at intake, uncomment:
-// import { PermissionsExamples } from "@/components/PermissionsExamples";
 import type { SupportedLanguage } from "@/i18n";
 import { type ThemePreference, usePreferencesStore } from "@/stores/preferences-store";
 
@@ -88,28 +86,6 @@ export default function SettingsScreen() {
         errorLabel={t("settings.toastError")}
         infoLabel={t("settings.toastInfo")}
       />
-
-      {/*
-        When any permission toggle is on at intake, uncomment and keep only labels
-        for selected capabilities (also trim unused imports in PermissionsExamples):
-
-      <PermissionsExamples
-        title={t("settings.permissions")}
-        description={t("settings.permissionsDescription")}
-        statusLabel={t("settings.permissionStatus")}
-        requestLabel={t("settings.permissionRequest")}
-        openSettingsLabel={t("settings.permissionOpenSettings")}
-        labels={{
-          microphone: t("settings.permissionMicrophone"),
-          locationForeground: t("settings.permissionLocationForeground"),
-          locationBackground: t("settings.permissionLocationBackground"),
-          locationServices: t("settings.permissionLocationServices"),
-          notifications: t("settings.permissionNotifications"),
-          camera: t("settings.permissionCamera"),
-          mediaLibrary: t("settings.permissionMediaLibrary"),
-        }}
-      />
-      */}
 
       <SettingsFooterButton
         label={t("settings.replayOnboarding")}

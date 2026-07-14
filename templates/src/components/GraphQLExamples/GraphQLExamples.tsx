@@ -43,7 +43,7 @@ function QueryExample({
   );
 }
 
-/** Home-screen demo for Apollo query. Copy with GraphQL stack. */
+/** Home-screen demo for Apollo query. */
 export function GraphQLExamples({
   title,
   description,

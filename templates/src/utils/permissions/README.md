@@ -176,7 +176,7 @@ Defaults live in `ios-strings.ts`. With CNG / prebuild, config plugins write the
 When any permission is selected, also:
 
 1. Copy `templates/src/components/PermissionsExamples/` → `src/components/PermissionsExamples/`.
-2. In Settings (`(tabs)/settings.tsx`, flat `navigation/screens/settings.tsx`, and minimal settings if used): uncomment the `PermissionsExamples` import and JSX block.
+2. In Settings (`(tabs)/settings.tsx`, flat `navigation/screens/settings.tsx`, and minimal settings if used): add the `PermissionsExamples` import and JSX (do not leave commented scaffold blocks).
 3. Keep only `labels` keys for selected toggles (e.g. omit `camera` / `mediaLibrary` when Image picker is off).
 4. Trim unused imports and rows inside `PermissionsExamples.tsx` so missing packages do not break the build.
 

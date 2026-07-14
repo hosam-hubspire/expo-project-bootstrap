@@ -14,11 +14,6 @@ import StorybookUIRoot from "../../.rnstorybook";
 
 const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === "true";
 
-/**
- * Default root: tabs + intro onboarding (no auth, no drawer).
- * When intake enables auth/drawer/flat screens, compose from `templates/navigation/` —
- * see `templates/navigation/README.md`.
- */
 export default function RootLayout() {
   const { theme } = useUniwind();
 

@@ -14,11 +14,6 @@ import StorybookUIRoot from "../../.rnstorybook";
 
 const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === "true";
 
-/**
- * REST stack root: no AppApolloProvider.
- * When auth is on, wrap with SessionProvider (inside GestureHandlerRootView) per navigation/README.md.
- * Axios reads SESSION_STORAGE_KEY from SecureStore in its request interceptor.
- */
 export default function RootLayout() {
   const { theme } = useUniwind();
 

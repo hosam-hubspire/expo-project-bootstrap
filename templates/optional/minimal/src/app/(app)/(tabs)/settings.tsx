@@ -10,8 +10,6 @@ import {
 } from "@/components/SettingsUI";
 import { ThemedText } from "@/components/ThemedText";
 import { ToastExamples } from "@/components/ToastExamples";
-// When any permission toggle is on at intake, uncomment:
-// import { PermissionsExamples } from "@/components/PermissionsExamples";
 import { type ThemePreference, usePreferencesStore } from "@/stores/preferences-store";
 
 export default function SettingsScreen() {
@@ -61,28 +59,6 @@ export default function SettingsScreen() {
         errorLabel="Error"
         infoLabel="Info"
       />
-
-      {/*
-        When any permission toggle is on at intake, uncomment and keep only labels
-        for selected capabilities (also trim unused imports in PermissionsExamples):
-
-      <PermissionsExamples
-        title="Permissions"
-        description="Check status and request access for capabilities selected at bootstrap."
-        statusLabel="Status"
-        requestLabel="Request"
-        openSettingsLabel="Open settings"
-        labels={{
-          microphone: "Microphone",
-          locationForeground: "Location (foreground)",
-          locationBackground: "Location (background)",
-          locationServices: "Device location services",
-          notifications: "Notifications",
-          camera: "Camera",
-          mediaLibrary: "Photos & videos",
-        }}
-      />
-      */}
 
       <SettingsFooterButton
         label="Replay onboarding"

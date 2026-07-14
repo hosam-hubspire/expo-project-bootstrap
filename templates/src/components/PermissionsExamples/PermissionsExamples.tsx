@@ -89,7 +89,7 @@ export type PermissionsExamplesProps = {
   statusLabel: string;
   requestLabel: string;
   openSettingsLabel: string;
-  /** Only include keys for permissions selected at intake; trim unused imports/rows. */
+  /** Labels for enabled permission rows only. */
   labels: {
     microphone?: string;
     locationForeground?: string;
@@ -101,10 +101,7 @@ export type PermissionsExamplesProps = {
   };
 };
 
-/**
- * Settings demo: status + request for each enabled permission.
- * Copy when any permission toggle is on; trim unused rows/imports to match intake.
- */
+/** Settings demo: status + request for each enabled permission. */
 export function PermissionsExamples({
   title,
   description,

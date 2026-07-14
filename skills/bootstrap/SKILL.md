@@ -155,6 +155,7 @@ Installs, nav assembly, EAS, C2, and token sync steps: **[bootstrap.md](bootstra
 - **Package versions:** `bunx expo install` for Expo/SDK packages (no `@latest`); `bun add <pkg>@latest` / `bun add -d <pkg>@latest` otherwise. **Exception:** pin `jest` / `@types/jest` from `jest-expo`'s `babel-jest` range — never `jest@latest`. Never copy version pins from templates.
 - **Never pass `--verbose` to `bunx expo install`**. Prefer `bun install --verbose` for the exit-0 gate. On `bun add`, `--verbose` may dump registry `Authorization` headers — if a verbose add hangs or floods logs, kill it and retry **without** `--verbose`; never paste auth headers into chat or the run report
 - No `move_agent_to_root` during bootstrap
+- **No agent-assembly comments in shipped source** — do not leave (or invent) comments that explain intake toggles, template swap paths, or “uncomment when X” scaffolding. Keep assembly instructions in skill/README only. Real API/JSDoc is fine.
 - Grouped installs + strip unchecked stack — templates README / `optional/minimal/`
 - **Navigation:** start from `templates/src/app/`; assemble from `templates/navigation/` per intake — never leave unused route groups
 - **Hooks / constants:** auth hook `use-storage-state.ts` → `src/hooks/` (create folder when auth on; base template has no `hooks/`). Constants like `SESSION_STORAGE_KEY` → `src/constants/`. Never put hooks under `src/lib/`

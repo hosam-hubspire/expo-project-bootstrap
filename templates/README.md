@@ -24,7 +24,7 @@ Adapt into a new app **after** `bunx create-expo-app@latest … --template defau
 
 **Toasts** — `<AppToast />` is mounted in the root `_layout.tsx` (core, always). Call `toast.success()`, `toast.error()`, or `toast.info()` from `@/utils/toast` anywhere in the app. Settings includes a **ToastExamples** panel with sample buttons (uses shared `SettingsUI` row/panel primitives — copy `src/components/SettingsUI/` with Settings).
 
-**Permissions demos** — when any permission toggle is on, copy `src/components/PermissionsExamples/`, enable the commented block in Settings (import + `<PermissionsExamples />`), and keep only `labels` keys (plus matching imports/rows in `PermissionsExamples.tsx`) for selected capabilities. See [`src/utils/permissions/README.md`](./src/utils/permissions/README.md).
+**Permissions demos** — when any permission toggle is on, copy `src/components/PermissionsExamples/`, add the import + `<PermissionsExamples />` to Settings, and keep only `labels` keys (plus matching imports/rows in `PermissionsExamples.tsx`) for selected capabilities. See [`src/utils/permissions/README.md`](./src/utils/permissions/README.md). Do not leave commented-out scaffold placeholders in Settings.
 
 ## Installs
 
@@ -122,7 +122,7 @@ Copy into the app:
 
 Merge iOS usage strings from `IOS_PERMISSION_STRINGS` in `ios-strings.ts` into each plugin block. Trim `index.ts` exports to match copied modules.
 
-Also copy `src/components/PermissionsExamples/` and enable the Settings demo block (uncomment import + `<PermissionsExamples />` in settings screens). Pass only `labels` for selected toggles; trim unused imports/rows in `PermissionsExamples.tsx`.
+Also copy `src/components/PermissionsExamples/` and add the Settings import + `<PermissionsExamples />` (no commented placeholders). Pass only `labels` for selected toggles; trim unused imports/rows in `PermissionsExamples.tsx`.
 
 ### Default stack (unless unchecked)
 
