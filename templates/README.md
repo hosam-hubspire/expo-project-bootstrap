@@ -57,8 +57,11 @@ bunx expo install expo-dev-client
 
 ### Navigation (when toggles on)
 
+> **Expo SDK 56+ / Drawer — do not install `@react-navigation/drawer`.**  
+> Expo Router’s `expo-router/drawer` uses gesture-handler · reanimated · worklets only. Adding `@react-navigation/drawer` (including to “fix” a missing peer resolve) causes errors on SDK 56+. Import `Drawer` from `expo-router/drawer` only — never `@react-navigation/*` in app code.
+
 ```bash
-# Drawer on — peers only; do not install @react-navigation/drawer
+# Drawer on — peers ONLY (hard stop: never @react-navigation/drawer)
 bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets
 
 # Auth on

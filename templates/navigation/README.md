@@ -50,7 +50,7 @@ Hold splash until prefs (and session, if auth) rehydrate — `SplashScreenContro
 | off | on | `Drawer` | flat screens |
 | off | off | Stack | flat screens |
 
-Drawer wraps Tabs when both on. Install peers only — [templates/README.md](../README.md). **Never** `headerShown: false` on the `(tabs)` drawer screen (hides hamburger).
+Drawer wraps Tabs when both on. Install peers only (gesture-handler · reanimated · worklets) — [templates/README.md](../README.md). **Expo SDK 56+: never install `@react-navigation/drawer`.** **Never** `headerShown: false` on the `(tabs)` drawer screen (hides hamburger).
 
 ## Module map
 
@@ -67,7 +67,7 @@ Drawer wraps Tabs when both on. Install peers only — [templates/README.md](../
 1. Read intake toggles; start from `templates/src/app/`.
 2. Intro **off** → delete `(onboarding)/`; remove onboarding `Protected` / `hasCompletedOnboarding` from navigator.
 3. Auth **on** → copy auth modules (`session-provider` → `providers/`, `use-storage-state` → `hooks/`, `sign-in` → `app/`); ensure `constants/session.ts`; nest `SessionProvider` inside `AppApolloProvider` when GraphQL; else `SessionProvider` alone; `expo-secure-store`. Transport reads SecureStore — do not wire to React context.
-4. Drawer **on** → copy drawer; install peers; keep drawer header on `(tabs)`.
+4. Drawer **on** → copy drawer; install peers only (no `@react-navigation/drawer`); keep drawer header on `(tabs)`.
 5. Tabs **off** → remove `(tabs)/` + `AppTabs`; copy `navigation/screens/`.
 6. C2 checks match intake (below).
 

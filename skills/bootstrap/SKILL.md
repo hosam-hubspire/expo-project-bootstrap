@@ -107,7 +107,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Auth hook → `src/hooks/use-storage-state.ts`; constants → `src/constants/`. Never hooks under `src/lib/`
 - Providers: GraphQL + auth → `SessionProvider` **inside** `AppApolloProvider`. REST/none + auth → `SessionProvider` only
 - Token scripts / `tokens:sync` only when sync on; else stub `generated/` only
-- Drawer on: gesture-handler / reanimated / worklets only — **not** `@react-navigation/drawer`. Never import `@react-navigation/*` in app code — use `expo-router` / `expo-router/react-navigation`
+- **Drawer / Expo SDK 56+ (hard stop at install):** When Drawer is on, install **only** `react-native-gesture-handler` · `react-native-reanimated` · `react-native-worklets` via `bunx expo install`. **Never** `bun add` / `expo install` `@react-navigation/drawer` — it breaks Expo Router drawer on SDK 56+. App code imports `Drawer` from `expo-router/drawer` only; never `@react-navigation/*`. A missing peer `require.resolve` for `@react-navigation/drawer` is **not** a reason to install it — ignore and continue. Install matrix: [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md#navigation-when-toggles-on)
 - Uniwind: CSS `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts …` before Phase C
 - Biome: `@biomejs/biome@latest`, `bunx biome migrate --write`; `useFilenamingConvention` off. Templates should already be Biome-clean
 - Tabs: Expo Router JS `Tabs` + nano `Icon`; `Icon` must accept RN `ColorValue` (not `string` only)
