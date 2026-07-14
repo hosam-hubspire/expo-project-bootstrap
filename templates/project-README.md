@@ -11,8 +11,8 @@ Expo React Native app (iOS & Android) scaffolded with the Hubspire bootstrap sta
 | Quality | TypeScript strict · Biome · ESLint a11y · Jest · CI |
 | State | Zustand + MMKV |
 | Forms | react-hook-form + Zod (`@hookform/resolvers`) |
-| Keyboard | react-native-keyboard-controller |
-| Bottom sheet | @swmansion/react-native-bottom-sheet |
+| Keyboard | keyboard controller |
+| Bottom sheet | inline + modal sheets |
 | i18n | {{I18N}} |
 | API | {{API}} |
 | Storybook | {{STORYBOOK}} |

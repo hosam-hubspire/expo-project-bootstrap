@@ -24,7 +24,7 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 
 **Toasts** — `<AppToast />` in root `_layout` (always). `toast.*` from `@/utils/toast`. Settings: `ToastExamples` + `SettingsUI/`.
 
-**Bottom sheet** — `@swmansion/react-native-bottom-sheet` (always). Wrap root in `BottomSheetProvider` (inside `KeyboardProvider`). Fabric native — needs a dev/client build (`expo run:*` / prebuild), not Expo Go. Settings: `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim, keyboard, a11y). Use `BottomSheet` / `ModalBottomSheet` from the package.
+**Bottom sheet** — always. Wrap root in `BottomSheetProvider` (inside `KeyboardProvider`). Fabric native — needs a dev/client build (`expo run:*` / prebuild), not Expo Go. Settings: `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim, keyboard, a11y).
 
 **Permissions** — when any on: `PermissionsExamples/` + Settings import; trim labels. [`permissions/README.md`](./src/utils/permissions/README.md).
 
