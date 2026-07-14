@@ -116,6 +116,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Core toasts always; PermissionsExamples when any permission on
 - Core forms always: `react-hook-form`, `zod`, `@hookform/resolvers` — auth `sign-in` is the reference wiring when Auth on
 - Core keyboard always: `react-native-keyboard-controller` via `bunx expo install`; wrap root in `KeyboardProvider`; auth `sign-in` uses `KeyboardAwareScrollView` + `KeyboardToolbar` when Auth on
+- Core bottom sheet always: `@swmansion/react-native-bottom-sheet` via `bun add …@latest`; wrap root in `BottomSheetProvider` (inside `KeyboardProvider`); Fabric native — not Expo Go; Settings always mounts `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim/keyboard/a11y)
 - Native only (iOS/Android): strip web leftovers; prefer `Screen` + insets over `SafeAreaView`
 - Argent init in A **only** when any smoke on
 - Commit gate: C2 must pass when smokes on; B complete when sync on; when smokes off, C (+ B if sync) then ask before D

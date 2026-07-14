@@ -1,6 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+import {
+  BottomSheetExamples,
+  BottomSheetExamplesRoot,
+} from "@/components/BottomSheetExamples";
 import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
 import {
@@ -34,65 +38,85 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <Screen
-      scroll
-      contentClassName="w-full max-w-content gap-base self-center px-lg pb-base pt-base"
+    <BottomSheetExamplesRoot
+      title={t("settings.bottomSheets")}
+      description={t("settings.bottomSheetsDescription")}
+      inlineLabel={t("settings.bottomSheetInline")}
+      modalLabel={t("settings.bottomSheetModal")}
+      inlineSheetTitle={t("settings.bottomSheetInlineTitle")}
+      modalSheetTitle={t("settings.bottomSheetModalTitle")}
+      closeLabel={t("settings.bottomSheetClose")}
+      dismissBackdropLabel={t("settings.bottomSheetDismissBackdrop")}
+      noteLabel={t("settings.bottomSheetNoteLabel")}
+      notePlaceholder={t("settings.bottomSheetNotePlaceholder")}
+      noteHelper={t("settings.bottomSheetNoteHelper")}
+      inlineBody={t("settings.bottomSheetInlineBody")}
+      modalBody={t("settings.bottomSheetModalBody")}
+      openedAnnouncement={t("settings.bottomSheetOpenedA11y")}
+      closedAnnouncement={t("settings.bottomSheetClosedA11y")}
     >
-      <View className="flex-row items-center gap-xs">
-        <Icon name="settings" size={22} colorToken="text-text-default" />
-        <ThemedText variant="heading-app-section">{t("settings.title")}</ThemedText>
-      </View>
-
-      <SettingsPanel
-        title={t("settings.appearance")}
-        description={t("settings.appearanceDescription")}
-        icon="appearance"
+      <Screen
+        scroll
+        contentClassName="w-full max-w-content gap-base self-center px-lg pb-base pt-base"
       >
-        <SettingsButtonRow>
-          {themeOptions.map((option) => (
-            <SettingsOptionChip
-              key={option.value}
-              label={option.label}
-              value={option.value}
-              selected={themePreference === option.value}
-              onSelect={setThemePreference}
-            />
-          ))}
-        </SettingsButtonRow>
-      </SettingsPanel>
+        <View className="flex-row items-center gap-xs">
+          <Icon name="settings" size={22} colorToken="text-text-default" />
+          <ThemedText variant="heading-app-section">{t("settings.title")}</ThemedText>
+        </View>
 
-      <SettingsPanel
-        title={t("settings.language")}
-        description={t("settings.languageDescription")}
-        icon="language"
-      >
-        <SettingsButtonRow>
-          {languageOptions.map((option) => (
-            <SettingsOptionChip
-              key={option.value}
-              label={option.label}
-              value={option.value}
-              selected={language === option.value}
-              onSelect={setLanguage}
-            />
-          ))}
-        </SettingsButtonRow>
-      </SettingsPanel>
+        <SettingsPanel
+          title={t("settings.appearance")}
+          description={t("settings.appearanceDescription")}
+          icon="appearance"
+        >
+          <SettingsButtonRow>
+            {themeOptions.map((option) => (
+              <SettingsOptionChip
+                key={option.value}
+                label={option.label}
+                value={option.value}
+                selected={themePreference === option.value}
+                onSelect={setThemePreference}
+              />
+            ))}
+          </SettingsButtonRow>
+        </SettingsPanel>
 
-      <ToastExamples
-        title={t("settings.toasts")}
-        description={t("settings.toastsDescription")}
-        successLabel={t("settings.toastSuccess")}
-        errorLabel={t("settings.toastError")}
-        infoLabel={t("settings.toastInfo")}
-      />
+        <SettingsPanel
+          title={t("settings.language")}
+          description={t("settings.languageDescription")}
+          icon="language"
+        >
+          <SettingsButtonRow>
+            {languageOptions.map((option) => (
+              <SettingsOptionChip
+                key={option.value}
+                label={option.label}
+                value={option.value}
+                selected={language === option.value}
+                onSelect={setLanguage}
+              />
+            ))}
+          </SettingsButtonRow>
+        </SettingsPanel>
 
-      <SettingsFooterButton
-        label={t("settings.replayOnboarding")}
-        onPress={() => {
-          resetOnboarding();
-        }}
-      />
-    </Screen>
+        <ToastExamples
+          title={t("settings.toasts")}
+          description={t("settings.toastsDescription")}
+          successLabel={t("settings.toastSuccess")}
+          errorLabel={t("settings.toastError")}
+          infoLabel={t("settings.toastInfo")}
+        />
+
+        <BottomSheetExamples />
+
+        <SettingsFooterButton
+          label={t("settings.replayOnboarding")}
+          onPress={() => {
+            resetOnboarding();
+          }}
+        />
+      </Screen>
+    </BottomSheetExamplesRoot>
   );
 }

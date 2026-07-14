@@ -12,6 +12,7 @@ Expo React Native app (iOS & Android) scaffolded with the Hubspire bootstrap sta
 | State | Zustand + MMKV |
 | Forms | react-hook-form + Zod (`@hookform/resolvers`) |
 | Keyboard | react-native-keyboard-controller |
+| Bottom sheet | @swmansion/react-native-bottom-sheet |
 | i18n | {{I18N}} |
 | API | {{API}} |
 | Storybook | {{STORYBOOK}} |
@@ -59,7 +60,7 @@ bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types
 ```
 src/
   app/           # Expo Router routes
-  components/    # UI (Screen, Icon, AppToast, …)
+  components/    # UI (Screen, Icon, AppToast, BottomSheetExamples, …)
   theme/         # Uniwind + design tokens
   stores/        # Zustand
   utils/         # toast (+ permissions when enabled)
@@ -71,6 +72,7 @@ assets/icons/    # SVG → nano-icons (prebuild)
 
 - **Native only** — no web target.
 - Prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView`.
+- Bottom sheets (`BottomSheet` / `ModalBottomSheet`) need a native build — not Expo Go.
 - Customize iOS permission copy in `app.json` plugins before shipping (when permissions are enabled).
 - Replace this README’s product blurb as the app takes shape.
 

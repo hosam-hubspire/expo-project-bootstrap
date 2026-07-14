@@ -2,6 +2,7 @@ import "@/global.css";
 import "@/i18n";
 import "@/stores/preferences-store";
 
+import { BottomSheetProvider } from "@swmansion/react-native-bottom-sheet";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
@@ -25,15 +26,17 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView className="flex-1">
       <KeyboardProvider>
-        <AppApolloProvider>
-          <IconFontLoader>
-            <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
-              <SplashScreenController />
-              <RootNavigator />
-              <AppToast />
-            </ThemeProvider>
-          </IconFontLoader>
-        </AppApolloProvider>
+        <BottomSheetProvider>
+          <AppApolloProvider>
+            <IconFontLoader>
+              <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
+                <SplashScreenController />
+                <RootNavigator />
+                <AppToast />
+              </ThemeProvider>
+            </IconFontLoader>
+          </AppApolloProvider>
+        </BottomSheetProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
   );

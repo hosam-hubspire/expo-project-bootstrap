@@ -38,6 +38,7 @@ Merge into `expo.plugins`. Use strings from `IOS_PERMISSION_STRINGS` in `ios-str
 4. `bunx expo prebuild` after plugin changes (when native projects exist)
 5. Copy `PermissionsExamples/` → Settings import + JSX; keep only selected `labels`; trim unused rows/imports
 6. Toast examples always via `ToastExamples` + `SettingsUI/`
+7. Bottom sheet examples always via `BottomSheetExamplesRoot` + `BottomSheetExamples`
 
 ## API pattern
 

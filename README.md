@@ -22,7 +22,7 @@ Intake: app name → **defaults** or customize ([SKILL.md](./skills/bootstrap/SK
 | Permissions | Mic · Location fg/bg · Notifications · Image picker · Documents |
 | Infra | GitHub repo · EAS · design-token sync · iOS / Android smokes |
 
-Always on: Uniwind · Bun · Biome · forms (RHF + zod) · keyboard controller · toasts · nano-icons · `Screen` + insets.
+Always on: Uniwind · Bun · Biome · forms (RHF + zod) · keyboard controller · `@swmansion/react-native-bottom-sheet` · toasts · nano-icons · `Screen` + insets.
 
 **Defaults:** i18n + Storybook on · API GraphQL · nav tabs + intro · EAS / token sync / smokes / permissions off.
 
