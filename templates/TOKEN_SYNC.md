@@ -147,6 +147,8 @@ Keep `@/theme` import paths. Prefer CSS-safe names. Match stub file names under 
 
 Compare source leaves → generated output (or log from the script). Missing schemes, colors, size leaves, or typography = **not done**. Fix `transformAndWrite`; do not hand-edit `generated/*`.
 
+Carry the same inventory into the Phase R run report **Design token import gaps** section (when sync on): schemes, semantic colors, primitives, size/typography (incl. sm/md/lg+), unresolved aliases, intentionally skipped collections (e.g. Phases), font packages / `expo-font` load gaps, and Settings / `extraThemes` wiring. See skills/bootstrap/SKILL.md run report template.
+
 Example Tokens Studio bundle: top-level `files[]` with `collectionName`, `modeName`, `tokens`; aliases like `{neutrals.black-20}` and `{text.text-link-hover}`. Modes such as `Default` / `Rider Tools` are **schemes** (auto light-only); exact `light`/`dark` would be appearance.
 
 ## 3 — Run & verify

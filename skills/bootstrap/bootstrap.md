@@ -88,8 +88,9 @@ Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-pro
 3. Wire UI from detection: `colorScheme` when ≥2 schemes; appearance Settings only when `light-and-dark`; light-only → lock / hide dark
 4. `bun run tokens:sync` → uniwind artifacts (include `--theme` scheme slugs) → Phase C again
 5. Note detection in run report; leave script as re-sync path. Do not require user confirmation of light/dark mapping when a named Default (or exact light/dark modes) makes the pin clear
+6. Phase R **Design token import gaps** section (required when sync on): report source→generated coverage and any missing schemes/colors/sizes/typography, unresolved aliases, skipped collections, fonts not loaded, Settings/`extraThemes` wiring gaps, or app references to absent stub token names — [SKILL.md](SKILL.md) run report template
 
-**Gate:** real generated tokens + coverage checklist + correct appearance/scheme wiring from auto-detect + lint/test/tsc. If blocked, keep stubs; document; do not mark B complete.
+**Gate:** real generated tokens + coverage checklist + correct appearance/scheme wiring from auto-detect + lint/test/tsc. If blocked, keep stubs; document gaps in Phase R; do not mark B complete.
 
 **Before D:** filled project README. Commit on `main`; push if repo given. If push fails on `.github/workflows/*` for token scope, push app first then add the workflow via `gh api` (or SSH). Completion summary + Phase R run report in chat — [SKILL.md](SKILL.md).
 

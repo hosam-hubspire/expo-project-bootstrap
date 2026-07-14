@@ -127,7 +127,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 
 ## Completion summary
 
-Path, remote, commit SHA, EAS on/off (+ owner / project ID / build ID), stack, API client, nav toggles, permissions (if any), token sync (+ URL), iOS/Android smoke, token gate, device verification (or skipped). Then **Run report** below.
+Path, remote, commit SHA, EAS on/off (+ owner / project ID / build ID), stack, API client, nav toggles, permissions (if any), token sync (+ URL), iOS/Android smoke, token gate, device verification (or skipped). Then **Run report** below (include **Design token import gaps** when sync on).
 
 ## Run report (Phase R — mandatory)
 
@@ -160,6 +160,28 @@ Post in chat after the session — **do not** write `BOOTSTRAP_REPORT.md`.
 
 For each incident: symptom → probable cause → fixes tried → final resolution (or open).
 If none: say “None.”
+
+## Design token import gaps (when sync on)
+
+Omit this section entirely when token sync is off.
+
+Summarize Phase B coverage vs the tokens repo source. Call out anything not imported, partially resolved, or left for follow-up — do not claim full coverage if gaps remain.
+
+| Area | Source → generated | Gaps / notes |
+|------|-------------------|--------------|
+| Color schemes | e.g. 2/2 (`default`, `rider-tools`) | … or “None” |
+| Semantic colors | e.g. 108/108 per scheme | missing paths, dropped modes, … |
+| Color primitives | … | … |
+| Size tokens (sm/md/lg+) | … | missing strokes/radius/padding/responsive, … |
+| Size primitives | … | … |
+| Typography styles | … | missing composites; scaffold aliases kept/skipped |
+| Typography / font families | … | families not installed or not loaded via `expo-font` |
+| Alias resolution | … | unresolved or circular `{…}` refs |
+| Skipped collections | e.g. Phases | intentional skips only |
+| App / Settings wiring | appearance · schemes · `extraThemes` | panel hidden incorrectly, Metro themes missing, … |
+
+Also list any **app token name** still expecting stub keys (e.g. old `heading-app-section` without alias) or UI that references tokens absent from `generated/`.
+If none: say “No design-token import gaps observed.”
 
 ## Security / secret-handling review
 
