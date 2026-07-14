@@ -180,7 +180,7 @@ Summarize Phase B coverage vs the tokens repo source. Call out anything not impo
 | Skipped collections | e.g. Phases | intentional skips only |
 | App / Settings wiring | appearance · schemes · `extraThemes` | panel hidden incorrectly, Metro themes missing, … |
 
-Also list any **app token name** still expecting stub keys (e.g. old `heading-app-section` without alias) or UI that references tokens absent from `generated/`.
+Also list any **app token name** still expecting stub keys or UI that references tokens absent from `generated/` (rename those usages to real Figma token names during Phase B — do not add generated aliases).
 If none: say “No design-token import gaps observed.”
 
 ## Security / secret-handling review

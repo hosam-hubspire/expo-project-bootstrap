@@ -139,7 +139,7 @@ Keep `@/theme` import paths. Prefer CSS-safe names. Match stub file names under 
 | Appearance | From exact `light`/`dark` modes only; else light-only. |
 | Size tokens | `--spacing-*`, `--radius-*`, `--border-width-*` (strokes), padding as spacing keys if needed, `--responsive-*`. |
 | Size modes | Mobile-first: **sm** base; **md** `@media (min-width: 768px)`; **lg+** `1024px` (match `global.css` breakpoints). |
-| Typography | All composite styles for sm/md + lg+; keep template aliases if rename would break app code (e.g. `heading-app-section`). |
+| Typography | All composite styles for sm/md + lg+. **Do not** emit scaffold aliases (e.g. `heading-app-section`). Rename app / Storybook `variant` strings to the generated Figma token names (e.g. `heading-rider-tools-section`). |
 | Primitives | Emit color **and** size primitives. |
 | Skip | Feature-flag collections (Phases, etc.). |
 
