@@ -11,8 +11,6 @@ bunx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
 
 Then: `use bootstrap skill to scaffold a project`
 
-`skills add -g` copies only `skills/bootstrap/`. Agents must use a local clone’s `templates/` or the [GitHub templates](https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates) URL — `../../templates` does not resolve from `~/.agents/skills/`.
-
 ## Layout
 
 | Path | Purpose |
