@@ -1,5 +1,7 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
-/* Design tokens → Uniwind @variant light / dark */
+/* Stub: Uniwind *appearance* variants (light/dark) for the default scaffold.
+ * Figma collection modes (e.g. Default / Rider Tools) are product *color schemes* —
+ * do not auto-map them here. Phase B replaces this file per TOKEN_SYNC.md. */
 
 @layer theme {
   :root {

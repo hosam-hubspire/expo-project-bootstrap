@@ -7,7 +7,14 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 1. Merge — don’t bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. Install (below) — skip unchecked groups. Expo: `bunx expo install`. Else: `bun add …@latest`. Never copy version pins.
 3. Add: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. `eas.json` only when EAS on.
-4. **Tokens** — sync **on:** copy `scripts/sync-design-tokens.mjs`, pin GitHub URL, add `tokens:sync`, stub `generated/`. Sync **off:** stub `generated/` only; no `tokens:*`. See [`TOKEN_SYNC.md`](./TOKEN_SYNC.md).
+4. **Tokens** — sync **on:** copy `scripts/sync-design-tokens.mjs`, pin GitHub URL, add `tokens:sync`, stub `generated/`. Sync **off:** stub `generated/` only; no `tokens:*`. See [`TOKEN_SYNC.md`](./TOKEN_SYNC.md). Stubs may use Uniwind `@variant light` / `dark` for the default scaffold’s **appearance** demo — that is **not** a map of Figma collection modes. Phase B replaces stubs using intake **appearance** + **color schemes**.
+
+### Appearance vs color schemes
+
+- **Appearance** (`themePreference` / `Uniwind.setTheme`): light · dark · system — only when the app supports dark appearance.
+- **Color scheme** (Figma modes such as Default / Rider Tools): product themes; often **all light**. Store separately (e.g. `colorScheme`); never drive scheme switches via `setTheme("dark")` unless design says that mode is appearance-dark.
+- Light-only apps: lock Uniwind to `light`; hide dark/system in Settings.
+- Multi-scheme: Settings scheme toggle; single scheme: no toggle.
 5. Replace demo routes with `src/app/` (default: tabs + intro). Tabs: Expo Router JS `Tabs` + `assets/icons/*.svg`.
 6. **Nav** — toggles per [`navigation/README.md`](./navigation/README.md).
 7. Strip unchecked — [`optional/minimal`](./optional/minimal/README.md). REST → [`optional/rest`](./optional/rest/README.md).

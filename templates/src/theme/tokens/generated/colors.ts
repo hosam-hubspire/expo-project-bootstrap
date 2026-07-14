@@ -1,5 +1,9 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
-/** Semantic color tokens resolved from Figma color collections */
+/**
+ * Stub semantic colors keyed by Uniwind *appearance* (light/dark) for the default scaffold.
+ * After Phase B (TOKEN_SYNC.md), prefer scheme-keyed maps (`colorSchemes.default`, …) for
+ * Figma modes such as Default / Rider Tools — do not treat those modes as appearance dark.
+ */
 
 export const colorTokens = {
   light: {

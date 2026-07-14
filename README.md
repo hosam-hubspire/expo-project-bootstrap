@@ -20,7 +20,7 @@ Intake: app name → **defaults** or customize ([SKILL.md](./skills/bootstrap/SK
 | API | GraphQL · REST · none (exclusive) |
 | Navigation | Tabs · Drawer · Intro · Auth — any combo; both Tabs + Drawer off → flat Stack |
 | Permissions | Mic · Location fg/bg · Notifications · Image picker · Documents |
-| Infra | GitHub repo · EAS · design-token sync · iOS / Android smokes |
+| Infra | GitHub repo · EAS · design-token sync (appearance ≠ Figma color schemes) · iOS / Android smokes |
 
 Always on: Uniwind · Bun · Biome · forms (RHF + zod) · keyboard controller · bottom sheets · toasts · nano-icons · `Screen` + insets.
 

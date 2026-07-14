@@ -7,6 +7,9 @@
  *
  *   bun run tokens:sync
  *
+ * Appearance (light/dark) ≠ Figma color schemes (e.g. Default / Rider Tools).
+ * Never auto-map scheme names to Uniwind light/dark — see templates/TOKEN_SYNC.md.
+ *
  * Output contract: templates/TOKEN_SYNC.md and stubs under src/theme/tokens/generated/
  */
 
