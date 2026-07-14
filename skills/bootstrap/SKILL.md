@@ -68,7 +68,7 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 
 Assembly: [navigation](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md) · [permissions](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md).
 
-**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; Phase B auto-detects appearance vs color schemes from Figma mode names ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — exact `light`/`dark` → appearance; other modes (e.g. Default / Rider Tools) → product schemes under light-only. **Never** map arbitrary modes to dark. Ask only if mode names are ambiguous.
+**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; Phase B auto-detects appearance vs color schemes from Figma mode names ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — exact `light`/`dark` → appearance; other modes (e.g. Default / Rider Tools) → product schemes under light-only. **Never** map arbitrary modes to dark. Pin `colorTokens.light`/`dark` from a named Default scheme when present; **if no Default, ask the user during scaffolding** which schemes back light and dark, then pin `APPEARANCE_SCHEME_MAP` (script does not prompt). Ask also if mode names are ambiguous.
 
 **API wiring:** GraphQL → Apollo + Rick and Morty `.env` + `expo-secure-store`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
 

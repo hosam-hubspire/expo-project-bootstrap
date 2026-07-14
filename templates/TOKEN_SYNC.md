@@ -35,13 +35,22 @@ Derive wiring:
 | Detected | Appearance | Schemes | Settings UI |
 |----------|------------|---------|-------------|
 | Only `light` + `dark` (no other color modes) | `light-and-dark` | Use appearance axis for CSS; no product scheme toggle | Appearance only |
-| ≥1 non-appearance mode, **no** `light`/`dark` modes | `light-only` | All of those modes; default = `Default`/`default` if present, else first | Scheme toggle if ≥2 |
+| ≥1 non-appearance mode, **no** `light`/`dark` modes | `light-only` | All of those modes; default = `Default`/`default` if present, else **agent asks** which scheme backs light (and dark for future) | Scheme toggle if ≥2 |
 | Both appearance **and** non-appearance modes | `light-and-dark` + schemes | Non-appearance → schemes; light/dark → appearance | Both panels |
 | Single color mode total | `light-only` (unless that mode is literally `dark`) | One scheme; no scheme toggle | Minimal |
 
-**Default scheme:** CSS-safe slug of the chosen default mode. Register schemes as Uniwind `extraThemes`. Mirror default-scheme colors into built-in `@variant light` (and `@variant dark` when light-only so Uniwind’s required variable sets stay complete — still **do not** expose dark in Settings).
+**Default scheme / `colorTokens.light`·`dark`:** Pin `APPEARANCE_SCHEME_MAP` in `scripts/sync-design-tokens.mjs` (agent — never interactive in the script).
 
-**Ask only if ambiguous** (e.g. `Day`/`Night`, `Light Mode`/`Dark Mode` — not exact `light`/`dark`). Otherwise proceed and note the detection in the Phase B / run report.
+| Situation | Agent action |
+|-----------|----------------|
+| Exact Figma `light`/`dark` appearance modes | Use those for `@variant light`/`dark` and `colorTokens`; no ask |
+| Named scheme `Default` / `default` | Pin `APPEARANCE_SCHEME_MAP = { light: "default", dark: "default" }` without asking (dark mirrored for future OS dark) |
+| Product schemes only, **no** named Default | **Ask the user** which scheme slug maps to light and which to dark, then pin those constants. Dark may equal light until a dark-oriented scheme exists |
+| Ambiguous mode names (`Day`/`Night`, …) | Ask only then (existing rule) |
+
+Register product schemes as Uniwind `extraThemes`. Emit `@variant light` / `@variant dark` from the pinned map so dark can be enabled later — still **do not** expose dark in Settings when appearance is light-only.
+
+**Ask only if ambiguous** (e.g. `Day`/`Night`, `Light Mode`/`Dark Mode` — not exact `light`/`dark`) **or** there is no named Default for the light/dark appearance pin. Otherwise proceed and note the detection in the Phase B / run report.
 
 Wire `colorScheme` in `preferences-store` **separately** from `themePreference`. Appearance panel only when `light-and-dark`; color scheme panel only when ≥2 schemes.
 
@@ -71,9 +80,9 @@ Match `templates/src/theme/tokens/generated/` **shape intent**; Phase B replaces
 
 | File | Role |
 |------|------|
-| `theme.css` | Semantic `--color-*` under Uniwind variants: appearance `light`/`dark` when detected; product schemes as `@variant <slug>`; light-only apps mirror default scheme into light+dark builtins |
-| `colors.ts` | Prefer **scheme-keyed** maps (see below); keep `ColorTokenName` as the semantic token key union |
-| `color-schemes.metro.json` | `{ appearance, defaultScheme, extraThemes, schemes }` for Metro `extraThemes` |
+| `theme.css` | Semantic `--color-*` under Uniwind variants: appearance `light`/`dark` from exact modes **or** from agent-pinned `APPEARANCE_SCHEME_MAP`; product schemes as `@variant <slug>` |
+| `colors.ts` | `colorSchemes` (scheme-keyed) + first-class `colorTokens.light`/`dark` (pinned scheme sources); keep `ColorTokenName` as the semantic token key union |
+| `metro.config.js` | `tokens:sync` patches `extraThemes: […]` under `withUniwindConfig` (no sidecar JSON) |
 | `spacing.css` | Size → `@theme` (+ sm / md / lg+ overrides) |
 | `font-families.css` | `--font-family-*` |
 | `typography-classes.ts` | Uniwind className strings |
@@ -95,6 +104,23 @@ export type ColorTokenName = keyof (typeof colorSchemes)[typeof defaultColorSche
 export function colorsForScheme(scheme: ColorSchemeName) {
   return colorSchemes[scheme];
 }
+
+export const colorTokens = {
+  light: colorSchemes.default,
+  dark: colorSchemes.default,
+} as const;
+
+export const appearanceSchemeMap = { light: "default", dark: "default", source: "named-default" } as const;
+
+export type TokenAppearanceKind = "light-only" | "light-and-dark" | "dark-only";
+
+export const tokenAppearance: {
+  kind: TokenAppearanceKind;
+  schemes: readonly ColorSchemeName[];
+} = {
+  kind: "light-only",
+  schemes: ["default", "rider-tools"],
+};
 ```
 
 Switch schemes with `Uniwind.setTheme(schemeSlug)` — **not** `setTheme("dark")` unless detection classified that mode as appearance-dark.

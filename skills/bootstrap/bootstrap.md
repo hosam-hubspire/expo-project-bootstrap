@@ -83,11 +83,11 @@ Nav checks: [navigation/README.md C2](https://github.com/hosam-hubspire/expo-pro
 
 Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md). After C2 when C2 ran, else after C.
 
-1. Review tokens repo; **auto-detect** appearance vs color schemes ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — ask only if ambiguous
-2. Implement `transformAndWrite` → Uniwind `generated/` (aliases, hex+rgba, stroke/padding/responsive, sm/md/lg+, coverage gate)
+1. Review tokens repo; **auto-detect** appearance vs color schemes ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — ask only if ambiguous **or** no named Default for light/dark `colorTokens` pin
+2. Implement `transformAndWrite` → Uniwind `generated/` (aliases, hex+rgba, stroke/padding/responsive, sm/md/lg+, coverage gate). Pin `APPEARANCE_SCHEME_MAP` in the sync script: named Default → both `default`; else **ask user** which scheme backs light and dark, then pin. Script must not prompt.
 3. Wire UI from detection: `colorScheme` when ≥2 schemes; appearance Settings only when `light-and-dark`; light-only → lock / hide dark
 4. `bun run tokens:sync` → uniwind artifacts (include `--theme` scheme slugs) → Phase C again
-5. Note detection in run report; leave script as re-sync path. Do not require user confirmation of light/dark mapping when detection is clear
+5. Note detection in run report; leave script as re-sync path. Do not require user confirmation of light/dark mapping when a named Default (or exact light/dark modes) makes the pin clear
 
 **Gate:** real generated tokens + coverage checklist + correct appearance/scheme wiring from auto-detect + lint/test/tsc. If blocked, keep stubs; document; do not mark B complete.
 
