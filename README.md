@@ -6,7 +6,6 @@ Agent skill + templates for Expo React Native apps.
 
 ```bash
 bunx skills add hosam-hubspire/expo-project-bootstrap --skill bootstrap -g -y
-# or local: bunx skills add ./path/to/expo-project-bootstrap --skill bootstrap -g -y
 ```
 
 Then: `use bootstrap skill to scaffold a project`
