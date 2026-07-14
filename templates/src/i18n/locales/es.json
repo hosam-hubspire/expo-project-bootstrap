@@ -67,6 +67,12 @@
   "auth": {
     "signInTitle": "Iniciar sesión",
     "signInSubtitle": "Auth de ejemplo del shell. Conecta tu proveedor real en SessionProvider.",
-    "signInAction": "Iniciar sesión"
+    "signInAction": "Iniciar sesión",
+    "emailLabel": "Correo",
+    "passwordLabel": "Contraseña",
+    "emailRequired": "El correo es obligatorio",
+    "emailInvalid": "Introduce un correo válido",
+    "passwordRequired": "La contraseña es obligatoria",
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres"
   }
 }

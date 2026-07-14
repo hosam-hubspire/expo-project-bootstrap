@@ -10,6 +10,8 @@ Expo React Native app (iOS & Android) scaffolded with the Hubspire bootstrap sta
 | UI | Uniwind + Tailwind v4 · nano-icons · toasts |
 | Quality | TypeScript strict · Biome · ESLint a11y · Jest · CI |
 | State | Zustand + MMKV |
+| Forms | react-hook-form + Zod (`@hookform/resolvers`) |
+| Keyboard | react-native-keyboard-controller |
 | i18n | {{I18N}} |
 | API | {{API}} |
 | Storybook | {{STORYBOOK}} |

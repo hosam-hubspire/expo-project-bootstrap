@@ -67,6 +67,12 @@
   "auth": {
     "signInTitle": "Sign in",
     "signInSubtitle": "Mock auth for the bootstrap shell. Wire your real provider into SessionProvider.",
-    "signInAction": "Sign in"
+    "signInAction": "Sign in",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Enter a valid email",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters"
   }
 }

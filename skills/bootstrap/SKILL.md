@@ -125,6 +125,8 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - API: GraphQL / REST / none per intake; always gitignore `.env`
 - EAS / C2 / B / prebuild / Argent: follow bootstrap.md — skip A2 when EAS off; skip Argent + C2 + prebuild when both smokes off
 - Core toasts always; PermissionsExamples when any permission on
+- Core forms always: `react-hook-form`, `zod`, `@hookform/resolvers` — auth `sign-in` is the reference wiring when Auth on
+- Core keyboard always: `react-native-keyboard-controller` via `bunx expo install`; wrap root in `KeyboardProvider`; auth `sign-in` uses `KeyboardAwareScrollView` + `KeyboardToolbar` when Auth on
 - Native only (iOS/Android): strip web leftovers; prefer `Screen` + insets over `SafeAreaView`
 - Argent init in A **only** when any smoke on
 - Commit gate: C2 must pass when smokes on; B complete when sync on; when smokes off, C (+ B if sync) then ask before D

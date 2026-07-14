@@ -4,6 +4,7 @@ import "@/stores/preferences-store";
 
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { useUniwind } from "uniwind";
 import { AppToast } from "@/components/AppToast";
 import { IconFontLoader } from "@/components/IconFontLoader";
@@ -23,15 +24,17 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView className="flex-1">
-      <AppApolloProvider>
-        <IconFontLoader>
-          <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
-            <SplashScreenController />
-            <RootNavigator />
-            <AppToast />
-          </ThemeProvider>
-        </IconFontLoader>
-      </AppApolloProvider>
+      <KeyboardProvider>
+        <AppApolloProvider>
+          <IconFontLoader>
+            <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
+              <SplashScreenController />
+              <RootNavigator />
+              <AppToast />
+            </ThemeProvider>
+          </IconFontLoader>
+        </AppApolloProvider>
+      </KeyboardProvider>
     </GestureHandlerRootView>
   );
 }

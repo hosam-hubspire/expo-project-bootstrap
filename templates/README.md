@@ -39,10 +39,10 @@ Never `--verbose` on `bunx expo install`. Prefer `bun install --verbose` for exi
 ### Core (always)
 
 ```bash
-bunx expo install expo-localization expo-font jest-expo
+bunx expo install expo-localization expo-font jest-expo react-native-keyboard-controller
 JEST_RANGE=$(node -p "require('jest-expo/package.json').dependencies['babel-jest']")
 bun add -d jest@${JEST_RANGE} @types/jest@${JEST_RANGE}
-bun add uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest react-native-toast-message@latest
+bun add uniwind@latest tailwindcss@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest react-native-toast-message@latest react-hook-form@latest zod@latest @hookform/resolvers@latest
 bun add -d @biomejs/biome@latest eslint@latest eslint-plugin-react-native-a11y@latest typescript-eslint@latest @testing-library/react-native@latest
 bunx biome migrate --write
 ```
