@@ -1,6 +1,6 @@
 # Expo project bootstrap
 
-Agent skill + templates for Expo React Native apps (Uniwind, Bun, Biome, design tokens, nano-icons, i18n, GraphQL or REST, Storybook, mixable Expo Router navigation).
+Agent skill + templates for Expo React Native apps.
 
 ## Install
 
