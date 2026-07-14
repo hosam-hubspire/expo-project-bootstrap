@@ -14,32 +14,40 @@ These are **different axes**. Do not conflate them.
 
 | Axis | Meaning | Examples | App control |
 |------|---------|----------|-------------|
-| **Appearance** | Light / dark UI chrome (Uniwind `light` \| `dark` \| `system`) | OS dark mode | `Uniwind.setTheme` / Settings “Appearance” |
-| **Color scheme** | Named Figma **variable collection modes** (product / brand themes) | `Default`, `Rider Tools` | In-app scheme toggle (often both schemes are still appearance-*light*) |
+| **Appearance** | Light / dark UI chrome | OS dark mode; Figma modes named exactly `light` / `dark` | `themePreference` + `Uniwind.setTheme("light"|"dark"|"system")` |
+| **Color scheme** | Named product / brand themes | `Default`, `Rider Tools` | `colorScheme` + `Uniwind.setTheme(schemeSlug)` (often all appearance-light) |
 
-**Never auto-map Figma mode names to Uniwind light/dark** (e.g. do **not** assume `Default` → light and `Rider Tools` → dark). Confirm with intake / design. Marta-style SweetTea exports use `Default` and `Rider Tools` as **two light product schemes** the user can switch — not appearance dark mode.
+**Never** treat an arbitrary second mode (e.g. `Rider Tools`) as appearance-dark.
 
-### Intake (when token sync is on)
+### Auto-detect from the export (no intake questions)
 
-Confirm before implementing `transformAndWrite`:
+Classify **Color Tokens** (or equivalent) collection modes during Phase B review. **Do not ask** appearance/scheme fields at intake — only the tokens GitHub URL.
 
-| Field | Options / notes |
-|-------|-----------------|
-| Appearance support | `light-only` · `light-and-dark` |
-| Color schemes | List Figma mode names from the export (CSS-safe slugs); mark **default** scheme; multi-scheme toggle on if ≥2 schemes kept |
-| Appearance ↔ Figma | Only if a mode truly is dark appearance: explicit mapping. Otherwise schemes stay under appearance light |
-| Single scheme | Emit one palette; no scheme Settings UI |
-| Light-only | Force `Uniwind.setTheme("light")` (or hide dark/system); emit semantic colors under `@variant light` only (omit dark variant or leave empty stubs unused) |
+| Mode name (case-insensitive) | Treat as |
+|------------------------------|----------|
+| Exactly `light`, `dark`, or `system` | **Appearance** axis |
+| Anything else (`Default`, `Rider Tools`, `Ocean`, …) | **Color scheme** |
+| Size/typography modes (`sm`, `md`, `lg+`, `sm/md`, …) | Not color — ignore here |
+| Feature flags (Phases, …) | Skip |
 
-Wire scheme selection in `preferences-store` (e.g. `colorScheme`) **separately** from `themePreference`. Settings: Appearance panel only when `light-and-dark`; Color scheme panel only when ≥2 schemes.
+Derive wiring:
+
+| Detected | Appearance | Schemes | Settings UI |
+|----------|------------|---------|-------------|
+| Only `light` + `dark` (no other color modes) | `light-and-dark` | Use appearance axis for CSS; no product scheme toggle | Appearance only |
+| ≥1 non-appearance mode, **no** `light`/`dark` modes | `light-only` | All of those modes; default = `Default`/`default` if present, else first | Scheme toggle if ≥2 |
+| Both appearance **and** non-appearance modes | `light-and-dark` + schemes | Non-appearance → schemes; light/dark → appearance | Both panels |
+| Single color mode total | `light-only` (unless that mode is literally `dark`) | One scheme; no scheme toggle | Minimal |
+
+**Default scheme:** CSS-safe slug of the chosen default mode. Register schemes as Uniwind `extraThemes`. Mirror default-scheme colors into built-in `@variant light` (and `@variant dark` when light-only so Uniwind’s required variable sets stay complete — still **do not** expose dark in Settings).
+
+**Ask only if ambiguous** (e.g. `Day`/`Night`, `Light Mode`/`Dark Mode` — not exact `light`/`dark`). Otherwise proceed and note the detection in the Phase B / run report.
+
+Wire `colorScheme` in `preferences-store` **separately** from `themePreference`. Appearance panel only when `light-and-dark`; color scheme panel only when ≥2 schemes.
 
 ## 1 — Review tokens repo
 
-Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Variables JSON, Style Dictionary, etc.). Note:
-
-- Color **schemes** (collection modes) — names only; do not rename to light/dark unless intake says so
-- Size / typography **breakpoint** modes (sm / md / lg+) — unrelated to appearance
-- Skip feature-flag collections (e.g. Phases)
+Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Variables JSON, Style Dictionary, etc.). Run the auto-detect table above. Note size/typography breakpoint modes (sm / md / lg+) separately. Skip Phases / feature-flag collections.
 
 ## 2 — Implement `scripts/sync-design-tokens.mjs`
 
@@ -51,7 +59,7 @@ Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Var
 | Headers | `AUTO-GENERATED — do not edit. Run: bun run tokens:sync` |
 | Storybook | Update `token-definitions.ts` when present |
 | Idempotent | Same inputs → stable outputs |
-| Document | Script header: appearance support, scheme slugs, default scheme |
+| Document | Script header: detected appearance, scheme slugs, default scheme |
 
 ```json
 "tokens:sync": "node scripts/sync-design-tokens.mjs"
@@ -59,12 +67,13 @@ Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Var
 
 ### Uniwind / TS output contract
 
-Match `templates/src/theme/tokens/generated/` **shape intent**; Phase B replaces stubs to match **intake** (stubs may still show `light`/`dark` for the default scaffold’s appearance demo — that is not a Figma mode map).
+Match `templates/src/theme/tokens/generated/` **shape intent**; Phase B replaces stubs to match **detection** (stubs may still show `light`/`dark` for the default scaffold’s appearance demo — that is not a Figma mode map).
 
 | File | Role |
 |------|------|
-| `theme.css` | Semantic `--color-*` under Uniwind **appearance** variants per intake (`@variant light` only when light-only; add `@variant dark` only when appearance includes dark **and** intake maps real dark values) |
+| `theme.css` | Semantic `--color-*` under Uniwind variants: appearance `light`/`dark` when detected; product schemes as `@variant <slug>`; light-only apps mirror default scheme into light+dark builtins |
 | `colors.ts` | Prefer **scheme-keyed** maps (see below); keep `ColorTokenName` as the semantic token key union |
+| `color-schemes.metro.json` | `{ appearance, defaultScheme, extraThemes, schemes }` for Metro `extraThemes` |
 | `spacing.css` | Size → `@theme` (+ sm / md / lg+ overrides) |
 | `font-families.css` | `--font-family-*` |
 | `typography-classes.ts` | Uniwind className strings |
@@ -83,13 +92,12 @@ export const defaultColorScheme = "default" satisfies ColorSchemeName;
 
 export type ColorTokenName = keyof (typeof colorSchemes)[typeof defaultColorScheme];
 
-/** Active scheme palette helper — UI should not hardcode light/dark for Figma modes. */
 export function colorsForScheme(scheme: ColorSchemeName) {
   return colorSchemes[scheme];
 }
 ```
 
-Apply the active scheme by writing CSS variables onto the root (or swapping Uniwind theme tokens) when `colorScheme` changes — **do not** implement scheme switches as `Uniwind.setTheme("dark")` unless intake explicitly says that mode is appearance-dark.
+Switch schemes with `Uniwind.setTheme(schemeSlug)` — **not** `setTheme("dark")` unless detection classified that mode as appearance-dark.
 
 **Single scheme:** one object (or `colorSchemes` with one key); no scheme toggle UI.
 
@@ -101,8 +109,8 @@ Keep `@/theme` import paths. Prefer CSS-safe names. Match stub file names under 
 |------|-------------|
 | Alias resolution | Resolve before emit. Primitive refs **and** semantic→semantic (include the active scheme’s token tree after primitives). |
 | Color values | Accept `#hex` **and** `rgb()` / `rgba()` / `hsl()` / `hsla()`. |
-| Color schemes | Emit **every** retained Figma mode under its own slug. No silent drop; no light/dark rename without intake. |
-| Appearance | Light-only → light variant only. Light-and-dark → only if dark values exist for that axis (often separate from schemes). |
+| Color schemes | Emit **every** retained non-appearance color mode under its own slug. No silent drop; no light/dark rename of product schemes. |
+| Appearance | From exact `light`/`dark` modes only; else light-only. |
 | Size tokens | `--spacing-*`, `--radius-*`, `--border-width-*` (strokes), padding as spacing keys if needed, `--responsive-*`. |
 | Size modes | Mobile-first: **sm** base; **md** `@media (min-width: 768px)`; **lg+** `1024px` (match `global.css` breakpoints). |
 | Typography | All composite styles for sm/md + lg+; keep template aliases if rename would break app code (e.g. `heading-app-section`). |
@@ -113,18 +121,17 @@ Keep `@/theme` import paths. Prefer CSS-safe names. Match stub file names under 
 
 Compare source leaves → generated output (or log from the script). Missing schemes, colors, size leaves, or typography = **not done**. Fix `transformAndWrite`; do not hand-edit `generated/*`.
 
-Example Tokens Studio bundle: top-level `files[]` with `collectionName`, `modeName`, `tokens`; aliases like `{neutrals.black-20}` and `{text.text-link-hover}`. Modes such as `Default` / `Rider Tools` are **schemes**, not appearance.
+Example Tokens Studio bundle: top-level `files[]` with `collectionName`, `modeName`, `tokens`; aliases like `{neutrals.black-20}` and `{text.text-link-hover}`. Modes such as `Default` / `Rider Tools` are **schemes** (auto light-only); exact `light`/`dark` would be appearance.
 
 ## 3 — Run & verify
 
 ```bash
 bun run tokens:sync
-bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts
+# Include detected scheme slugs as --theme extras when regenerating types:
+bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts --theme <scheme>…
 bun run lint && bun test && bunx tsc --noEmit
 ```
 
-Confirm schemes + appearance with user. Fix the script — do not one-off edit `generated/*`.
+Fix the script — do not one-off edit `generated/*`. After fonts change: install packages matching exported families; load via `expo-font` ([templates/README.md](./README.md)).
 
-After fonts change: install packages matching exported families; load via `expo-font` ([templates/README.md](./README.md)).
-
-**Gate:** real tokens + coverage + correct scheme/appearance wiring + lint/test/tsc before D. If blocked: keep stubs; document; do not mark B complete.
+**Gate:** real tokens + coverage + correct appearance/scheme wiring from auto-detect + lint/test/tsc before D. If blocked: keep stubs; document; do not mark B complete.

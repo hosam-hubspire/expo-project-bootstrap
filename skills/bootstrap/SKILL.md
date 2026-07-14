@@ -58,8 +58,6 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 | Expo account owner | When EAS on | `hubspire` → `expo.owner` |
 | Sync design tokens | Yes | off — see notes |
 | Design tokens GitHub URL | When sync on | Required |
-| Appearance support | When sync on | `light-only` · `light-and-dark` — default **ask**; do not infer from Figma mode names |
-| Color schemes | When sync on | From export mode names; pick default; multi-scheme toggle if ≥2 — see [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) |
 | Stack toggles | Yes | i18n · Storybook — `allow_multiple`, both on |
 | API client | Yes | GraphQL · REST · none (exclusive) |
 | GraphQL subscriptions | When GraphQL | off |
@@ -70,7 +68,7 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 
 Assembly: [navigation](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md) · [permissions](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md).
 
-**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; Phase B transform ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)). **Never auto-map Figma modes → Uniwind light/dark** — confirm appearance (`light-only` / `light-and-dark`) and product color schemes (e.g. Default / Rider Tools) separately; schemes often are all light and user-togglable.
+**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; Phase B auto-detects appearance vs color schemes from Figma mode names ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — exact `light`/`dark` → appearance; other modes (e.g. Default / Rider Tools) → product schemes under light-only. **Never** map arbitrary modes to dark. Ask only if mode names are ambiguous.
 
 **API wiring:** GraphQL → Apollo + Rick and Morty `.env` + `expo-secure-store`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
 
@@ -109,7 +107,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Auth hook → `src/hooks/use-storage-state.ts`; constants → `src/constants/`. Never hooks under `src/lib/`
 - Keep `src/constants/session.ts` when GraphQL or REST is on (SecureStore for API auth), even if Auth nav is off. Auth on → also `SessionProvider` / `sign-in` / etc.
 - Providers: GraphQL + auth → `SessionProvider` **inside** `AppApolloProvider`. REST/none + auth → `SessionProvider` only
-- Token scripts / `tokens:sync` only when sync on; else stub `generated/` only. Phase B: follow [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) — **appearance ≠ color schemes**; no auto light/dark mapping from Figma mode names; scheme-keyed colors + coverage gate; alias resolve incl. semantic→semantic; hex+rgba; size modes sm/md/lg+
+- Token scripts / `tokens:sync` only when sync on; else stub `generated/` only. Phase B: follow [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) — **auto-detect** appearance vs schemes from mode names (no intake); never map product schemes to dark; scheme-keyed colors + coverage gate; alias resolve incl. semantic→semantic; hex+rgba; size modes sm/md/lg+
 - **Drawer / Expo SDK 56+ (hard stop at install):** When Drawer is on, install **only** `react-native-gesture-handler` · `react-native-reanimated` · `react-native-worklets` via `bunx expo install`. **Never** `bun add` / `expo install` `@react-navigation/drawer` — it breaks Expo Router drawer on SDK 56+. App code imports `Drawer` from `expo-router/drawer` only; never `@react-navigation/*`. A missing peer `require.resolve` for `@react-navigation/drawer` is **not** a reason to install it — ignore and continue. Install matrix: [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md#navigation-when-toggles-on)
 - Uniwind: CSS `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts …` before Phase C
 - Biome: `@biomejs/biome@latest`, `bunx biome migrate --write`; `useFilenamingConvention` off. Templates should already be Biome-clean

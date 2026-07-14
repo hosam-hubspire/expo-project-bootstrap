@@ -11,10 +11,12 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 
 ### Appearance vs color schemes
 
-- **Appearance** (`themePreference` / `Uniwind.setTheme`): light · dark · system — only when the app supports dark appearance.
-- **Color scheme** (Figma modes such as Default / Rider Tools): product themes; often **all light**. Store separately (e.g. `colorScheme`); never drive scheme switches via `setTheme("dark")` unless design says that mode is appearance-dark.
-- Light-only apps: lock Uniwind to `light`; hide dark/system in Settings.
+- **Auto-detect** in Phase B from Figma color mode names ([TOKEN_SYNC.md](./TOKEN_SYNC.md)): exact `light`/`dark` → appearance; other names → product color schemes (often light-only).
+- **Appearance** (`themePreference`): only when detection finds light/dark modes.
+- **Color scheme** (`colorScheme`): Figma modes such as Default / Rider Tools — never driven via `setTheme("dark")` unless that mode is literally appearance-dark.
+- Light-only (typical multi-scheme export): lock Uniwind schemes; hide dark/system in Settings.
 - Multi-scheme: Settings scheme toggle; single scheme: no toggle.
+- Stubs may use Uniwind `@variant light` / `dark` for the default scaffold’s appearance demo — Phase B replaces per detection.
 5. Replace demo routes with `src/app/` (default: tabs + intro). Tabs: Expo Router JS `Tabs` + `assets/icons/*.svg`.
 6. **Nav** — toggles per [`navigation/README.md`](./navigation/README.md).
 7. Strip unchecked — [`optional/minimal`](./optional/minimal/README.md). REST → [`optional/rest`](./optional/rest/README.md).
