@@ -97,6 +97,7 @@ Record wall-clock per phase / notable sub-step (approximate OK).
 
 Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md). Do not duplicate long steps here.
 
+- **IMPORTANT — No prior-session reuse:** Implement Phase A/B/C from this skill + current templates + the live tokens repo only. **Never** copy, reconstruct, or “port” files from previous chats, agent transcripts, sibling app folders, or an earlier bootstrap of the same name. That habit causes stale scripts, wrong tests, and hard-to-debug drift. Fresh work each run.
 - `bunx create-expo-app@latest --template default` — never hand-roll `package.json`
 - Expo/SDK: `bunx expo install` (no `@latest`). Else: `bun add …@latest`. **Exception:** pin `jest` / `@types/jest` from `jest-expo`'s `babel-jest` — never `jest@latest`. Never copy version pins from templates
 - Never `--verbose` on `bunx expo install`. Prefer `bun install --verbose` for exit-0. Verbose `bun add` can dump registry `Authorization` — kill and retry without `--verbose`; never paste auth into chat/report

@@ -96,4 +96,6 @@ Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-pro
 
 ## Constraints
 
+**IMPORTANT — No prior-session reuse:** Build only from this workflow + current `templates/` + the intake tokens URL. Never copy/reconstruct from previous chats, agent transcripts, sibling projects, or an earlier bootstrap of the same app name.
+
 Latest Expo default · merge templates · replace stock README before D · token generate only when sync on · never hand-edit `generated/*` · C2/B gates per intake · A2 only when EAS on · resolve versions at install · assemble nav from modules · `Screen` + insets · no `@react-navigation/*` app imports · native only · always Phase R in chat (secrets redacted; no report file)
