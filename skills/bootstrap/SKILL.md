@@ -58,34 +58,23 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 | Expo account owner | When EAS on | `hubspire` → `expo.owner` |
 | Sync design tokens | Yes | off — see notes |
 | Design tokens GitHub URL | When sync on | Required |
-| Stack toggles | Yes | i18n, Storybook — all on |
+| Stack toggles | Yes | i18n · Storybook — `allow_multiple`, both on |
 | API client | Yes | GraphQL · REST · none (exclusive) |
 | GraphQL subscriptions | When GraphQL | off |
-| Navigation toggles | Yes | mix freely — see below |
-| Permission toggles | Yes | all off — see below |
+| Navigation toggles | Yes | Tabs · Drawer · Intro · Auth — `allow_multiple`; pre-check Tabs + Intro |
+| Permission toggles | Yes | Mic · Location fg/bg · Notifications · Image picker · Documents — `allow_multiple`, all off; bg ⇒ fg |
 | iOS Argent smoke (C2) | Yes | off |
 | Android smoke | Yes | off — requires iOS smoke if on |
 
-**Tokens off:** copy stub `generated/` only; no token scripts. **On:** copy `sync-design-tokens.mjs` + stub `generated/`; add `tokens:sync`; Phase B implements transform ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)).
+Assembly: [navigation](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md) · [permissions](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md).
 
-**Stack** (`allow_multiple`): i18n · Storybook.
+**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; Phase B transform ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)).
 
-**API** (single choice): GraphQL → Apollo + Rick and Morty `.env` + `expo-secure-store`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
+**API wiring:** GraphQL → Apollo + Rick and Morty `.env` + `expo-secure-store`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
 
-**Navigation** (`allow_multiple`; pre-check Tabs + Intro):
+**Nav:** Tabs + Drawer both off → flat Stack (`navigation/screens/` + flat layout).
 
-| Toggle | Default |
-|--------|---------|
-| Tabs | on |
-| Drawer | off |
-| Intro | on |
-| Protected / auth | off |
-
-If Tabs and Drawer both off → flat Stack (`navigation/screens/` + flat layout). Assembly: [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md).
-
-**Permissions** (`allow_multiple`; all off): Microphone · Location fg · Location bg (implies fg) · Notifications · Image picker · Documents. Copy per [permissions/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md).
-
-**Smokes:** both off → skip C2 and prebuild; Phase C enough. “Smoke tests all off” = both off.
+**Smokes:** both off → skip C2 and prebuild; Phase C enough.
 
 Then [bootstrap.md](bootstrap.md).
 

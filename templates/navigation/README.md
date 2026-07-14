@@ -6,14 +6,14 @@ Docs: [Tabs](https://docs.expo.dev/router/advanced/tabs/) · [Drawer](https://do
 
 ## Toggles
 
-| Toggle | Default | Effect |
-|--------|---------|--------|
-| Tabs | on | `(app)/(tabs)/` + `AppTabs` (JS `Tabs`, not Native Tabs) |
-| Drawer | off | `(app)/_layout` = `Drawer`; nest `(tabs)` when tabs on |
-| Intro | on | `(onboarding)/` + `Protected` until `hasCompletedOnboarding` |
-| Auth | off | `sign-in` + `SessionProvider` + `Protected` on `(app)` |
+Intake defaults live in [SKILL.md](../../skills/bootstrap/SKILL.md) / [Features](../../README.md#features). Shipped tree = tabs + intro (`templates/src/app/`).
 
-**Default:** tabs + intro — matches `templates/src/app/`.
+| Toggle | Effect |
+|--------|--------|
+| Tabs | `(app)/(tabs)/` + `AppTabs` (JS `Tabs`, not Native Tabs) |
+| Drawer | `(app)/_layout` = `Drawer`; nest `(tabs)` when tabs on |
+| Intro | `(onboarding)/` + `Protected` until `hasCompletedOnboarding` |
+| Auth | `sign-in` + `SessionProvider` + `Protected` on `(app)` |
 
 ## Target tree (all on)
 

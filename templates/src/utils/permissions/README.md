@@ -13,7 +13,7 @@ Copy only when selected at intake. Each toggle: packages + `app.json` plugin + m
 | Image picker | `expo-image-picker` | `expo-image-picker` | `image-picker.ts` |
 | Documents | `expo-document-picker` `expo-file-system` | `expo-document-picker` | `documents.ts` |
 
-Defaults: all off. Background location implies foreground.
+Defaults from intake (all off). Background location implies foreground.
 
 **Always** when any on: `types.ts`, `ios-strings.ts`, `open-settings.ts`, `index.ts` (trim exports).
 

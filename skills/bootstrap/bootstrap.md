@@ -17,12 +17,7 @@
    - **API GraphQL:** GraphQL stack + codegen; Rick and Morty `.env`
    - **API REST:** [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md); JSONPlaceholder `.env`
    - **API none:** omit GraphQL; skip REST
-5. **Navigation** — start `templates/src/app/`; apply toggles per [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md):
-   - Intro off → delete `(onboarding)/` + onboarding `Protected`
-   - Auth on → copy `navigation/auth/*`; `SessionProvider` inside `AppApolloProvider` when GraphQL; else `SessionProvider` alone; `expo-secure-store`; Sign out on Settings
-   - Drawer on → drawer layout; peers only (no `@react-navigation/drawer`)
-   - Tabs off → remove `(tabs)/` + `AppTabs`; use `navigation/screens/`
-   - Permissions on → [permissions/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md)
+5. **Navigation / permissions** — start `templates/src/app/`; assemble per [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md). Permissions → [permissions/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md).
 6. **Biome** — copy `biome.json`, install `@biomejs/biome@latest`, `bunx biome migrate --write`. Keep names like `SettingsUI.tsx`.
 7. **Uniwind** — `src/global.css`; import in root `_layout`; `withUniwindConfig` outermost; `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`.
 8. **Argent** — only when any smoke on: `bunx @swmansion/argent init -y`, then `bun run lint:fix`. Skip when both smokes off. Before C2 CLI: `argent server status` → relink if needed → `argent tools` must not 401.
