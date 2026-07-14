@@ -10,7 +10,7 @@ Rerunnable `bun run tokens:sync` that fetches the intake GitHub tokens repo and 
 
 ## 1 — Review tokens repo
 
-Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Variables JSON, Style Dictionary, etc.). Note color / size / typography sources.
+Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Variables JSON, Style Dictionary, etc.). Note color / size / typography sources and **modes** (e.g. light/dark color modes; sm / md / lg+ size modes).
 
 ## 2 — Implement `scripts/sync-design-tokens.mjs`
 
@@ -37,12 +37,31 @@ Match `templates/src/theme/tokens/generated/`:
 |------|------|
 | `theme.css` | Semantic colors → `@variant light` / `dark` |
 | `colors.ts` | `colorTokens.light` / `.dark` |
-| `spacing.css` | Size → `@theme` |
+| `spacing.css` | Size → `@theme` (+ responsive overrides) |
 | `font-families.css` | `--font-family-*` |
 | `typography-classes.ts` | Uniwind className strings |
-| `typography-primitives.*` / `primitives.css` | Optional |
+| `typography-primitives.*` / `primitives.css` | Color + size + type primitives |
 
-Keep `@/theme` import paths. Prefer CSS-safe names. Resolve aliases to concrete values before emit. Match stub files under `templates/src/theme/tokens/generated/`.
+Keep `@/theme` import paths. Prefer CSS-safe names. Match stub files under `templates/src/theme/tokens/generated/` (stubs may be a subset; Phase B emit should cover the full usable set from the tokens repo).
+
+### Resolve & emit checklist (do not skip)
+
+| Area | Requirement |
+|------|-------------|
+| Alias resolution | Resolve to concrete values before emit. Follow **primitive** refs and **semantic→semantic** refs (include the color-mode token tree in the resolver stack after primitives). |
+| Color values | Accept `#hex` **and** `rgb()` / `rgba()` / `hsl()` / `hsla()` (opacity overlays). Do not drop tokens that are not hex-only. |
+| Color modes | Map export modes → Uniwind light/dark (document mapping in the script header). |
+| Size tokens | Emit spacing (`--spacing-*`), radius (`--radius-*`), stroke widths (`--border-width-*`), padding (as `--spacing-*` keys if needed for utilities), responsive (`--responsive-*`). |
+| Size modes | Mobile-first: **sm** base; **md** overrides at `min-width: 768px`; **lg+** at `min-width: 1024px` (match Uniwind breakpoints in `global.css`). |
+| Typography | All composite styles for sm/md + lg+; keep template aliases if rename would break stubs (e.g. `heading-app-section`). |
+| Primitives | Emit resolved color **and** size primitives under `primitives.css` / Storybook groups. |
+| Skip | Feature-flag collections (e.g. Phases) — not Uniwind tokens; count in `tokenCounts.figmaPhasesSkipped` if useful. |
+
+### Coverage gate
+
+Before marking Phase B complete, compare source leaf counts to generated output (or log coverage from the script). Missing semantic colors, size leaves, or typography styles = **not done** — fix `transformAndWrite`, do not hand-edit `generated/*`.
+
+Example Tokens Studio bundle shape (Marta / similar): top-level `files[]` with `collectionName`, `modeName`, `tokens`; aliases like `{neutrals.black-20}` and `{text.text-link-hover}`.
 
 ## 3 — Run & verify
 
@@ -54,4 +73,6 @@ bun run lint && bun test && bunx tsc --noEmit
 
 Confirm with user. Fix the script — do not one-off edit `generated/*`.
 
-**Gate:** real tokens (not stubs only) + checks pass before D. If blocked: keep stubs; document; do not mark B complete.
+After fonts change: install packages matching exported families; load via `expo-font` ([templates/README.md](./README.md)).
+
+**Gate:** real tokens (not stubs only) + coverage checklist + checks pass before D. If blocked: keep stubs; document; do not mark B complete.

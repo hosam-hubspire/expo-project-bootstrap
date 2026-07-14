@@ -153,7 +153,7 @@ export function BottomSheetExamplesRoot({ children, ...labels }: BottomSheetExam
             onPress={() => {
               setInlineIndex(0);
             }}
-            style={[StyleSheet.absoluteFillObject, { backgroundColor: INLINE_BACKDROP_COLOR }]}
+            style={[StyleSheet.absoluteFill, { backgroundColor: INLINE_BACKDROP_COLOR }]}
           />
         ) : null}
 

@@ -84,13 +84,13 @@ Nav checks: [navigation/README.md C2](https://github.com/hosam-hubspire/expo-pro
 Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md). After C2 when C2 ran, else after C.
 
 1. Review intake GitHub tokens repo
-2. Implement `transformAndWrite` in `sync-design-tokens.mjs` → Uniwind `generated/`
+2. Implement `transformAndWrite` in `sync-design-tokens.mjs` → Uniwind `generated/` ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) checklist: semantic→semantic aliases, hex+rgba, stroke/padding/responsive, sm/md/lg+ size modes, coverage gate)
 3. `bun run tokens:sync` → uniwind artifacts → Phase C again
 4. Confirm with user; leave script as re-sync path
 
-**Gate:** real generated tokens + lint/test/tsc. If blocked, keep stubs; document; do not mark B complete.
+**Gate:** real generated tokens + coverage checklist + lint/test/tsc. If blocked, keep stubs; document; do not mark B complete.
 
-**Before D:** filled project README. Commit on `main`; push if repo given. Completion summary + Phase R run report in chat — [SKILL.md](SKILL.md).
+**Before D:** filled project README. Commit on `main`; push if repo given. If push fails on `.github/workflows/*` for token scope, push app first then add the workflow via `gh api` (or SSH). Completion summary + Phase R run report in chat — [SKILL.md](SKILL.md).
 
 ## Constraints
 

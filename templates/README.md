@@ -75,7 +75,9 @@ bunx expo install expo-secure-store
 | `sign-in.tsx` | `src/app/sign-in.tsx` |
 | `sign-out-button.tsx` | Settings (optional) |
 
-Also `src/constants/session.ts`. GraphQL + auth:
+Also `src/constants/session.ts` whenever **GraphQL or REST** is on (SecureStore key for Apollo auth link / axios Bearer) — **even if Auth is off**. Do not strip it with Auth-off nav cleanup. Auth on additionally copies `SessionProvider` / `sign-in` / `use-storage-state`.
+
+GraphQL + auth:
 
 ```tsx
 <AppApolloProvider>

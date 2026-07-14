@@ -105,8 +105,9 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Strip unchecked stack — `optional/minimal/`; REST via `optional/rest/`
 - Nav: start `templates/src/app/`; assemble from `templates/navigation/` — no unused route groups
 - Auth hook → `src/hooks/use-storage-state.ts`; constants → `src/constants/`. Never hooks under `src/lib/`
+- Keep `src/constants/session.ts` when GraphQL or REST is on (SecureStore for API auth), even if Auth nav is off. Auth on → also `SessionProvider` / `sign-in` / etc.
 - Providers: GraphQL + auth → `SessionProvider` **inside** `AppApolloProvider`. REST/none + auth → `SessionProvider` only
-- Token scripts / `tokens:sync` only when sync on; else stub `generated/` only
+- Token scripts / `tokens:sync` only when sync on; else stub `generated/` only. Phase B: follow [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) (alias resolution incl. semantic→semantic, hex+rgba, size modes sm/md/lg+, coverage gate)
 - **Drawer / Expo SDK 56+ (hard stop at install):** When Drawer is on, install **only** `react-native-gesture-handler` · `react-native-reanimated` · `react-native-worklets` via `bunx expo install`. **Never** `bun add` / `expo install` `@react-navigation/drawer` — it breaks Expo Router drawer on SDK 56+. App code imports `Drawer` from `expo-router/drawer` only; never `@react-navigation/*`. A missing peer `require.resolve` for `@react-navigation/drawer` is **not** a reason to install it — ignore and continue. Install matrix: [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md#navigation-when-toggles-on)
 - Uniwind: CSS `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts …` before Phase C
 - Biome: `@biomejs/biome@latest`, `bunx biome migrate --write`; `useFilenamingConvention` off. Templates should already be Biome-clean
@@ -116,11 +117,12 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Core toasts always; PermissionsExamples when any permission on
 - Core forms always: `react-hook-form`, `zod`, `@hookform/resolvers` — auth `sign-in` is the reference wiring when Auth on
 - Core keyboard always: `react-native-keyboard-controller` via `bunx expo install`; wrap root in `KeyboardProvider`; auth `sign-in` uses `KeyboardAwareScrollView` + `KeyboardToolbar` when Auth on
-- Core bottom sheet always: `@swmansion/react-native-bottom-sheet` via `bun add …@latest`; wrap root in `BottomSheetProvider` (inside `KeyboardProvider`); Fabric native — not Expo Go; Settings always mounts `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim/keyboard/a11y)
+- Core bottom sheet always: `@swmansion/react-native-bottom-sheet` via `bun add …@latest`; wrap root in `BottomSheetProvider` (inside `KeyboardProvider`); Fabric native — not Expo Go; Settings always mounts `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim/keyboard/a11y). Use `StyleSheet.absoluteFill` (not `absoluteFillObject` — removed in RN 0.86+)
 - Native only (iOS/Android): strip web leftovers; prefer `Screen` + insets over `SafeAreaView`
 - Argent init in A **only** when any smoke on
 - Commit gate: C2 must pass when smokes on; B complete when sync on; when smokes off, C (+ B if sync) then ask before D
 - Project README: fill [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) before D
+- Phase D push: if HTTPS rejects `.github/workflows/*` (missing usable `workflow` scope on the git credential), push without the workflow file then add it via `gh api` Contents — or use SSH with a key that can write workflows. Restore local tree to match remote before finish
 - Phase R always: run report as **agent chat message** (not a file); redact secrets
 
 ## Completion summary

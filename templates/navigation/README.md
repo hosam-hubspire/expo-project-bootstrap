@@ -31,7 +31,7 @@ src/app/
 - Tabs off + drawer on → `navigation/screens/` under `(app)/`
 - Tabs + drawer both off → flat screens + Stack
 - Intro off → omit `(onboarding)/` + its `Protected`
-- Auth off → omit `sign-in`, `SessionProvider`, auth guards
+- Auth off → omit `sign-in`, `SessionProvider`, auth guards; keep `src/constants/session.ts` if GraphQL or REST is on (API SecureStore key)
 
 ## Guard order (outer → inner)
 
@@ -66,7 +66,7 @@ Drawer wraps Tabs when both on. Install peers only (gesture-handler · reanimate
 
 1. Read intake toggles; start from `templates/src/app/`.
 2. Intro **off** → delete `(onboarding)/`; remove onboarding `Protected` / `hasCompletedOnboarding` from navigator.
-3. Auth **on** → copy auth modules (`session-provider` → `providers/`, `use-storage-state` → `hooks/`, `sign-in` → `app/`); ensure `constants/session.ts`; nest `SessionProvider` inside `AppApolloProvider` when GraphQL; else `SessionProvider` alone; `expo-secure-store`. Transport reads SecureStore — do not wire to React context.
+3. Auth **on** → copy auth modules (`session-provider` → `providers/`, `use-storage-state` → `hooks/`, `sign-in` → `app/`); ensure `constants/session.ts`; nest `SessionProvider` inside `AppApolloProvider` when GraphQL; else `SessionProvider` alone; `expo-secure-store`. Transport reads SecureStore — do not wire to React context. Auth **off** + GraphQL/REST → still keep `constants/session.ts` + `expo-secure-store` for the API client.
 4. Drawer **on** → copy drawer; install peers only (no `@react-navigation/drawer`); keep drawer header on `(tabs)`.
 5. Tabs **off** → remove `(tabs)/` + `AppTabs`; copy `navigation/screens/`.
 6. C2 checks match intake (below).

@@ -11,7 +11,7 @@ When i18n / Storybook unchecked, or API is **none** (REST → [`optional/rest`](
 ## Omit GraphQL / API none
 
 - Remove `AppApolloProvider`, GraphQL services/provider/examples, `codegen.ts`, `graphql:generate`, GraphQL installs
-- Keep `SessionProvider` + `session.ts` if auth on
+- Keep `SessionProvider` if auth on; keep `session.ts` if auth on **or** GraphQL/REST remains
 
 ## API REST
 
