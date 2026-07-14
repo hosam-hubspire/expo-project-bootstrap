@@ -26,8 +26,6 @@ Always on: Uniwind · Bun · Biome · forms (RHF + zod) · keyboard controller �
 
 **Defaults:** i18n + Storybook on · API GraphQL · nav tabs + intro · EAS / token sync / smokes / permissions off.
 
-Scaffolded apps replace stock Expo `README.md` with filled [`templates/project-README.md`](./templates/project-README.md).
-
 ## Layout
 
 | Path | Purpose |
