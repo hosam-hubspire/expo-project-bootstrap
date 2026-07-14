@@ -1,4 +1,4 @@
-/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
+/* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
 /** Design token metadata for Storybook */
 
 export const colorTokenGroups = {

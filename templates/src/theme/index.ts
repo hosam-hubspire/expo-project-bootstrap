@@ -1,7 +1,7 @@
 /**
  * Design system — tokens and typography utilities.
  * CSS entry: src/global.css (must live under src/ — not theme/ — so Uniwind scans all classNames)
- * Regenerate tokens: bun run tokens:generate
+ * When token sync is on: bun run tokens:sync
  */
 
 export { Fonts } from "@/theme/fonts";

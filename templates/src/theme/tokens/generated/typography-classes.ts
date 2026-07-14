@@ -1,4 +1,4 @@
-/* AUTO-GENERATED — do not edit. Run: bun run tokens:generate */
+/* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
 /** Responsive typography classNames — mobile-first lg: at 1024px (Uniwind) */
 
 export const typographyClassNames = {

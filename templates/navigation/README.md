@@ -1,92 +1,81 @@
 # Navigation assembly
 
-Expo Router layouts are **orthogonal toggles** — compose any combination. Do not ship every module; copy only what intake selected, then wire `RootNavigator` guards.
+Compose Expo Router layouts from intake toggles. Copy only what was selected; wire `RootNavigator` guards.
 
-**Docs:** [Tabs](https://docs.expo.dev/router/advanced/tabs/) · [Drawer](https://docs.expo.dev/router/advanced/drawer/) · [Protected routes](https://docs.expo.dev/router/advanced/protected/) · [Authentication](https://docs.expo.dev/router/advanced/authentication/) · [Nesting](https://docs.expo.dev/router/advanced/nesting-navigators/)
+Docs: [Tabs](https://docs.expo.dev/router/advanced/tabs/) · [Drawer](https://docs.expo.dev/router/advanced/drawer/) · [Protected](https://docs.expo.dev/router/advanced/protected/) · [Auth](https://docs.expo.dev/router/advanced/authentication/) · [Nesting](https://docs.expo.dev/router/advanced/nesting-navigators/)
 
-## Intake toggles
+## Toggles
 
 | Toggle | Default | Effect |
 |--------|---------|--------|
-| **Tabs** | on | `(app)/(tabs)/` + `AppTabs` (Expo Router JS [`Tabs`](https://docs.expo.dev/router/advanced/tabs/), not Native Tabs) |
-| **Drawer** | off | `(app)/_layout` uses `Drawer`; nest `(tabs)` inside when tabs on |
-| **Intro / onboarding** | on | `(onboarding)/` + `Stack.Protected` until `hasCompletedOnboarding` |
-| **Protected / auth** | off | `sign-in` + `SessionProvider` + `Stack.Protected` on `(app)` |
+| Tabs | on | `(app)/(tabs)/` + `AppTabs` (JS `Tabs`, not Native Tabs) |
+| Drawer | off | `(app)/_layout` = `Drawer`; nest `(tabs)` when tabs on |
+| Intro | on | `(onboarding)/` + `Protected` until `hasCompletedOnboarding` |
+| Auth | off | `sign-in` + `SessionProvider` + `Protected` on `(app)` |
 
-**Default combo:** tabs + intro (no drawer, no auth) — matches `templates/src/app/`.
+**Default:** tabs + intro — matches `templates/src/app/`.
 
-## Target tree (all toggles on)
+## Target tree (all on)
 
 ```
 src/app/
   _layout.tsx                 # providers + SplashScreenController + RootNavigator
   sign-in.tsx                 # auth only
-  (onboarding)/
-    _layout.tsx
-    index.tsx
-    features.tsx
+  (onboarding)/ …             # intro only
   (app)/
-    _layout.tsx               # Drawer when drawer on; else Stack passthrough
-    (tabs)/                   # when tabs on
-      _layout.tsx
-      index.tsx
-      settings.tsx
-    about.tsx                 # drawer-only sample when drawer on
+    _layout.tsx               # Drawer or Stack
+    (tabs)/ …                 # tabs on
+    about.tsx                 # drawer-only sample
 ```
 
-When **tabs off** and **drawer on**: put `index.tsx` / `settings.tsx` directly under `(app)/` (use `navigation/screens/`).
-When **tabs off** and **drawer off**: same flat screens under `(app)/` with a Stack layout.
-When **intro off**: omit `(onboarding)/` and its `Protected` block.
-When **auth off**: omit `sign-in.tsx`, `SessionProvider`, and auth guards.
+- Tabs off + drawer on → `navigation/screens/` under `(app)/`
+- Tabs + drawer both off → flat screens + Stack
+- Intro off → omit `(onboarding)/` + its `Protected`
+- Auth off → omit `sign-in`, `SessionProvider`, auth guards
 
-## Guard order (root Stack)
-
-Evaluate outermost → innermost. Typical full stack:
+## Guard order (outer → inner)
 
 1. `!hasCompletedOnboarding` → `(onboarding)`
 2. `hasCompletedOnboarding && !session` → `sign-in` (auth only)
 3. `hasCompletedOnboarding && (!auth || !!session)` → `(app)`
 
-Hold the native splash until preferences (and session, when auth on) rehydrate — `SplashScreenController`.
+Hold splash until prefs (and session, if auth) rehydrate — `SplashScreenController`.
 
-## Nesting rules
+## Nesting
 
 | Tabs | Drawer | `(app)/_layout` | Children |
 |------|--------|-----------------|----------|
 | on | off | Stack, `headerShown: false` | `(tabs)` |
-| on | on | `Drawer` from `expo-router/drawer` | `(tabs)` + optional drawer-only screens |
-| off | on | `Drawer` | `index`, `settings`, … |
-| off | off | Stack | `index`, `settings`, … |
+| on | on | `Drawer` (`expo-router/drawer`) | `(tabs)` + drawer-only screens |
+| off | on | `Drawer` | flat screens |
+| off | off | Stack | flat screens |
 
-Drawer + tabs: **Drawer wraps Tabs** (one drawer item can be the tab navigator). Install drawer deps when drawer is on — see [templates/README.md](../README.md) (`react-native-gesture-handler` / `reanimated` / `worklets` only on SDK 56+; do not add `@react-navigation/drawer`).
-
-**Drawer header + tabs:** do **not** set `headerShown: false` on the `(tabs)` drawer screen. Hiding that header removes the menu (hamburger) icon on Home/Settings even though edge-swipe still opens the drawer. Keep the default drawer header so the toggle is visible; drawer-only screens (e.g. `about`) already show it.
+Drawer wraps Tabs when both on. Install peers only — [templates/README.md](../README.md). **Never** `headerShown: false` on the `(tabs)` drawer screen (hides hamburger).
 
 ## Module map
 
-| Path | Copy when |
-|------|-----------|
-| `templates/src/app/` | **Always start here** (default: tabs + intro). Strip/add per toggles. |
-| `navigation/auth/` | Protected routes on |
+| Path | When |
+|------|------|
+| `templates/src/app/` | Always start here |
+| `navigation/auth/` | Auth on |
 | `navigation/drawer/` | Drawer on |
-| `navigation/screens/` | Tabs off (flat home/settings) |
-| `navigation/root/` | Reference snippets for `RootNavigator` / splash (already wired in default `_layout`) |
+| `navigation/screens/` | Tabs off |
+| `navigation/root/` | Reference only (wired in default `_layout`) |
 
 ## Agent checklist
 
-1. Read intake toggles.
-2. Start from `templates/src/app/` (and shared `src/` components/stores).
-3. If intro **off**: delete `(onboarding)/`; remove onboarding `Protected` + `hasCompletedOnboarding` usage from navigator (keep store field optional or remove).
-4. If auth **on**: copy `navigation/auth/*` (`session-provider` → `src/providers/`, `use-storage-state` → `src/hooks/`, `sign-in` → `src/app/`); ensure `src/constants/session.ts` exists; nest **`SessionProvider` inside `AppApolloProvider`** when GraphQL is on; when REST or API none, wrap with `SessionProvider` alone; add sign-in screen + guards; `bunx expo install expo-secure-store`. Hooks go under `src/hooks/`, constants under `src/constants/`. Apollo auth link / axios interceptor already attach `Authorization` from SecureStore — do not wire transport to React context.
-5. If drawer **on**: copy `navigation/drawer/*`; replace `(app)/_layout`; install drawer deps; if tabs on, keep `(tabs)` nested under drawer with the drawer header **shown** (menu icon — never `headerShown: false` on `(tabs)`).
-6. If tabs **off**: remove `(tabs)/` + `AppTabs`; copy `navigation/screens/` into `(app)/`.
-7. Update C2 Argent checks: dismiss onboarding if present; verify tabs and/or drawer; sign-in → app when auth on.
+1. Read intake toggles; start from `templates/src/app/`.
+2. Intro **off** → delete `(onboarding)/`; remove onboarding `Protected` / `hasCompletedOnboarding` from navigator.
+3. Auth **on** → copy auth modules (`session-provider` → `providers/`, `use-storage-state` → `hooks/`, `sign-in` → `app/`); ensure `constants/session.ts`; nest `SessionProvider` inside `AppApolloProvider` when GraphQL; else `SessionProvider` alone; `expo-secure-store`. Transport reads SecureStore — do not wire to React context.
+4. Drawer **on** → copy drawer; install peers; keep drawer header on `(tabs)`.
+5. Tabs **off** → remove `(tabs)/` + `AppTabs`; copy `navigation/screens/`.
+6. C2 checks match intake (below).
 
 ## C2 smoke expectations
 
 | Feature | Verify |
 |---------|--------|
-| Intro | First launch shows onboarding; Complete → main shell; relaunch skips intro |
+| Intro | First launch onboarding → Complete → main; relaunch skips |
 | Tabs | Home ↔ Settings |
-| Drawer | Menu (hamburger) icon visible in header on Home/tabs; tap it (or swipe) to open; navigate to a drawer item |
-| Auth | Signed out → sign-in; Sign in → `(app)`; Sign out → sign-in |
+| Drawer | Hamburger on Home/tabs; open; navigate |
+| Auth | Signed out → sign-in → app; Sign out → sign-in |

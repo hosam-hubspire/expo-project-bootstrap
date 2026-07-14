@@ -2,7 +2,7 @@
 @import "uniwind";
 
 /*
- * Design system tokens (from Figma via bun run tokens:generate)
+ * Design system tokens (Uniwind generated/; bun run tokens:sync when enabled)
  */
 
 @import "./theme/tokens/generated/spacing.css";
