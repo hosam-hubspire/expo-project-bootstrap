@@ -26,8 +26,3 @@ export const uniwindFontFamilies = {
 } as const;
 
 export type UniwindFontFace = keyof typeof uniwindFontFamilies;
-
-/** @deprecated Prefer `uniwindFontFamilies` + weight faces for RN text. */
-export const Fonts = {
-  System: uniwindFontFamilies.Regular,
-} as const;
