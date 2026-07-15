@@ -13,5 +13,7 @@ export {
   bgClassName,
   colorClassName,
   isLinkVariant,
+  mergeTypographyClassName,
   typographyClassName,
+  typographyTwMerge,
 } from "@/theme/typography";

@@ -180,6 +180,8 @@ Compose from declared primitives (same idea as a Tailwind `theme.extend` + `getT
 
 Keep `src/theme/fonts.ts` as the hand-maintained source of truth for loadable faces; sync emits matching `--font-*` theme keys.
 
+**Class overrides:** `ThemedText` (and any variant + `className` composition) must use `tailwind-merge` via `mergeTypographyClassName` / `typographyTwMerge` in `src/theme/typography.ts`, with `extendTailwindMerge` class groups for custom `text-size-*`, `leading-*`, and `font-Regular|Medium|Bold` (keys from generated `typography-primitives`). Do not string-join conflicting utilities — later overrides would not win reliably.
+
 ### Coverage gate
 
 Compare source leaves → generated output (or log from the script). Missing schemes, colors, size leaves, or typography = **not done**. Fix `transformAndWrite`; do not hand-edit `generated/*`.

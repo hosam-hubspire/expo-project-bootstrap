@@ -1,6 +1,11 @@
 import { Text, type TextProps } from "react-native";
 import type { ColorTokenName, TypographyTokenName } from "@/theme";
-import { colorClassName, isLinkVariant, typographyClassName } from "@/theme/typography";
+import {
+  colorClassName,
+  isLinkVariant,
+  mergeTypographyClassName,
+  typographyClassName,
+} from "@/theme/typography";
 
 export type ThemedTextProps = TextProps & {
   variant?: TypographyTokenName;
@@ -21,9 +26,11 @@ export function ThemedText({
 
   return (
     <Text
-      className={[typographyClassName(variant), resolvedColorClass, className]
-        .filter(Boolean)
-        .join(" ")}
+      className={mergeTypographyClassName(
+        typographyClassName(variant),
+        resolvedColorClass,
+        className,
+      )}
       {...rest}
     />
   );
