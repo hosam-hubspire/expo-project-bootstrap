@@ -182,6 +182,8 @@ Keep `src/theme/fonts.ts` as the hand-maintained source of truth for loadable fa
 
 **Class overrides:** `ThemedText` (and any variant + `className` composition) must use `tailwind-merge` via `mergeTypographyClassName` / `typographyTwMerge` in `src/theme/typography.ts`, with `extendTailwindMerge` class groups for custom `text-size-*`, `leading-*`, and `font-Regular|Medium|Bold` (keys from generated `typography-primitives`). Do not string-join conflicting utilities — later overrides would not win reliably.
 
+**Line height gate:** Generated recipes include `leading-*`, but applying leading is optional per instance. `ThemedText` exposes `withLineHeight` (default `true`). Pass `withLineHeight={false}` (or `typographyClassName(variant, { withLineHeight: false })`) to omit leading utilities — do not fork variants just to drop line height.
+
 ### Coverage gate
 
 Compare source leaves → generated output (or log from the script). Missing schemes, colors, size leaves, or typography = **not done**. Fix `transformAndWrite`; do not hand-edit `generated/*`.

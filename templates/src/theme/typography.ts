@@ -39,8 +39,30 @@ export function isLinkVariant(variant: TypographyTokenName): boolean {
   return variant.includes("underlined-links");
 }
 
-export function typographyClassName(variant: TypographyTokenName): string {
-  return typographyClassNames[variant];
+export type TypographyClassNameOptions = {
+  /** When false, omit `leading-*` from the variant recipe. Default true. */
+  withLineHeight?: boolean;
+};
+
+function stripLeadingUtilities(className: string): string {
+  return className
+    .split(/\s+/)
+    .filter((token) => token.length > 0 && !/(?:^|:)leading-/.test(token))
+    .join(" ");
+}
+
+/**
+ * Variant recipe from generated tokens. Pass `{ withLineHeight: false }` to drop leading.
+ */
+export function typographyClassName(
+  variant: TypographyTokenName,
+  options?: TypographyClassNameOptions,
+): string {
+  const base = typographyClassNames[variant];
+  if (options?.withLineHeight === false) {
+    return stripLeadingUtilities(base);
+  }
+  return base;
 }
 
 export function colorClassName(colorToken: ColorTokenName): string {

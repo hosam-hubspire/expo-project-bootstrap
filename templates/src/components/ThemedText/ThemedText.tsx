@@ -11,12 +11,18 @@ export type ThemedTextProps = TextProps & {
   variant?: TypographyTokenName;
   colorToken?: ColorTokenName;
   className?: string;
+  /**
+   * When false, omit the variant’s `leading-*` utility so line height is not applied.
+   * Default true (full typography recipe).
+   */
+  withLineHeight?: boolean;
 };
 
 export function ThemedText({
   className,
   variant = "global-body-base",
   colorToken,
+  withLineHeight = true,
   ...rest
 }: ThemedTextProps) {
   const resolvedColorClass =
@@ -27,7 +33,7 @@ export function ThemedText({
   return (
     <Text
       className={mergeTypographyClassName(
-        typographyClassName(variant),
+        typographyClassName(variant, { withLineHeight }),
         resolvedColorClass,
         className,
       )}
