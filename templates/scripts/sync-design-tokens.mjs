@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * Sync design tokens from a GitHub repo of Figma plugin exports → Uniwind generated files.
+ * Sync design tokens from a GitHub repo or a local design-tokens JSON file → Uniwind generated files.
  *
- * Intake pins TOKENS_GITHUB_URL (or set the env var). Phase B: implement `transformAndWrite`
- * for this repo’s export layout. Users re-run anytime:
+ * Intake pins TOKENS_SOURCE (GitHub URL or local path). Compatible aliases:
+ * TOKENS_GITHUB_URL (repos) / TOKENS_LOCAL_PATH (JSON file). Phase B: implement
+ * `transformAndWrite` for this source’s export layout. Users re-run anytime:
  *
  *   bun run tokens:sync
  *
@@ -25,8 +26,11 @@ const OUT_DIR = path.join(ROOT, "src/theme/tokens/generated");
 const CACHE_DIR = path.join(ROOT, ".tokens-cache");
 
 /** Set at bootstrap Phase B from intake (override with env). */
-const TOKENS_GITHUB_URL =
-  process.env.TOKENS_GITHUB_URL?.trim() || "https://github.com/ORG/design-tokens";
+const TOKENS_SOURCE =
+  process.env.TOKENS_SOURCE?.trim() ||
+  process.env.TOKENS_GITHUB_URL?.trim() ||
+  process.env.TOKENS_LOCAL_PATH?.trim() ||
+  "https://github.com/ORG/design-tokens";
 
 const GENERATED_BANNER = "/* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */";
 const METRO_CONFIG = path.join(ROOT, "metro.config.js");
@@ -72,17 +76,25 @@ function patchMetroExtraThemes(schemeSlugs) {
   console.log(`  patched metro extraThemes: [${list}]`);
 }
 
+/** @param {string} source */
+function isGitHubUrl(source) {
+  return (
+    /^https?:\/\/(www\.)?github\.com[/:]/i.test(source) ||
+    /^git@github\.com:/i.test(source)
+  );
+}
+
+/** @param {string} source */
+function isPlaceholderSource(source) {
+  return !source || source.includes("ORG/design-tokens");
+}
+
 /**
  * Shallow-clone or fetch the tokens repo into .tokens-cache/repo.
+ * @param {string} githubUrl
  * @returns {string} absolute path to the checkout
  */
-function fetchTokensRepo() {
-  if (!TOKENS_GITHUB_URL || TOKENS_GITHUB_URL.includes("ORG/design-tokens")) {
-    throw new Error(
-      "Set TOKENS_GITHUB_URL (env or constant in scripts/sync-design-tokens.mjs) to the tokens GitHub repo.",
-    );
-  }
-
+function fetchTokensRepo(githubUrl) {
   ensureDir(CACHE_DIR);
   const repoDir = path.join(CACHE_DIR, "repo");
 
@@ -98,8 +110,8 @@ function fetchTokensRepo() {
     if (fs.existsSync(repoDir)) {
       fs.rmSync(repoDir, { recursive: true, force: true });
     }
-    console.log(`Cloning ${TOKENS_GITHUB_URL}…`);
-    execFileSync("git", ["clone", "--depth", "1", TOKENS_GITHUB_URL, repoDir], {
+    console.log(`Cloning ${githubUrl}…`);
+    execFileSync("git", ["clone", "--depth", "1", githubUrl, repoDir], {
       stdio: "inherit",
     });
   }
@@ -108,34 +120,76 @@ function fetchTokensRepo() {
 }
 
 /**
- * AGENT (Phase B): parse plugin exports under `sourceDir` and write Uniwind files to OUT_DIR.
+ * Resolve intake source to a path the transform can read.
+ * GitHub URL → cloned repo directory. Local path → absolute file or directory.
+ *
+ * @returns {{ kind: "github" | "local"; path: string; label: string }}
+ */
+function resolveTokensSource() {
+  if (isPlaceholderSource(TOKENS_SOURCE)) {
+    throw new Error(
+      "Set TOKENS_SOURCE (env or constant in scripts/sync-design-tokens.mjs) to a GitHub URL or a local path to a design-tokens JSON file.",
+    );
+  }
+
+  if (isGitHubUrl(TOKENS_SOURCE)) {
+    const repoDir = fetchTokensRepo(TOKENS_SOURCE);
+    return { kind: "github", path: repoDir, label: TOKENS_SOURCE };
+  }
+
+  const localPath = path.isAbsolute(TOKENS_SOURCE)
+    ? TOKENS_SOURCE
+    : path.resolve(ROOT, TOKENS_SOURCE);
+
+  if (!fs.existsSync(localPath)) {
+    throw new Error(`Design tokens source not found: ${localPath}`);
+  }
+
+  const stat = fs.statSync(localPath);
+  if (stat.isFile() && !/\.json$/i.test(localPath)) {
+    throw new Error(
+      `Local design tokens source must be a .json file (got: ${localPath})`,
+    );
+  }
+
+  console.log(`Using local tokens source: ${localPath}`);
+  return { kind: "local", path: localPath, label: localPath };
+}
+
+/**
+ * AGENT (Phase B): parse plugin exports under `sourcePath` and write Uniwind files to OUT_DIR.
+ *
+ * `sourcePath` is either a cloned tokens repo directory (GitHub intake) or an absolute
+ * path to a design-tokens `.json` file (local intake). Sibling exports may live next to
+ * a JSON file — check `path.dirname(sourcePath)` when needed.
  *
  * Must produce the same file set / shapes as template stubs in src/theme/tokens/generated/
  * (theme.css, colors.ts, spacing.css, typography-primitives.*, typography-classes.ts, …).
  * Typography: text-size-* + leading-* + font-Regular|Medium|Bold — see templates/TOKEN_SYNC.md
  * “Typography (Uniwind)”. Call patchMetroExtraThemes(schemeSlugs) when multi-scheme.
  *
- * @param {string} sourceDir
+ * @param {string} sourcePath
  */
-function transformAndWrite(sourceDir) {
-  void sourceDir;
+function transformAndWrite(sourcePath) {
+  void sourcePath;
   void writeGenerated;
   void OUT_DIR;
   void os;
   void patchMetroExtraThemes;
 
   throw new Error(
-    "Phase B incomplete: implement transformAndWrite() in scripts/sync-design-tokens.mjs for this tokens repo’s export format.",
+    "Phase B incomplete: implement transformAndWrite() in scripts/sync-design-tokens.mjs for this tokens source’s export format.",
   );
 }
 
 function main() {
   console.log("Syncing design tokens → Uniwind generated/\n");
-  console.log(`  source: ${TOKENS_GITHUB_URL}`);
 
-  const sourceDir = fetchTokensRepo();
+  const source = resolveTokensSource();
+  console.log(`  source (${source.kind}): ${source.label}`);
+
   ensureDir(OUT_DIR);
-  transformAndWrite(sourceDir);
+  transformAndWrite(source.path);
 
   console.log("\nDone. Re-run anytime: bun run tokens:sync");
 }

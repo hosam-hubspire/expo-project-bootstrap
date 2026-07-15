@@ -1,12 +1,12 @@
 # Design token sync — Phase B
 
-When intake **Sync design tokens** is on — after A2 (or A when EAS off), before C. Needs **Design tokens GitHub URL**. Do not copy this file into the app.
+When intake **Sync design tokens** is on — after A2 (or A when EAS off), before C. Needs **Design tokens source** (GitHub URL **or** local path to a design-tokens JSON file). Do not copy this file into the app.
 
 Icons: export SVGs to `assets/icons/` separately.
 
 ## Goal
 
-Rerunnable `bun run tokens:sync` that fetches the intake GitHub tokens repo and writes Uniwind files under `src/theme/tokens/generated/`. Normalize plugin exports inside the script — do not invent an intermediate `raw/` layer.
+Rerunnable `bun run tokens:sync` that loads the intake tokens source (clone a GitHub repo **or** read a local JSON file) and writes Uniwind files under `src/theme/tokens/generated/`. Normalize plugin exports inside the script — do not invent an intermediate `raw/` layer.
 
 ## Appearance vs color schemes (critical)
 
@@ -21,7 +21,7 @@ These are **different axes**. Do not conflate them.
 
 ### Auto-detect from the export (no intake questions)
 
-Classify **Color Tokens** (or equivalent) collection modes during Phase B review. **Do not ask** appearance/scheme fields at intake — only the tokens GitHub URL.
+Classify **Color Tokens** (or equivalent) collection modes during Phase B review. **Do not ask** appearance/scheme fields at intake — only the tokens source (GitHub URL or local JSON path).
 
 | Mode name (case-insensitive) | Treat as |
 |------------------------------|----------|
@@ -54,16 +54,16 @@ Register product schemes as Uniwind `extraThemes`. Emit `@variant light` / `@var
 
 Wire `colorScheme` in `preferences-store` **separately** from `themePreference`. Appearance panel only when `light-and-dark`; color scheme panel only when ≥2 schemes.
 
-## 1 — Review tokens repo
+## 1 — Review tokens source
 
-Shallow-clone / `gh` the intake URL. Inventory export layout (Tokens Studio, Variables JSON, Style Dictionary, etc.). Run the auto-detect table above. Note size/typography breakpoint modes (sm / md / lg+) separately. Skip Phases / feature-flag collections.
+**GitHub URL:** shallow-clone / `gh` the intake URL. **Local JSON:** open the file (and sibling exports in the same folder if present). Inventory export layout (Tokens Studio, Variables JSON, Style Dictionary, etc.). Run the auto-detect table above. Note size/typography breakpoint modes (sm / md / lg+) separately. Skip Phases / feature-flag collections.
 
 ## 2 — Implement `scripts/sync-design-tokens.mjs`
 
 | Requirement | Detail |
 |-------------|--------|
-| Source | Pin intake GitHub URL (constant or `TOKENS_GITHUB_URL`) |
-| Fetch | Clone/pull each run (cache under `.tokens-cache/`, gitignored) |
+| Source | Pin intake source as `TOKENS_SOURCE` (or `TOKENS_GITHUB_URL` for repos) — GitHub URL **or** absolute/relative path to a `.json` file |
+| Fetch | GitHub: clone/pull each run (cache under `.tokens-cache/`, gitignored). Local: resolve path and read the JSON (no clone) |
 | Output | Overwrite `generated/*` per contract below |
 | Headers | `AUTO-GENERATED — do not edit. Run: bun run tokens:sync` |
 | Storybook | Update `token-definitions.ts` when present |

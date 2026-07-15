@@ -84,7 +84,7 @@ Bootstrap agent — fill placeholders then delete this comment block:
 {{API}}          — GraphQL (subscriptions on|off) | REST (axios) | none
 {{STORYBOOK}}    — on | off
 {{EAS}}          — on (owner: …) | off
-{{TOKENS}}       — stub tokens | GitHub sync via `tokens:sync` (URL) · appearance: light-only|light-and-dark · schemes: …
+{{TOKENS}}       — stub tokens | sync via `tokens:sync` (GitHub URL or local JSON path) · appearance: light-only|light-and-dark · schemes: …
 {{NAVIGATION}}   — e.g. Tabs + Intro · Drawer off · Auth off
 {{PERMISSIONS}}  — none | comma-separated list from intake
 {{ENV_SECTION}}  — GraphQL or REST `.env` block when API on; otherwise omit

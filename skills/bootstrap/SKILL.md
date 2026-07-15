@@ -57,7 +57,7 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 | Setup EAS | Yes | off — A2 + cloud sim build in C2 when on |
 | Expo account owner | When EAS on | `hubspire` → `expo.owner` |
 | Sync design tokens | Yes | off — see notes |
-| Design tokens GitHub URL | When sync on | Required |
+| Design tokens source | When sync on | Required — GitHub URL **or** local path to a design-tokens JSON file |
 | Add-on toggles | Yes | i18n · Storybook — `allow_multiple`, both on |
 | API client | Yes | GraphQL · REST · none (exclusive) |
 | GraphQL subscriptions | When GraphQL | off |
@@ -68,7 +68,7 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 
 Assembly: [navigation](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md) · [permissions](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/utils/permissions/README.md).
 
-**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; Phase B auto-detects appearance vs color schemes from Figma mode names ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — exact `light`/`dark` → appearance; other modes (e.g. Default / Rider Tools) → product schemes under light-only. **Never** map arbitrary modes to dark. Pin `colorTokens.light`/`dark` from a named Default scheme when present; **if no Default, ask the user during scaffolding** which schemes back light and dark, then pin `APPEARANCE_SCHEME_MAP` (script does not prompt). Ask also if mode names are ambiguous.
+**Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; pin intake **Design tokens source** (GitHub URL or local JSON path). Phase B auto-detects appearance vs color schemes from Figma mode names ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — exact `light`/`dark` → appearance; other modes (e.g. Default / Rider Tools) → product schemes under light-only. **Never** map arbitrary modes to dark. Pin `colorTokens.light`/`dark` from a named Default scheme when present; **if no Default, ask the user during scaffolding** which schemes back light and dark, then pin `APPEARANCE_SCHEME_MAP` (script does not prompt). Ask also if mode names are ambiguous.
 
 **API wiring:** GraphQL → Apollo + Rick and Morty `.env` + `expo-secure-store`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
 
@@ -97,7 +97,7 @@ Record wall-clock per phase / notable sub-step (approximate OK).
 
 Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md). Do not duplicate long steps here.
 
-- **IMPORTANT — No prior-session reuse:** Implement Phase A/B/C from this skill + current templates + the live tokens repo only. **Never** copy, reconstruct, or “port” files from previous chats, agent transcripts, sibling app folders, or an earlier bootstrap of the same name. That habit causes stale scripts, wrong tests, and hard-to-debug drift. Fresh work each run.
+- **IMPORTANT — No prior-session reuse:** Implement Phase A/B/C from this skill + current templates + the live tokens source only. **Never** copy, reconstruct, or “port” files from previous chats, agent transcripts, sibling app folders, or an earlier bootstrap of the same name. That habit causes stale scripts, wrong tests, and hard-to-debug drift. Fresh work each run.
 - `bunx create-expo-app@latest --template default` — never hand-roll `package.json`
 - Expo/SDK: `bunx expo install` (no `@latest`). Else: `bun add …@latest`. **Exception:** pin `jest` / `@types/jest` from `jest-expo`'s `babel-jest` — never `jest@latest`. Never copy version pins from templates
 - Never `--verbose` on `bunx expo install`. Prefer `bun install --verbose` for exit-0. Verbose `bun add` can dump registry `Authorization` — kill and retry without `--verbose`; never paste auth into chat/report
@@ -131,7 +131,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 
 ## Completion summary
 
-Path, remote, commit SHA, EAS on/off (+ owner / project ID / build ID), add-ons, API client, nav toggles, permissions (if any), token sync (+ URL), iOS/Android smoke, token gate, device verification (or skipped). Then **Run report** below (include **Design token import gaps** when sync on).
+Path, remote, commit SHA, EAS on/off (+ owner / project ID / build ID), add-ons, API client, nav toggles, permissions (if any), token sync (+ GitHub URL or local JSON path), iOS/Android smoke, token gate, device verification (or skipped). Then **Run report** below (include **Design token import gaps** when sync on).
 
 ## Run report (Phase R — mandatory)
 
@@ -169,7 +169,7 @@ If none: say “None.”
 
 Omit this section entirely when token sync is off.
 
-Summarize Phase B coverage vs the tokens repo source. Call out anything not imported, partially resolved, or left for follow-up — do not claim full coverage if gaps remain.
+Summarize Phase B coverage vs the tokens source. Call out anything not imported, partially resolved, or left for follow-up — do not claim full coverage if gaps remain.
 
 | Area | Source → generated | Gaps / notes |
 |------|-------------------|--------------|
