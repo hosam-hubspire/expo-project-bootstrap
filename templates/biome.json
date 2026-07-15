@@ -60,9 +60,6 @@
             "skip": ["ThemedText"]
           }
         }
-      },
-      "style": {
-        "useFilenamingConvention": "off"
       }
     }
   },
