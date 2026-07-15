@@ -2,7 +2,7 @@
 /* Stub typography primitives as Uniwind/Tailwind @theme tokens
  * --text-size-*  → text-size-*
  * --leading-*    → leading-*
- * --font-Regular|Medium|Bold → RN weight faces (src/theme/fonts.ts)
+ * --font-Regular|Medium|Bold → RN weight faces (load via expoFontSourceMap in typography.ts)
  */
 
 @theme {

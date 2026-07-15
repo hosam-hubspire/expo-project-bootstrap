@@ -10,6 +10,26 @@ import {
 } from "@/theme/tokens/generated/typography-primitives";
 
 /**
+ * Custom font files for `expo-font` / `useFonts` (root `IconFontLoader` + Storybook).
+ *
+ * Keys **Regular**, **Medium**, and **Bold** must match Uniwind `@theme` `--font-*`
+ * utilities (`font-Regular`, …) in `typography-primitives.css`. In React Native,
+ * weight must be a separate loaded face — `font-normal` / `font-bold` do not switch
+ * custom fonts.
+ *
+ * Phase B: point values at brand `.ttf`s (or Expo Google Font modules) and keep keys
+ * stable. When present, `--font-*` values should equal the native names expo-font
+ * registers (usually these same keys).
+ */
+export const expoFontSourceMap = {
+  // Regular: require("../../assets/fonts/Brand-Regular.ttf"),
+  // Medium: require("../../assets/fonts/Brand-Medium.ttf"),
+  // Bold: require("../../assets/fonts/Brand-Bold.ttf"),
+} as const;
+
+export type ExpoFontFace = keyof typeof expoFontSourceMap;
+
+/**
  * Merges typography + ad hoc classNames so custom `text-size-*`, `leading-*`, and
  * `font-Regular|Medium|Bold` replace earlier conflicting utilities.
  */

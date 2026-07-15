@@ -24,9 +24,3 @@ export const typographyFontFaces = {
   Medium: "System",
   Bold: "System",
 } as const;
-
-export const typographyPrimitives = {
-  fontSizes: typographyFontSizes,
-  lineHeights: typographyLineHeights,
-  fontFaces: typographyFontFaces,
-} as const;

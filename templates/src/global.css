@@ -8,7 +8,6 @@
 @import "./theme/tokens/generated/spacing.css";
 @import "./theme/tokens/generated/primitives.css";
 @import "./theme/tokens/generated/typography-primitives.css";
-@import "./theme/tokens/generated/font-families.css";
 @import "./theme/tokens/generated/theme.css";
 
 @theme {

@@ -4,14 +4,14 @@
  * When token sync is on: bun run tokens:sync
  */
 
-export type { UniwindFontFace } from "@/theme/fonts";
-export { expoFontSourceMap, uniwindFontFamilies } from "@/theme/fonts";
 export type { ColorTokenName } from "@/theme/tokens/generated/colors";
 export type { TypographyTokenName } from "@/theme/tokens/generated/typography-classes";
+export type { ExpoFontFace } from "@/theme/typography";
 export {
   accentColorClassName,
   bgClassName,
   colorClassName,
+  expoFontSourceMap,
   isLinkVariant,
   mergeTypographyClassName,
   typographyClassName,

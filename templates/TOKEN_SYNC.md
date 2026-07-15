@@ -85,9 +85,8 @@ Match `templates/src/theme/tokens/generated/` **shape intent**; Phase B replaces
 | `metro.config.js` | `tokens:sync` patches `extraThemes: […]` under `withUniwindConfig` (no sidecar JSON). **Idempotent:** if the array already matches the detected scheme slugs, leave the file untouched (do not throw). Only throw when `extraThemes` is missing from the config. |
 | `spacing.css` | Size → `@theme` (+ sm / md / lg+ overrides) |
 | `typography-primitives.css` | **`@theme`** typography primitives: `--text-size-*` → `text-size-*`; `--leading-*` → `leading-*` (unitless); `--font-Regular\|Medium\|Bold` → weight faces (see Typography below) |
-| `typography-primitives.ts` | TS mirrors of size / leading / font-face maps for Storybook |
-| `font-families.css` | Stable import path only — weight faces live in `typography-primitives.css`; load files via `src/theme/fonts.ts` |
-| `typography-classes.ts` | Composite class strings: `text-size-*` + `leading-*` + `font-Regular\|Medium\|Bold` (**not** hardcoded `text-[16px]` / `leading-[21px]` / `font-normal`) |
+| `typography-primitives.ts` | TS mirrors of size / leading / font-face maps for Storybook + `tailwind-merge` |
+| `typography-classes.ts` | Composite class strings: `text-size-*` + `leading-*` + `font-Regular\|Medium\|Bold` (**not** hardcoded `text-[Npx]` / `leading-[Npx]` / `font-normal`) |
 | `primitives.css` | Color + size primitive CSS vars (inventory; semantic UI uses scheme colors + spacing `@theme`) |
 
 **Preferred `colors.ts` shape (multi-scheme):**
@@ -166,19 +165,19 @@ Compose from declared primitives (same idea as a Tailwind `theme.extend` + `getT
 
 **RN weight faces (critical):** React Native ignores CSS `font-weight` on custom fonts. Map Figma weights to separate loaded families:
 
-| Figma weight | Uniwind class | `src/theme/fonts.ts` |
-|--------------|---------------|----------------------|
-| Regular (and thin/light fallbacks) | `font-Regular` | `expoFontSourceMap.Regular` + `uniwindFontFamilies.Regular` |
+| Figma weight | Uniwind class | App load + CSS |
+|--------------|---------------|----------------|
+| Regular (and thin/light fallbacks) | `font-Regular` | `expoFontSourceMap.Regular` + `--font-Regular` in `typography-primitives.css` |
 | Medium | `font-Medium` | `…Medium` |
 | Bold | `font-Bold` | `…Bold` |
 
 - Emit **one** face class per style (`font-Bold`), never `font-bold` + `font-sans`.
 - `IconFontLoader` / root loader: `useFonts({ ...expoFontSourceMap })`.
-- `--font-*` values must equal the **native names** expo-font registers (usually the map keys).
+- `--font-*` values must equal the **native names** expo-font registers (usually the map keys when custom files are loaded).
 - Phase B: install/load the brand `.ttf`s (or Google font packages) and keep keys `Regular` / `Medium` / `Bold` stable when swapping files.
 - **Mono / second family:** only add extra faces (e.g. `MonoRegular`) when the design system needs a separate loaded mono stack. Do not invent mono faces by default — map monospaced composites to the same Regular/Medium/Bold faces unless intake fonts include a dedicated mono.
 
-Keep `src/theme/fonts.ts` as the hand-maintained source of truth for loadable faces; sync emits matching `--font-*` theme keys.
+Keep `expoFontSourceMap` in `src/theme/typography.ts` as the hand-maintained **load map**. Sync emits `--font-*` / `typographyFontFaces` in `typography-primitives.*` — do not maintain a separate `fonts.ts` or empty `font-families.css` import.
 
 **Class overrides:** `ThemedText` (and any variant + `className` composition) must use `tailwind-merge` via `mergeTypographyClassName` / `typographyTwMerge` in `src/theme/typography.ts`, with `extendTailwindMerge` class groups for custom `text-size-*`, `leading-*`, and `font-Regular|Medium|Bold` (keys from generated `typography-primitives`). Do not string-join conflicting utilities — later overrides would not win reliably.
 
