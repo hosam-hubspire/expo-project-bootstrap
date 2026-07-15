@@ -19,7 +19,7 @@ Use [`optional/rest`](../rest/README.md) — do not only strip GraphQL and leave
 
 ## Omit Storybook
 
-- Minimal `metro.config.js`; remove Storybook gate from `_layout`; delete `.rnstorybook/`, `src/stories/`, `*.stories.tsx`; skip Storybook deps/scripts
+- Point `"main"` back to `expo-router/entry` (or omit root `index.js`); minimal `metro.config.js`; delete `.rnstorybook/`, `src/stories/`, `*.stories.tsx`; skip Storybook deps/scripts
 
 ## Combinations
 

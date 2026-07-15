@@ -12,16 +12,9 @@ import { IconFontLoader } from "@/components/IconFontLoader";
 import { SplashScreenController } from "@/components/SplashScreenController";
 import { AppApolloProvider } from "@/providers/apollo-provider";
 import { usePreferencesStore } from "@/stores/preferences-store";
-import StorybookUIRoot from "../../.rnstorybook";
-
-const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === "true";
 
 export default function RootLayout() {
   const { theme } = useUniwind();
-
-  if (isStorybookEnabled) {
-    return <StorybookUIRoot />;
-  }
 
   return (
     <GestureHandlerRootView className="flex-1">

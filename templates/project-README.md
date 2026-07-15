@@ -72,7 +72,7 @@ assets/icons/    # SVG → nano-icons (prebuild)
 
 - **Native only** — no web target.
 - Prefer `Screen` + `useSafeAreaInsets()` over `SafeAreaView`.
-- Bottom sheets (`BottomSheet` / `ModalBottomSheet`) need a native build — not Expo Go.
+- Bottom sheets (`BottomSheet` / `ModalBottomSheet`) and MMKV need a native build — not Expo Go. Storybook uses root `index.js` to skip those modules and can run in Expo Go (`bun run storybook`).
 - Customize iOS permission copy in `app.json` plugins before shipping (when permissions are enabled).
 - Replace this README’s product blurb as the app takes shape.
 

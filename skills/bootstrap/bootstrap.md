@@ -10,7 +10,7 @@
 1. **Create app** — `bunx create-expo-app@latest <APP_NAME> --template default` (or `CI=true … .` in existing repo). Set `name`/`slug`/`scheme` in `app.json`. No `move_agent_to_root`.
 2. **Remove cruft** — demo routes, stock helpers, non-Bun lockfiles, web leftovers (`*.web.*`, `web` script/config, favicon / tutorial-web). Move `app/` → `src/app/` or add `@/` only if missing. Native only. Strip agent-assembly comments from source.
 3. **Install** — grouped commands in templates README; skip unchecked groups. Expo: `bunx expo install`. Non-Expo: `bun add …@latest` (except jest — derive from `jest-expo`). Never copy version pins. `bun install --verbose` must exit **0**.
-4. **Apply templates** — merge (don’t bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. `eas.json` only when EAS on. Strip unchecked — [optional/minimal](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/minimal/README.md).
+4. **Apply templates** — merge (don’t bulk-copy) `package.json`, `app.json`, `tsconfig.json`, `metro.config.js`, lint/CI, `src/`, `assets/`. When Storybook on: root `index.js` as `"main"` (Storybook Expo Go entry). `eas.json` only when EAS on. Strip unchecked — [optional/minimal](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/minimal/README.md).
    - **Tokens off:** stub `generated/` only; no token scripts
    - **Tokens on:** `scripts/sync-design-tokens.mjs` + stub `generated/` + `tokens:sync`; Phase B fills transform
    - **Tabs on:** Expo Router JS `Tabs` + nano icons from `assets/icons/*.svg`

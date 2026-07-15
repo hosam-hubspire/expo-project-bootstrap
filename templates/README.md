@@ -6,7 +6,7 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 
 1. Merge — don’t bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. Install (below) — skip unchecked groups. Expo: `bunx expo install`. Else: `bun add …@latest`. Never copy version pins.
-3. Add: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`. `eas.json` only when EAS on.
+3. Add: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`, and (when Storybook on) root `index.js` as `"main"` so Storybook bypasses expo-router / native-only app modules in Expo Go. `eas.json` only when EAS on.
 4. **Tokens** — sync **on:** copy `scripts/sync-design-tokens.mjs`, pin GitHub URL, add `tokens:sync`, stub `generated/`. Sync **off:** stub `generated/` only; no `tokens:*`. See [`TOKEN_SYNC.md`](./TOKEN_SYNC.md). Stubs may use Uniwind `@variant light` / `dark` for the default scaffold’s **appearance** demo — that is **not** a map of Figma collection modes. Phase B replaces stubs using intake **appearance** + **color schemes**.
 
 ### Appearance vs color schemes
@@ -141,7 +141,7 @@ After Phase B fonts: wire `src/theme/fonts.ts` (`expoFontSourceMap` + `uniwindFo
 | `test` / `test:watch` | always — **`bun run test`**, never bare `bun test` (Bun’s runner ≠ Jest) |
 | `tokens:sync` | token sync on — `"tokens:sync": "node scripts/sync-design-tokens.mjs"` |
 | `graphql:generate` | GraphQL on |
-| `storybook` / `storybook-generate` | Storybook on |
+| `storybook` / `storybook-generate` | Storybook on — `"storybook": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --go"`; root `index.js` as `"main"` so Expo Go never loads MMKV / bottom sheet / app routes |
 
 ## Icons
 
