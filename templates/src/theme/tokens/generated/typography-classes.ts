@@ -1,14 +1,18 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
-/** Responsive typography classNames — mobile-first lg: at 1024px (Uniwind) */
+/**
+ * Stub: tokenized typography — text-size-* + leading-* + font-Regular|Medium|Bold.
+ * Phase B replaces with Figma keys; never emit hardcoded text-[Npx] / font-normal.
+ */
 
 export const typographyClassNames = {
-  "global-body-base": "text-[16px] leading-[21px] font-normal font-[family-name:var(--font-family-system)] lg:text-[18px] lg:leading-[23px]",
-  "global-body-small": "text-[14px] leading-[18px] font-normal font-[family-name:var(--font-family-system)] lg:text-[16px] lg:leading-[21px]",
-  "global-body-small-bold": "text-[14px] leading-[18px] font-medium font-[family-name:var(--font-family-system)] lg:text-[16px] lg:leading-[21px]",
-  "global-body-xxs": "text-[10px] leading-[13px] font-normal font-[family-name:var(--font-family-system)] lg:text-[12px] lg:leading-[16px]",
-  "global-body-xxs-bold": "text-[10px] leading-[13px] font-medium font-[family-name:var(--font-family-system)] lg:text-[12px] lg:leading-[16px]",
-  "global-underlined-links-base-link": "text-[16px] leading-[21px] font-bold font-[family-name:var(--font-family-system)] underline lg:text-[18px] lg:leading-[23px]",
-  "heading-app-section": "text-[20px] leading-[26px] font-bold font-[family-name:var(--font-family-system)] lg:text-[24px] lg:leading-[31px]"
+  "global-body-base": "text-size-400 leading-md font-Regular lg:text-size-450",
+  "global-body-small": "text-size-350 leading-md font-Regular lg:text-size-400",
+  "global-body-small-bold": "text-size-350 leading-md font-Medium lg:text-size-400",
+  "global-body-xxs": "text-size-250 leading-md font-Regular lg:text-size-300",
+  "global-body-xxs-bold": "text-size-250 leading-md font-Medium lg:text-size-300",
+  "global-underlined-links-base-link":
+    "text-size-400 leading-md font-Bold lg:text-size-450 underline",
+  "heading-app-section": "text-size-500 leading-md font-Bold lg:text-size-600",
 } as const;
 
 export type TypographyTokenName = keyof typeof typographyClassNames;

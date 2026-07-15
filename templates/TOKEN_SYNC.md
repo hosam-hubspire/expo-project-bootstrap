@@ -84,9 +84,11 @@ Match `templates/src/theme/tokens/generated/` **shape intent**; Phase B replaces
 | `colors.ts` | `colorSchemes` (scheme-keyed) + first-class `colorTokens.light`/`dark` (pinned scheme sources); keep `ColorTokenName` as the semantic token key union |
 | `metro.config.js` | `tokens:sync` patches `extraThemes: […]` under `withUniwindConfig` (no sidecar JSON). **Idempotent:** if the array already matches the detected scheme slugs, leave the file untouched (do not throw). Only throw when `extraThemes` is missing from the config. |
 | `spacing.css` | Size → `@theme` (+ sm / md / lg+ overrides) |
-| `font-families.css` | `--font-family-*` |
-| `typography-classes.ts` | Uniwind className strings |
-| `typography-primitives.*` / `primitives.css` | Color + size + type primitives |
+| `typography-primitives.css` | **`@theme`** typography primitives: `--text-size-*` → `text-size-*`; `--leading-*` → `leading-*` (unitless); `--font-Regular\|Medium\|Bold` → weight faces (see Typography below) |
+| `typography-primitives.ts` | TS mirrors of size / leading / font-face maps for Storybook |
+| `font-families.css` | Stable import path only — weight faces live in `typography-primitives.css`; load files via `src/theme/fonts.ts` |
+| `typography-classes.ts` | Composite class strings: `text-size-*` + `leading-*` + `font-Regular\|Medium\|Bold` (**not** hardcoded `text-[16px]` / `leading-[21px]` / `font-normal`) |
+| `primitives.css` | Color + size primitive CSS vars (inventory; semantic UI uses scheme colors + spacing `@theme`) |
 
 **Preferred `colors.ts` shape (multi-scheme):**
 
@@ -139,9 +141,44 @@ Keep `@/theme` import paths. Prefer CSS-safe names. Match stub file names under 
 | Appearance | From exact `light`/`dark` modes only; else light-only. |
 | Size tokens | `--spacing-*`, `--radius-*`, `--border-width-*` (strokes), padding as spacing keys if needed, `--responsive-*`. |
 | Size modes | Mobile-first: **sm** base; **md** `@media (min-width: 768px)`; **lg+** `1024px` (match `global.css` breakpoints). |
-| Typography | All composite styles for sm/md + lg+. **Do not** emit scaffold aliases (e.g. `heading-app-section`). Rename app / Storybook `variant` strings to the generated Figma token names (e.g. `heading-rider-tools-section`). |
-| Primitives | Emit color **and** size primitives. |
+| Typography | All composite styles for sm/md + lg+. Emit **tokenized** classes only — see **Typography (Uniwind)** below. **Do not** emit scaffold aliases (e.g. `heading-app-section`). Rename app / Storybook `variant` strings to the generated Figma token names (e.g. `heading-rider-tools-section`). |
+| Primitives | Emit color **and** size primitives. Register typography size / leading / weight faces in `@theme`. |
 | Skip | Feature-flag collections (Phases, etc.). |
+
+### Typography (Uniwind) — required shape
+
+Compose from declared primitives (same idea as a Tailwind `theme.extend` + `getTextVariantTailwindClassName` map). **Do not** bake pixel sizes or line-heights into class strings.
+
+```ts
+// typography-classes.ts — good
+"global-body-base": "text-size-400 leading-md font-Regular lg:text-size-450",
+"global-body-small-bold": "text-size-350 leading-md font-Medium lg:text-size-400",
+
+// bad — hardcodes px / CSS font-weight (broken for custom fonts on RN)
+"global-body-base": "text-[16px] leading-[19px] font-normal font-sans",
+```
+
+| Piece | `@theme` token | Utility | Source |
+|-------|----------------|---------|--------|
+| Font size | `--text-size-400: 16px` | `text-size-400` | Typography size primitives (`size.size-400`) |
+| Line height | `--leading-md: 1.2` | `leading-md` | Leading primitives (unitless). Default `md` when composites omit line-height — do not invent per-style leading maps unless Figma exports them |
+| Weight face | `--font-Regular: "Regular"` | `font-Regular` | **RN weight faces** — see below |
+
+**RN weight faces (critical):** React Native ignores CSS `font-weight` on custom fonts. Map Figma weights to separate loaded families:
+
+| Figma weight | Uniwind class | `src/theme/fonts.ts` |
+|--------------|---------------|----------------------|
+| Regular (and thin/light fallbacks) | `font-Regular` | `expoFontSourceMap.Regular` + `uniwindFontFamilies.Regular` |
+| Medium | `font-Medium` | `…Medium` |
+| Bold | `font-Bold` | `…Bold` |
+
+- Emit **one** face class per style (`font-Bold`), never `font-bold` + `font-sans`.
+- `IconFontLoader` / root loader: `useFonts({ ...expoFontSourceMap })`.
+- `--font-*` values must equal the **native names** expo-font registers (usually the map keys).
+- Phase B: install/load the brand `.ttf`s (or Google font packages) and keep keys `Regular` / `Medium` / `Bold` stable when swapping files.
+- **Mono / second family:** only add extra faces (e.g. `MonoRegular`) when the design system needs a separate loaded mono stack. Do not invent mono faces by default — map monospaced composites to the same Regular/Medium/Bold faces unless intake fonts include a dedicated mono.
+
+Keep `src/theme/fonts.ts` as the hand-maintained source of truth for loadable faces; sync emits matching `--font-*` theme keys.
 
 ### Coverage gate
 

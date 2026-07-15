@@ -109,6 +109,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Keep `src/constants/session.ts` when GraphQL or REST is on (SecureStore for API auth), even if Auth nav is off. Auth on → also `SessionProvider` / `sign-in` / etc.
 - Providers: GraphQL + auth → `SessionProvider` **inside** `AppApolloProvider`. REST/none + auth → `SessionProvider` only
 - Token scripts / `tokens:sync` only when sync on; else stub `generated/` only. Phase B: follow [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) — **auto-detect** appearance vs schemes from mode names (no intake); never map product schemes to dark; scheme-keyed colors + coverage gate; alias resolve incl. semantic→semantic; hex+rgba; size modes sm/md/lg+
+- Typography Phase B: emit `text-size-*` + `leading-*` + `font-Regular|Medium|Bold` from `@theme` primitives — **never** hardcoded `text-[Npx]` / `leading-[Npx]` / `font-normal|bold`. RN custom fonts need weight faces via `src/theme/fonts.ts` `expoFontSourceMap` (see TOKEN_SYNC **Typography (Uniwind)**). Do not invent mono faces unless the tokens repo needs a separate mono stack
 - **Drawer / Expo SDK 56+ (hard stop at install):** When Drawer is on, install **only** `react-native-gesture-handler` · `react-native-reanimated` · `react-native-worklets` via `bunx expo install`. **Never** `bun add` / `expo install` `@react-navigation/drawer` — it breaks Expo Router drawer on SDK 56+. App code imports `Drawer` from `expo-router/drawer` only; never `@react-navigation/*`. A missing peer `require.resolve` for `@react-navigation/drawer` is **not** a reason to install it — ignore and continue. Install matrix: [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md#navigation-when-toggles-on)
 - Uniwind: CSS `src/global.css`; Metro `withUniwindConfig` outermost; `bunx uniwind generate-artifacts …` before Phase C
 - Phase C: `bun run lint && bun run test && bunx tsc --noEmit` — **`bun run test`** for Jest (`"test": "jest"`). Bare `bun test` is Bun’s runner and must not be used
@@ -178,7 +179,7 @@ Summarize Phase B coverage vs the tokens repo source. Call out anything not impo
 | Size tokens (sm/md/lg+) | … | missing strokes/radius/padding/responsive, … |
 | Size primitives | … | … |
 | Typography styles | … | missing composites; scaffold aliases kept/skipped |
-| Typography / font families | … | families not installed or not loaded via `expo-font` |
+| Typography / font families | … | weight faces (`font-Regular`…) not loaded via `expoFontSourceMap`; still using `font-normal`/`font-bold` |
 | Alias resolution | … | unresolved or circular `{…}` refs |
 | Skipped collections | e.g. Phases | intentional skips only |
 | App / Settings wiring | appearance · schemes · `extraThemes` | panel hidden incorrectly, Metro themes missing, … |

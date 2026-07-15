@@ -1,5 +1,24 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
-/* Typography primitives (static) */
+/* Stub typography primitives as Uniwind/Tailwind @theme tokens
+ * --text-size-*  → text-size-*
+ * --leading-*    → leading-*
+ * --font-Regular|Medium|Bold → RN weight faces (src/theme/fonts.ts)
+ */
 
-:root {
+@theme {
+  --text-size-250: 10px;
+  --text-size-300: 12px;
+  --text-size-350: 14px;
+  --text-size-400: 16px;
+  --text-size-450: 18px;
+  --text-size-500: 20px;
+  --text-size-600: 24px;
+  --leading-xs: 1;
+  --leading-sm: 1.1;
+  --leading-md: 1.2;
+  --leading-lg: 1.3;
+  --leading-xl: 1.4;
+  --font-Regular: "System";
+  --font-Medium: "System";
+  --font-Bold: "System";
 }

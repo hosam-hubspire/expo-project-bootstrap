@@ -1,6 +1,4 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
-/* Figma font families → CSS variables for typography classes */
-
-:root {
-  --font-family-system: "System", system-ui, sans-serif;
-}
+/* Weight faces registered in typography-primitives.css (@theme --font-Regular|Medium|Bold).
+ * Load files via src/theme/fonts.ts → IconFontLoader. Kept for stable global.css imports.
+ */

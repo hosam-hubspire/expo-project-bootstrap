@@ -131,7 +131,7 @@ GraphQL: `EXPO_PUBLIC_GRAPHQL_URL=https://rickandmortyapi.com/graphql`
 REST: `EXPO_PUBLIC_API_URL=https://jsonplaceholder.typicode.com`  
 Subscriptions: `EXPO_PUBLIC_GRAPHQL_SUBSCRIPTIONS_ENABLED=true` (+ optional `EXPO_PUBLIC_GRAPHQL_WS_URL`).
 
-After Phase B fonts: install packages matching exported families; load via `expo-font`.
+After Phase B fonts: wire `src/theme/fonts.ts` (`expoFontSourceMap` + `uniwindFontFamilies` for `Regular` / `Medium` / `Bold`), install packages or add `.ttf`s, load via `useFonts` in `IconFontLoader`. Typography classes use `font-Regular` etc. — not `font-normal` / `font-bold`.
 
 ## Scripts
 

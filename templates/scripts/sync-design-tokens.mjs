@@ -111,8 +111,9 @@ function fetchTokensRepo() {
  * AGENT (Phase B): parse plugin exports under `sourceDir` and write Uniwind files to OUT_DIR.
  *
  * Must produce the same file set / shapes as template stubs in src/theme/tokens/generated/
- * (theme.css, colors.ts, spacing.css, font-families.css, typography-classes.ts, …).
- * See templates/TOKEN_SYNC.md.
+ * (theme.css, colors.ts, spacing.css, typography-primitives.*, typography-classes.ts, …).
+ * Typography: text-size-* + leading-* + font-Regular|Medium|Bold — see templates/TOKEN_SYNC.md
+ * “Typography (Uniwind)”. Call patchMetroExtraThemes(schemeSlugs) when multi-scheme.
  *
  * @param {string} sourceDir
  */
