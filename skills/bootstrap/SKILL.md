@@ -84,9 +84,9 @@ Then [bootstrap.md](bootstrap.md).
 - [ ] 0 — Intake
 - [ ] A — Scaffold (deps, templates, nav, uniwind types, bun install 0, project README)
 - [ ] A2 — EAS (if enabled)
-- [ ] C — lint, test, tsc (stub tokens OK)
-- [ ] C2 — Argent smoke (if iOS on; + Android if opted in)
-- [ ] B — Token sync (if enabled) — after C2 when C2 ran, else after C
+- [ ] B — Token sync (if enabled) — after A2, before C
+- [ ] C — lint, test, tsc — once, after B when sync on (stubs OK when sync off)
+- [ ] C2 — Argent smoke (if iOS on; + Android if opted in) — after C; after B when sync on
 - [ ] D — Commit (+ push if repo) — project README already replaces stock
 - [ ] R — Run report (always, agent chat message)
 ```
@@ -121,7 +121,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Core bottom sheet always: `@swmansion/react-native-bottom-sheet` via `bun add …@latest`; wrap root in `BottomSheetProvider` (inside `KeyboardProvider`); Fabric native — not Expo Go; Settings always mounts `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim/keyboard/a11y). Use `StyleSheet.absoluteFill` (not `absoluteFillObject` — removed in RN 0.86+)
 - Native only (iOS/Android): strip web leftovers; prefer `Screen` + insets over `SafeAreaView`
 - Argent init in A **only** when any smoke on
-- Commit gate: C2 must pass when smokes on; B complete when sync on; when smokes off, C (+ B if sync) then ask before D
+- Commit gate: B complete when sync on; C then C2 when smokes on; when smokes off, B (if sync) → C then ask before D
 - Project README: fill [project-README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/project-README.md) before D
 - Phase D push: if HTTPS rejects `.github/workflows/*` (missing usable `workflow` scope on the git credential), push without the workflow file then add it via `gh api` Contents — or use SSH with a key that can write workflows. Restore local tree to match remote before finish
 - Phase R always: run report as **agent chat message** (not a file); redact secrets
@@ -152,9 +152,9 @@ Post in chat after the session — **do not** write `BOOTSTRAP_REPORT.md`.
 | A dependency installs | … | |
 | A biome / uniwind / README | … | |
 | A2 EAS | … or skipped | |
+| B token sync | … or skipped | |
 | C lint / test / tsc | … | |
 | C2 Argent smoke | … or skipped | |
-| B token sync | … or skipped | |
 | D commit / push | … or skipped / deferred | |
 
 ## What went wrong or sideways

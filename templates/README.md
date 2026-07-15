@@ -24,7 +24,7 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 9. **Uniwind** — `bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts`. CSS entry `src/global.css`; `withUniwindConfig` outermost.
 10. **Argent** — only when any smoke on: `bunx @swmansion/argent init -y`, then `lint:fix`. Skip when both smokes off.
 11. **EAS** — when on: merge `eas.json`, `expo.owner`, `expo-dev-client`, `eas init` (skill Phase A2).
-12. **Tokens Phase B** — when sync on, after C2 (or C): [`TOKEN_SYNC.md`](./TOKEN_SYNC.md).
+12. **Tokens Phase B** — when sync on, after A2/A and before C: [`TOKEN_SYNC.md`](./TOKEN_SYNC.md).
 13. **Project README** — fill [`project-README.md`](./project-README.md) before Phase D.
 
 **`.gitignore` merge** (append): `.env`, `src/uniwind-types.d.ts`, `.test-screenshots/`, `coverage/`, and `.tokens-cache/` when sync on.

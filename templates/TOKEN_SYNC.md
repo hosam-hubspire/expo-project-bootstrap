@@ -1,6 +1,6 @@
 # Design token sync — Phase B
 
-When intake **Sync design tokens** is on — after C2 (or after C if smokes off), before D. Needs **Design tokens GitHub URL**. Do not copy this file into the app.
+When intake **Sync design tokens** is on — after A2 (or A when EAS off), before C. Needs **Design tokens GitHub URL**. Do not copy this file into the app.
 
 Icons: export SVGs to `assets/icons/` separately.
 
@@ -151,15 +151,14 @@ Carry the same inventory into the Phase R run report **Design token import gaps*
 
 Example Tokens Studio bundle: top-level `files[]` with `collectionName`, `modeName`, `tokens`; aliases like `{neutrals.black-20}` and `{text.text-link-hover}`. Modes such as `Default` / `Rider Tools` are **schemes** (auto light-only); exact `light`/`dark` would be appearance.
 
-## 3 — Run & verify
+## 3 — Run & hand off to Phase C
 
 ```bash
 bun run tokens:sync
 # Include detected scheme slugs as --theme extras when regenerating types:
 bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts --theme <scheme>…
-bun run lint && bun test && bunx tsc --noEmit
 ```
 
-Fix the script — do not one-off edit `generated/*`. After fonts change: install packages matching exported families; load via `expo-font` ([templates/README.md](./README.md)).
+Then Phase C (`lint` / `test` / `tsc`) once — do not re-verify inside B. Fix the script — do not one-off edit `generated/*`. After fonts change: install packages matching exported families; load via `expo-font` ([templates/README.md](./README.md)).
 
-**Gate:** real tokens + coverage + correct appearance/scheme wiring from auto-detect + lint/test/tsc before D. If blocked: keep stubs; document; do not mark B complete.
+**Gate:** real tokens + coverage + correct appearance/scheme wiring from auto-detect before C. If blocked: keep stubs; document; do not mark B complete.
