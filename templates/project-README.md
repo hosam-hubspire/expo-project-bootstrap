@@ -51,7 +51,7 @@ bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types
 | `bunx expo run:ios` / `run:android` | Local native build + run |
 | `bun run lint` / `lint:fix` | Biome |
 | `bun run lint:a11y` | ESLint a11y |
-| `bun test` | Jest |
+| `bun run test` | Jest (not bare `bun test` — that is Bun’s runner) |
 | `bunx tsc --noEmit` | Typecheck |
 {{EXTRA_SCRIPTS}}
 

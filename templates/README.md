@@ -138,7 +138,7 @@ After Phase B fonts: install packages matching exported families; load via `expo
 | Script | When |
 |--------|------|
 | `lint` / `lint:fix` / `lint:a11y` | always |
-| `test` / `test:watch` | always |
+| `test` / `test:watch` | always — **`bun run test`**, never bare `bun test` (Bun’s runner ≠ Jest) |
 | `tokens:sync` | token sync on — `"tokens:sync": "node scripts/sync-design-tokens.mjs"` |
 | `graphql:generate` | GraphQL on |
 | `storybook` / `storybook-generate` | Storybook on |

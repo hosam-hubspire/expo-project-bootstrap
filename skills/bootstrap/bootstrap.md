@@ -72,8 +72,10 @@ Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-pro
 ## Verify (Phase C)
 
 ```bash
-bun run lint && bun test && bunx tsc --noEmit
+bun run lint && bun run test && bunx tsc --noEmit
 ```
+
+**Jest:** always `bun run test` (runs the `package.json` `"test": "jest"` script). Bare `bun test` invokes Bun’s built-in test runner and fails on Jest suites — do not use it.
 
 Needs Uniwind types from A step 7 (and from B when sync on). Run **once** — after B when sync on, else after A2/A.
 

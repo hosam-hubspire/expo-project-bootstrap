@@ -82,7 +82,7 @@ Match `templates/src/theme/tokens/generated/` **shape intent**; Phase B replaces
 |------|------|
 | `theme.css` | Semantic `--color-*` under Uniwind variants: appearance `light`/`dark` from exact modes **or** from agent-pinned `APPEARANCE_SCHEME_MAP`; product schemes as `@variant <slug>` |
 | `colors.ts` | `colorSchemes` (scheme-keyed) + first-class `colorTokens.light`/`dark` (pinned scheme sources); keep `ColorTokenName` as the semantic token key union |
-| `metro.config.js` | `tokens:sync` patches `extraThemes: […]` under `withUniwindConfig` (no sidecar JSON) |
+| `metro.config.js` | `tokens:sync` patches `extraThemes: […]` under `withUniwindConfig` (no sidecar JSON). **Idempotent:** if the array already matches the detected scheme slugs, leave the file untouched (do not throw). Only throw when `extraThemes` is missing from the config. |
 | `spacing.css` | Size → `@theme` (+ sm / md / lg+ overrides) |
 | `font-families.css` | `--font-family-*` |
 | `typography-classes.ts` | Uniwind className strings |

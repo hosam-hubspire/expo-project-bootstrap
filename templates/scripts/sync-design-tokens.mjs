@@ -29,6 +29,7 @@ const TOKENS_GITHUB_URL =
   process.env.TOKENS_GITHUB_URL?.trim() || "https://github.com/ORG/design-tokens";
 
 const GENERATED_BANNER = "/* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */";
+const METRO_CONFIG = path.join(ROOT, "metro.config.js");
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
@@ -41,6 +42,34 @@ function writeGenerated(fileName, body) {
   const filePath = path.join(OUT_DIR, fileName);
   fs.writeFileSync(filePath, withBanner.endsWith("\n") ? withBanner : `${withBanner}\n`);
   console.log(`  wrote ${path.relative(ROOT, filePath)}`);
+}
+
+/**
+ * Patch Uniwind `extraThemes` in metro.config.js from detected scheme slugs.
+ * Idempotent: if the array already matches, leave the file untouched (do not throw).
+ * Throw only when `extraThemes: […]` is missing from the config.
+ *
+ * @param {string[]} schemeSlugs
+ */
+function patchMetroExtraThemes(schemeSlugs) {
+  if (!fs.existsSync(METRO_CONFIG)) {
+    console.warn("  warn: metro.config.js missing — skip extraThemes patch");
+    return;
+  }
+  const src = fs.readFileSync(METRO_CONFIG, "utf8");
+  const list = schemeSlugs.map((s) => `"${s}"`).join(", ");
+  if (!/extraThemes:\s*\[/.test(src)) {
+    throw new Error(
+      "Could not patch extraThemes in metro.config.js — expected `extraThemes: […]`.",
+    );
+  }
+  const next = src.replace(/extraThemes:\s*\[[^\]]*\]/, `extraThemes: [${list}]`);
+  if (next === src) {
+    console.log(`  metro extraThemes already set: [${list}]`);
+    return;
+  }
+  fs.writeFileSync(METRO_CONFIG, next);
+  console.log(`  patched metro extraThemes: [${list}]`);
 }
 
 /**
@@ -92,6 +121,7 @@ function transformAndWrite(sourceDir) {
   void writeGenerated;
   void OUT_DIR;
   void os;
+  void patchMetroExtraThemes;
 
   throw new Error(
     "Phase B incomplete: implement transformAndWrite() in scripts/sync-design-tokens.mjs for this tokens repo’s export format.",
