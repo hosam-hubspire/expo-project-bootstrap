@@ -37,7 +37,7 @@ Ask **only** for app name / slug. Pre-fill and confirm if already given.
 | Setup EAS | off |
 | Expo account owner | `hubspire` |
 | Sync design tokens | off (stub `generated/` only) |
-| Stack | i18n, Storybook on |
+| Add-ons | i18n, Storybook on |
 | API client | GraphQL (Apollo) |
 | GraphQL subscriptions | off |
 | Navigation | Tabs on · Drawer off · Intro on · Auth off |
@@ -58,7 +58,7 @@ When defaults: do not re-ask — go to [bootstrap.md](bootstrap.md).
 | Expo account owner | When EAS on | `hubspire` → `expo.owner` |
 | Sync design tokens | Yes | off — see notes |
 | Design tokens GitHub URL | When sync on | Required |
-| Stack toggles | Yes | i18n · Storybook — `allow_multiple`, both on |
+| Add-on toggles | Yes | i18n · Storybook — `allow_multiple`, both on |
 | API client | Yes | GraphQL · REST · none (exclusive) |
 | GraphQL subscriptions | When GraphQL | off |
 | Navigation toggles | Yes | Tabs · Drawer · Intro · Auth — `allow_multiple`; pre-check Tabs + Intro |
@@ -103,7 +103,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Never `--verbose` on `bunx expo install`. Prefer `bun install --verbose` for exit-0. Verbose `bun add` can dump registry `Authorization` — kill and retry without `--verbose`; never paste auth into chat/report
 - No `move_agent_to_root` during bootstrap
 - No agent-assembly comments in shipped source (toggles, “uncomment when…”) — keep instructions in skill/README only
-- Strip unchecked stack — `optional/minimal/`; REST via `optional/rest/`
+- Strip unchecked add-ons — `optional/minimal/`; REST via `optional/rest/`
 - Nav: start `templates/src/app/`; assemble from `templates/navigation/` — no unused route groups
 - Auth hook → `src/hooks/use-storage-state.ts`; constants → `src/constants/`. Never hooks under `src/lib/`
 - Keep `src/constants/session.ts` when GraphQL or REST is on (SecureStore for API auth), even if Auth nav is off. Auth on → also `SessionProvider` / `sign-in` / etc.
@@ -128,7 +128,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 
 ## Completion summary
 
-Path, remote, commit SHA, EAS on/off (+ owner / project ID / build ID), stack, API client, nav toggles, permissions (if any), token sync (+ URL), iOS/Android smoke, token gate, device verification (or skipped). Then **Run report** below (include **Design token import gaps** when sync on).
+Path, remote, commit SHA, EAS on/off (+ owner / project ID / build ID), add-ons, API client, nav toggles, permissions (if any), token sync (+ URL), iOS/Android smoke, token gate, device verification (or skipped). Then **Run report** below (include **Design token import gaps** when sync on).
 
 ## Run report (Phase R — mandatory)
 

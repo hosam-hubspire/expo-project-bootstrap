@@ -109,7 +109,7 @@ bunx expo install expo-document-picker expo-file-system   # documents
 
 Always copy when any on: `types.ts`, `ios-strings.ts`, `open-settings.ts`, `index.ts` (trim exports). Plus selected modules. Merge iOS strings from `IOS_PERMISSION_STRINGS`. Copy `PermissionsExamples/` + Settings import.
 
-### Default stack (unless unchecked)
+### Default add-ons (unless unchecked)
 
 ```bash
 bun add i18next@latest react-i18next@latest

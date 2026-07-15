@@ -23,4 +23,4 @@ Use [`optional/rest`](../rest/README.md) — do not only strip GraphQL and leave
 
 ## Combinations
 
-All three off → minimal `_layout.tsx`. Partial → compose manually. REST + stack → rest layout (no Apollo).
+All three off → minimal `_layout.tsx`. Partial → compose manually. REST + add-ons → rest layout (no Apollo).

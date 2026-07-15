@@ -12,19 +12,23 @@ Then: `use bootstrap skill to scaffold a project`
 
 ## Features
 
-Intake: app name → **defaults** or customize ([SKILL.md](./skills/bootstrap/SKILL.md)).
+During intake you give the app a name, then either accept the defaults or customize options ([SKILL.md](./skills/bootstrap/SKILL.md)).
 
-| Area | Mixable inputs |
-|------|----------------|
-| Stack | i18n · Storybook |
-| API | GraphQL · REST · none (exclusive) |
-| Navigation | Tabs · Drawer · Intro · Auth — any combo; both Tabs + Drawer off → flat Stack |
-| Permissions | Mic · Location fg/bg · Notifications · Image picker · Documents |
-| Infra | GitHub repo · EAS · design-token sync (appearance ≠ Figma color schemes) · iOS / Android smokes |
+### Optional (mix and match)
 
-Always on: Uniwind · Bun · Biome · forms (RHF + zod) · keyboard controller · bottom sheets · toasts · nano-icons · `Screen` + insets.
+- **Add-ons** — i18n, Storybook
+- **API** — GraphQL, REST, or none (pick one)
+- **Navigation** — Tabs, Drawer, Intro, and Auth in any combination. If Tabs and Drawer are both off, you get a flat Stack.
+- **Permissions** — Microphone, location (foreground / background), notifications, image picker, documents
+- **Infra** — GitHub repo, EAS, design-token sync, iOS / Android smoke tests
 
-**Defaults:** i18n + Storybook on · API GraphQL · nav tabs + intro · EAS / token sync / smokes / permissions off.
+### Always included
+
+Uniwind, Bun, Biome, forms (React Hook Form + Zod), keyboard controller, bottom sheets, toasts, nano-icons, and a `Screen` helper with safe-area insets.
+
+### Defaults
+
+i18n and Storybook on; API set to GraphQL; navigation with tabs and intro; EAS, token sync, smoke tests, and permissions off.
 
 ## Layout
 
