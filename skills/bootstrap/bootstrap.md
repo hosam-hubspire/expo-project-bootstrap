@@ -58,10 +58,10 @@ C2 cloud: `bunx eas-cli build -p ios -e development-simulator --non-interactive 
 
 ## Design token sync (Phase B)
 
-Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md). After A2 (or A when EAS off), before C — so verify and smoke run on real tokens.
+Only when sync on — [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) (+ [STORYBOOK_TOKEN_DEFINITIONS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/STORYBOOK_TOKEN_DEFINITIONS.md) when Storybook on). After A2 (or A when EAS off), before C — so verify and smoke run on real tokens.
 
 1. Review tokens source (GitHub URL or local JSON); **auto-detect** appearance vs color schemes ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — ask only if ambiguous **or** no named Default for light/dark `colorTokens` pin
-2. Implement `transformAndWrite` → Uniwind `generated/` (aliases, hex+rgba, stroke/padding/responsive, sm/md/lg+, coverage gate). Pin `APPEARANCE_SCHEME_MAP` in the sync script: named Default → both `default`; else **ask user** which scheme backs light and dark, then pin. Script must not prompt.
+2. Implement `transformAndWrite` → Uniwind `generated/` (aliases, hex+rgba, stroke/padding/responsive, sm/md/lg+, coverage gate). Pin `APPEARANCE_SCHEME_MAP` in the sync script: named Default → both `default`; else **ask user** which scheme backs light and dark, then pin. Script must not prompt. When Storybook on: emit `src/stories/design-tokens/token-definitions.ts` per [STORYBOOK_TOKEN_DEFINITIONS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/STORYBOOK_TOKEN_DEFINITIONS.md).
 3. Wire UI from detection: `colorScheme` when ≥2 schemes; appearance Settings only when `light-and-dark`; light-only → lock / hide dark
 4. `bun run tokens:sync` → uniwind artifacts (include `--theme` scheme slugs) → Phase C
 5. Note detection in run report; leave script as re-sync path. Do not require user confirmation of light/dark mapping when a named Default (or exact light/dark modes) makes the pin clear

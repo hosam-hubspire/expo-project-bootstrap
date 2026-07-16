@@ -1,5 +1,8 @@
 /* AUTO-GENERATED — do not edit. Run: bun run tokens:sync */
-/** Design token metadata for Storybook */
+/**
+ * Design token metadata for Storybook.
+ * Export names + shapes: templates/STORYBOOK_TOKEN_DEFINITIONS.md (Phase B overwrites from Figma).
+ */
 
 export const colorTokenGroups = {
   "text": [

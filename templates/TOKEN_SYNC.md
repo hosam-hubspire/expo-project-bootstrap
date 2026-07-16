@@ -66,7 +66,7 @@ Wire `colorScheme` in `preferences-store` **separately** from `themePreference`.
 | Fetch | GitHub: clone/pull each run (cache under `.tokens-cache/`, gitignored). Local: resolve path and read the JSON (no clone) |
 | Output | Overwrite `generated/*` per contract below |
 | Headers | `AUTO-GENERATED — do not edit. Run: bun run tokens:sync` |
-| Storybook | Update `token-definitions.ts` when present |
+| Storybook | Regenerate `src/stories/design-tokens/token-definitions.ts` when Storybook is on — [**STORYBOOK_TOKEN_DEFINITIONS.md**](./STORYBOOK_TOKEN_DEFINITIONS.md) (export names + shapes; content varies per design system) |
 | Idempotent | Same inputs → stable outputs |
 | Document | Script header: detected appearance, scheme slugs, default scheme |
 
@@ -191,6 +191,27 @@ Carry the same inventory into the Phase R run report **Design token import gaps*
 
 Example Tokens Studio bundle: top-level `files[]` with `collectionName`, `modeName`, `tokens`; aliases like `{neutrals.black-20}` and `{text.text-link-hover}`. Modes such as `Default` / `Rider Tools` are **schemes** (auto light-only); exact `light`/`dark` would be appearance.
 
+### Storybook `token-definitions.ts` contract
+
+When Storybook is on, Phase B also overwrites `src/stories/design-tokens/token-definitions.ts`.  
+Design-token stories import **fixed export names and TypeScript shapes**; only keys/values change per project.
+
+**Full spec:** [STORYBOOK_TOKEN_DEFINITIONS.md](./STORYBOOK_TOKEN_DEFINITIONS.md)  
+**Reference stub:** [src/stories/design-tokens/token-definitions.ts](./src/stories/design-tokens/token-definitions.ts)
+
+Summary:
+
+| Must emit | Shape stories expect |
+|-----------|----------------------|
+| `spacingTokens`, `radiusTokens` | `Record<string, number>` (px, not `"16px"` strings) |
+| `colorTokenGroups`, `semanticColors`, `semanticColorClasses` | Grouped semantic colors + light/dark maps |
+| `colorPrimitiveGroups` | Grouped `{ tokenName, value }[]` or `{}` |
+| `fontFamilies` | `Record<string, string>` (not an array) |
+| `typographyVariants`, `typographyTokenEntries` | Arrays; `name`/`key` match `typography-classes.ts` |
+| `tokenCounts` | Coverage summary for Colors story header |
+
+**Gate:** `bunx tsc --noEmit` with Storybook stories included. Wrong shape = Phase B incomplete.
+
 ## 3 — Run & hand off to Phase C
 
 ```bash
@@ -201,4 +222,4 @@ bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types
 
 Then Phase C (`lint` / `test` / `tsc`) once — do not re-verify inside B. Fix the script — do not one-off edit `generated/*`. After fonts change: install packages matching exported families; load via `expo-font` ([templates/README.md](./README.md)).
 
-**Gate:** real tokens + coverage + correct appearance/scheme wiring from auto-detect before C. If blocked: keep stubs; document; do not mark B complete.
+**Gate:** real generated tokens + coverage checklist + correct appearance/scheme wiring from auto-detect. When Storybook is on: `token-definitions.ts` matches [STORYBOOK_TOKEN_DEFINITIONS.md](./STORYBOOK_TOKEN_DEFINITIONS.md) and `tsc` passes. If blocked: keep stubs; document; do not mark B complete.

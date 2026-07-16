@@ -7,7 +7,7 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 1. Merge — don’t bulk-copy `package.json`, `app.json`, `tsconfig.json`.
 2. Install (below) — skip unchecked groups. Expo: `bunx expo install`. Else: `bun add …@latest`. Never copy version pins.
 3. Add: lint/CI, `.rnstorybook/`, `codegen.ts`, `src/`, `assets/`, and (when Storybook on) root `index.js` as `"main"` so Storybook bypasses expo-router / native-only app modules in Expo Go. `eas.json` only when EAS on.
-4. **Tokens** — sync **on:** copy `scripts/sync-design-tokens.mjs`, pin tokens source (GitHub URL **or** local design-tokens JSON path), add `tokens:sync`, stub `generated/`. Sync **off:** stub `generated/` only; no `tokens:*`. See [`TOKEN_SYNC.md`](./TOKEN_SYNC.md). Stubs may use Uniwind `@variant light` / `dark` for the default scaffold’s **appearance** demo — that is **not** a map of Figma collection modes. Phase B replaces stubs using intake **appearance** + **color schemes**.
+4. **Tokens** — sync **on:** copy `scripts/sync-design-tokens.mjs`, pin tokens source (GitHub URL **or** local design-tokens JSON path), add `tokens:sync`, stub `generated/`. Sync **off:** stub `generated/` only; no `tokens:*`. See [`TOKEN_SYNC.md`](./TOKEN_SYNC.md) (Uniwind `generated/*`) and [`STORYBOOK_TOKEN_DEFINITIONS.md`](./STORYBOOK_TOKEN_DEFINITIONS.md) when Storybook is on. Stubs may use Uniwind `@variant light` / `dark` for the default scaffold’s **appearance** demo — that is **not** a map of Figma collection modes. Phase B replaces stubs using intake **appearance** + **color schemes**.
 
 ### Appearance vs color schemes
 

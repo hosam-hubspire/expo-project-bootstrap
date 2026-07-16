@@ -11,7 +11,9 @@
  * Appearance (light/dark) ≠ Figma color schemes (e.g. Default / Rider Tools).
  * Never auto-map scheme names to Uniwind light/dark — see templates/TOKEN_SYNC.md.
  *
- * Output contract: templates/TOKEN_SYNC.md and stubs under src/theme/tokens/generated/
+ * Output contracts:
+ *   - Uniwind: templates/TOKEN_SYNC.md + stubs under src/theme/tokens/generated/
+ *   - Storybook (when src/stories/design-tokens/ exists): templates/STORYBOOK_TOKEN_DEFINITIONS.md
  */
 
 import { execFileSync } from "node:child_process";
@@ -167,6 +169,10 @@ function resolveTokensSource() {
  * (theme.css, colors.ts, spacing.css, typography-primitives.*, typography-classes.ts, …).
  * Typography: text-size-* + leading-* + font-Regular|Medium|Bold — see templates/TOKEN_SYNC.md
  * “Typography (Uniwind)”. Call patchMetroExtraThemes(schemeSlugs) when multi-scheme.
+ *
+ * When Storybook is on, also write src/stories/design-tokens/token-definitions.ts per
+ * templates/STORYBOOK_TOKEN_DEFINITIONS.md (export API — stories import fixed shapes;
+ * token keys/counts vary per design system).
  *
  * @param {string} sourcePath
  */
