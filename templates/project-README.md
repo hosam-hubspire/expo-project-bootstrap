@@ -7,7 +7,7 @@ Expo React Native app (iOS & Android) scaffolded with the Hubspire bootstrap sta
 | Area | This project |
 |------|----------------|
 | Runtime | Expo + Expo Router · Bun |
-| UI | Uniwind + Tailwind v4 · nano-icons · toasts |
+| UI | Uniwind + Tailwind v4 · nano-icons · toasts · analytics / toast / storage / secure-storage adapters |
 | Quality | TypeScript strict · Biome · ESLint a11y · Jest · CI |
 | State | Zustand + MMKV |
 | Forms | react-hook-form + Zod (`@hookform/resolvers`) |
@@ -61,9 +61,10 @@ bunx uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types
 src/
   app/           # Expo Router routes
   components/    # UI (Screen, Icon, AppToast, BottomSheetExamples, …)
+  services/      # API clients + analytics / toast / storage / secure-storage adapters
   theme/         # Uniwind + design tokens
   stores/        # Zustand
-  utils/         # toast (+ permissions when enabled)
+  utils/         # toast re-export (+ permissions when enabled)
   …
 assets/icons/    # SVG → nano-icons (prebuild)
 ```

@@ -1,16 +1,7 @@
-import { createMMKV } from "react-native-mmkv";
-import type { StateStorage } from "zustand/middleware";
+import { createStorage, createZustandStateStorage } from "@/services/storage";
 
-export const storage = createMMKV({ id: "app-storage" });
+/** App-wide KV store (preferences, etc.). Backed by the storage adapter (default MMKV). */
+export const storage = createStorage("app-storage");
 
-export const mmkvStorage: StateStorage = {
-  setItem: (name, value) => {
-    storage.set(name, value);
-  },
-  getItem: (name) => {
-    return storage.getString(name) ?? null;
-  },
-  removeItem: (name) => {
-    storage.remove(name);
-  },
-};
+/** Zustand persist bridge — same adapter as `storage`. */
+export const mmkvStorage = createZustandStateStorage(storage);

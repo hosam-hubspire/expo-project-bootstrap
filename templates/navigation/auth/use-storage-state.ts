@@ -1,5 +1,6 @@
-import * as SecureStore from "expo-secure-store";
 import { useCallback, useEffect, useReducer } from "react";
+
+import { secureStorage } from "@/services/secure-storage";
 
 type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
 
@@ -12,18 +13,18 @@ function useAsyncState<T>(initialValue: [boolean, T | null] = [true, null]): Use
 
 async function setStorageItemAsync(key: string, value: string | null) {
   if (value == null) {
-    await SecureStore.deleteItemAsync(key);
+    await secureStorage.deleteItem(key);
   } else {
-    await SecureStore.setItemAsync(key, value);
+    await secureStorage.setItem(key, value);
   }
 }
 
-/** Persist a string securely via SecureStore. Used by SessionProvider. */
+/** Persist a string securely via `secureStorage`. Used by SessionProvider. */
 export function useStorageState(key: string): UseStateHook<string> {
   const [state, setState] = useAsyncState<string>();
 
   useEffect(() => {
-    void SecureStore.getItemAsync(key).then((value) => {
+    void secureStorage.getItem(key).then((value) => {
       setState(value);
     });
   }, [key, setState]);

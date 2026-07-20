@@ -1,5 +1,6 @@
 import { View } from "react-native";
 
+import { AnalyticsExamples } from "@/components/AnalyticsExamples";
 import {
   BottomSheetExamples,
   BottomSheetExamplesRoot,
@@ -75,10 +76,18 @@ export default function SettingsScreen() {
 
         <ToastExamples
           title="Toasts"
-          description="Sample success, error, and info toasts via @/utils/toast."
+          description="Sample success, error, and info toasts via @/utils/toast (adapter)."
           successLabel="Success"
           errorLabel="Error"
           infoLabel="Info"
+        />
+
+        <AnalyticsExamples
+          title="Analytics"
+          description="Imperative analytics via @/services/analytics. Swap vendors with an adapter — see ADAPTERS.md."
+          trackLabel="Track"
+          identifyLabel="Identify"
+          resetLabel="Reset"
         />
 
         <BottomSheetExamples />

@@ -8,7 +8,6 @@ import { RetryLink } from "@apollo/client/link/retry";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { persistCache } from "apollo3-cache-persist";
-import * as SecureStore from "expo-secure-store";
 import type { FragmentDefinitionNode, OperationDefinitionNode } from "graphql";
 import { createClient } from "graphql-ws";
 
@@ -18,6 +17,7 @@ import {
   apolloCacheStorage,
 } from "@/services/graphql/apollo-cache-storage";
 import { prefetchQueries } from "@/services/graphql/prefetchQueries";
+import { secureStorage } from "@/services/secure-storage";
 
 if (__DEV__) {
   loadDevMessages();
@@ -55,9 +55,9 @@ const retryLink = new RetryLink({
   },
 });
 
-/** Reads the session token from SecureStore — independent of React SessionProvider. */
+/** Reads the session token from secureStorage — independent of React SessionProvider. */
 const authLink = new SetContextLink(async (prevContext) => {
-  const token = await SecureStore.getItemAsync(SESSION_STORAGE_KEY);
+  const token = await secureStorage.getItem(SESSION_STORAGE_KEY);
   return {
     headers: {
       ...prevContext.headers,
@@ -70,7 +70,7 @@ let resolvedClient: ApolloClient | null = null;
 let initPromise: Promise<ApolloClient> | null = null;
 
 async function getAuthConnectionParams() {
-  const token = await SecureStore.getItemAsync(SESSION_STORAGE_KEY);
+  const token = await secureStorage.getItem(SESSION_STORAGE_KEY);
   return token ? { authorization: `Bearer ${token}` } : {};
 }
 

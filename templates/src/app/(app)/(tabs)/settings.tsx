@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+import { AnalyticsExamples } from "@/components/AnalyticsExamples";
 import {
   BottomSheetExamples,
   BottomSheetExamplesRoot,
@@ -107,6 +108,14 @@ export default function SettingsScreen() {
           successLabel={t("settings.toastSuccess")}
           errorLabel={t("settings.toastError")}
           infoLabel={t("settings.toastInfo")}
+        />
+
+        <AnalyticsExamples
+          title={t("settings.analytics")}
+          description={t("settings.analyticsDescription")}
+          trackLabel={t("settings.analyticsTrack")}
+          identifyLabel={t("settings.analyticsIdentify")}
+          resetLabel={t("settings.analyticsReset")}
         />
 
         <BottomSheetExamples />

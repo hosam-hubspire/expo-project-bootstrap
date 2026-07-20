@@ -3,7 +3,7 @@ name: bootstrap
 description: >-
   Bootstrap a new Expo React Native app from architectural templates (Uniwind,
   Bun, Biome, design tokens, nano-icons, i18n, GraphQL or REST, Storybook,
-  mixable Expo Router navigation). Use when the user asks to scaffold,
+  analytics / toast / storage / secure-storage adapters, mixable Expo Router navigation). Use when the user asks to scaffold,
   bootstrap, or create a new Expo app or React Native project.
 disable-model-invocation: true
 ---
@@ -70,7 +70,7 @@ Assembly: [navigation](https://github.com/hosam-hubspire/expo-project-bootstrap/
 
 **Tokens off:** stub `generated/` only; no token scripts. **On:** `sync-design-tokens.mjs` + stub + `tokens:sync`; pin intake **Design tokens source** (GitHub URL or local JSON path). Phase B auto-detects appearance vs color schemes from Figma mode names ([TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md)) — exact `light`/`dark` → appearance; other modes (e.g. Default / Rider Tools) → product schemes under light-only. **Never** map arbitrary modes to dark. Pin `colorTokens.light`/`dark` from a named Default scheme when present; **if no Default, ask the user during scaffolding** which schemes back light and dark, then pin `APPEARANCE_SCHEME_MAP` (script does not prompt). Ask also if mode names are ambiguous.
 
-**API wiring:** GraphQL → Apollo + Rick and Morty `.env` + `expo-secure-store`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
+**API wiring:** GraphQL → Apollo + Rick and Morty `.env` + core `secureStorage`. REST → [optional/rest](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/optional/rest/README.md) + JSONPlaceholder. none → strip both.
 
 **Nav:** Tabs + Drawer both off → flat Stack (`navigation/screens/` + flat layout).
 
@@ -106,7 +106,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Strip unchecked add-ons — `optional/minimal/`; REST via `optional/rest/`
 - Nav: start `templates/src/app/`; assemble from `templates/navigation/` — no unused route groups
 - Auth hook → `src/hooks/use-storage-state.ts`; constants → `src/constants/`. Never hooks under `src/lib/`
-- Keep `src/constants/session.ts` when GraphQL or REST is on (SecureStore for API auth), even if Auth nav is off. Auth on → also `SessionProvider` / `sign-in` / etc.
+- Keep `src/constants/session.ts` when GraphQL or REST is on (secureStorage for API auth), even if Auth nav is off. Auth on → also `SessionProvider` / `sign-in` / etc.
 - Providers: GraphQL + auth → `SessionProvider` **inside** `AppApolloProvider`. REST/none + auth → `SessionProvider` only
 - Token scripts / `tokens:sync` only when sync on; else stub `generated/` only. Phase B: follow [TOKEN_SYNC.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/TOKEN_SYNC.md) — **auto-detect** appearance vs schemes from mode names (no intake); never map product schemes to dark; scheme-keyed colors + coverage gate; alias resolve incl. semantic→semantic; hex+rgba; size modes sm/md/lg+. When Storybook on: regenerate `token-definitions.ts` per [STORYBOOK_TOKEN_DEFINITIONS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/STORYBOOK_TOKEN_DEFINITIONS.md) (fixed export shapes; content varies per design system)
 - Typography Phase B: emit `text-size-*` + `leading-*` + `font-Regular|Medium|Bold` from `@theme` primitives — **never** hardcoded `text-[Npx]` / `leading-[Npx]` / `font-normal|bold`. RN custom fonts need weight faces via `expoFontSourceMap` in `src/theme/typography.ts` (see TOKEN_SYNC **Typography (Uniwind)**). Do not invent mono faces unless the tokens repo needs a separate mono stack. Compose overrides with `tailwind-merge` (`mergeTypographyClassName`) so custom size/leading/face utilities replace correctly — always install `tailwind-merge`. Gate leading with `ThemedText` `withLineHeight` (default true; false omits `leading-*`)
@@ -119,6 +119,10 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - API: GraphQL / REST / none per intake; always gitignore `.env`
 - EAS / C2 / B / prebuild / Argent: follow bootstrap.md — skip A2 when EAS off; skip Argent + C2 + prebuild when both smokes off
 - Core toasts always; PermissionsExamples when any permission on
+- Core analytics always: `src/services/analytics` adapter facade (`analytics.track` / `identify` / `screen` / `reset`); default console in `__DEV__`, noop in production; mount `<AnalyticsScreenTracker />` in root layout; swap Firebase/Mixpanel via [ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/analytics/ADAPTERS.md) — no vendor SDK in core installs
+- Core toast adapter always: `src/services/toast` (`toast.*`); default `react-native-toast-message`; mount `<AppToast />`; swap via [toast ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/toast/ADAPTERS.md)
+- Core storage adapter always: `src/services/storage` (`createStorage`); default MMKV; `@/lib/mmkv` + Apollo cache use it; swap via [storage ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/storage/ADAPTERS.md)
+- Core secure storage adapter always: `src/services/secure-storage` (`secureStorage.*`); default `expo-secure-store` (core install); Auth + GraphQL/REST Bearer use it; swap via [secure-storage ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/secure-storage/ADAPTERS.md)
 - Core forms always: `react-hook-form`, `zod`, `@hookform/resolvers` — auth `sign-in` is the reference wiring when Auth on
 - Core keyboard always: `react-native-keyboard-controller` via `bunx expo install`; wrap root in `KeyboardProvider`; auth `sign-in` uses `KeyboardAwareScrollView` + `KeyboardToolbar` when Auth on
 - Core bottom sheet always: `@swmansion/react-native-bottom-sheet` via `bun add …@latest`; wrap root in `BottomSheetProvider` (inside `KeyboardProvider`); Fabric native — not Expo Go; Settings always mounts `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim/keyboard/a11y). Use `StyleSheet.absoluteFill` (not `absoluteFillObject` — removed in RN 0.86+)

@@ -31,7 +31,13 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 
 **Safe area** — `Screen` + `useSafeAreaInsets()`; no `SafeAreaView`. Tabs: `edges={["top","left","right"]}`. Drawer header visible → `Screen` skips top inset.
 
-**Toasts** — `<AppToast />` in root `_layout` (always). `toast.*` from `@/utils/toast`. Settings: `ToastExamples` + `SettingsUI/`.
+**Toasts** — `<AppToast />` in root `_layout` (always). `toast.*` from `@/utils/toast` (adapter under `@/services/toast`). Settings: `ToastExamples` + `SettingsUI/`. Swap vendors via [`src/services/toast/ADAPTERS.md`](./src/services/toast/ADAPTERS.md).
+
+**Analytics** — always. Imperative `analytics.*` from `@/services/analytics`; mount `<AnalyticsScreenTracker />` in root `_layout`. Default adapter: console in `__DEV__`, noop in production. Swap Firebase / Mixpanel (or custom) via [`src/services/analytics/ADAPTERS.md`](./src/services/analytics/ADAPTERS.md) — no vendor packages in core installs. Settings: `AnalyticsExamples`.
+
+**Storage** — always. Sync KV via `@/services/storage` (default MMKV). App prefs use `@/lib/mmkv`; Apollo cache uses the same factory. Swap / memory via [`src/services/storage/ADAPTERS.md`](./src/services/storage/ADAPTERS.md).
+
+**Secure storage** — always. `secureStorage.*` from `@/services/secure-storage` (default `expo-secure-store`). Auth hook + GraphQL/REST Bearer reads go through it. Swap via [`src/services/secure-storage/ADAPTERS.md`](./src/services/secure-storage/ADAPTERS.md).
 
 **Bottom sheet** — always. Wrap root in `BottomSheetProvider` (inside `KeyboardProvider`). Fabric native — needs a dev/client build (`expo run:*` / prebuild), not Expo Go. Settings: `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim, keyboard, a11y).
 
@@ -50,7 +56,7 @@ Never `--verbose` on `bunx expo install`. Prefer `bun install --verbose` for exi
 ### Core (always)
 
 ```bash
-bunx expo install expo-localization expo-font jest-expo react-native-keyboard-controller
+bunx expo install expo-localization expo-font expo-secure-store jest-expo react-native-keyboard-controller
 JEST_RANGE=$(node -p "require('jest-expo/package.json').dependencies['babel-jest']")
 bun add -d jest@${JEST_RANGE} @types/jest@${JEST_RANGE}
 bun add uniwind@latest tailwindcss@latest tailwind-merge@latest zustand@latest react-native-mmkv@latest react-native-nitro-modules@latest react-native-nano-icons@latest react-native-toast-message@latest react-hook-form@latest zod@latest @hookform/resolvers@latest @swmansion/react-native-bottom-sheet@latest
@@ -73,8 +79,7 @@ bunx expo install expo-dev-client
 # Drawer on — peers ONLY (hard stop: never @react-navigation/drawer)
 bunx expo install react-native-gesture-handler react-native-reanimated react-native-worklets
 
-# Auth on
-bunx expo install expo-secure-store
+# Auth on — expo-secure-store is already in Core (secureStorage adapter)
 ```
 
 | From `navigation/auth/` | To |
@@ -84,7 +89,7 @@ bunx expo install expo-secure-store
 | `sign-in.tsx` | `src/app/sign-in.tsx` |
 | `sign-out-button.tsx` | Settings (optional) |
 
-Also `src/constants/session.ts` whenever **GraphQL or REST** is on (SecureStore key for Apollo auth link / axios Bearer) — **even if Auth is off**. Do not strip it with Auth-off nav cleanup. Auth on additionally copies `SessionProvider` / `sign-in` / `use-storage-state`.
+Also `src/constants/session.ts` whenever **GraphQL or REST** is on (session key for Apollo auth link / axios Bearer via `secureStorage`) — **even if Auth is off**. Do not strip it with Auth-off nav cleanup. Auth on additionally copies `SessionProvider` / `sign-in` / `use-storage-state`.
 
 GraphQL + auth:
 
@@ -115,15 +120,14 @@ Always copy when any on: `types.ts`, `ios-strings.ts`, `open-settings.ts`, `inde
 bun add i18next@latest react-i18next@latest
 # GraphQL (default) — skip when REST or none
 bun add @apollo/client@latest graphql@latest graphql-ws@latest apollo3-cache-persist@latest @graphql-typed-document-node/core@latest
-bunx expo install expo-secure-store
 bun add -d @graphql-codegen/cli@latest @graphql-codegen/client-preset@latest
 # REST instead of GraphQL:
-# bun add axios@latest && bunx expo install expo-secure-store
+# bun add axios@latest
 bun add -d storybook@latest @storybook/react-native@latest @storybook/addon-ondevice-actions@latest @storybook/addon-ondevice-backgrounds@latest @storybook/addon-ondevice-controls@latest @storybook/addon-ondevice-notes@latest
 bun install --verbose
 ```
 
-GraphQL or REST both need `expo-secure-store` (auth link / Bearer interceptor). REST files: [`optional/rest`](./optional/rest/README.md) — do not copy GraphQL stack.
+GraphQL or REST both use core `expo-secure-store` via `secureStorage` (auth link / Bearer interceptor). REST files: [`optional/rest`](./optional/rest/README.md) — do not copy GraphQL stack.
 
 ### Dev `.env` (gitignored)
 

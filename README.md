@@ -24,7 +24,7 @@ During intake you give the app a name, then either accept the defaults or custom
 
 ### Always included
 
-Uniwind, Bun, Biome, forms (React Hook Form + Zod), keyboard controller, bottom sheets, toasts, nano-icons, and a `Screen` helper with safe-area insets.
+Uniwind, Bun, Biome, forms (React Hook Form + Zod), keyboard controller, bottom sheets, toasts, analytics / toast / storage / secure-storage adapters, nano-icons, and a `Screen` helper with safe-area insets.
 
 ### Defaults
 

@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
-import * as SecureStore from "expo-secure-store";
 
 import { SESSION_STORAGE_KEY } from "@/constants/session";
+import { secureStorage } from "@/services/secure-storage";
 
 /** Set EXPO_PUBLIC_API_URL to your project REST base URL (no trailing slash required). */
 export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL?.trim() ?? "";
@@ -9,7 +9,7 @@ export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL?.trim() ?? "";
 let client: AxiosInstance | null = null;
 
 /**
- * Singleton axios instance with Bearer auth from SecureStore (`SESSION_STORAGE_KEY`).
+ * Singleton axios instance with Bearer auth from secureStorage (`SESSION_STORAGE_KEY`).
  * Reads the token independently of React SessionProvider — same pattern as the Apollo auth link.
  */
 export function getRestClient(): AxiosInstance {
@@ -31,7 +31,7 @@ export function getRestClient(): AxiosInstance {
   });
 
   client.interceptors.request.use(async (config) => {
-    const token = await SecureStore.getItemAsync(SESSION_STORAGE_KEY);
+    const token = await secureStorage.getItem(SESSION_STORAGE_KEY);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

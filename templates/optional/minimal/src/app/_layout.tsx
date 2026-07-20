@@ -9,6 +9,7 @@ import { useUniwind } from "uniwind";
 import { AppToast } from "@/components/AppToast";
 import { IconFontLoader } from "@/components/IconFontLoader";
 import { SplashScreenController } from "@/components/SplashScreenController";
+import { AnalyticsScreenTracker } from "@/services/analytics";
 import { usePreferencesStore } from "@/stores/preferences-store";
 
 /** Minimal root (no i18n / GraphQL / Storybook). Default nav: tabs + intro. */
@@ -22,6 +23,7 @@ export default function RootLayout() {
           <IconFontLoader>
             <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
               <SplashScreenController />
+              <AnalyticsScreenTracker />
               <RootNavigator />
               <AppToast />
             </ThemeProvider>

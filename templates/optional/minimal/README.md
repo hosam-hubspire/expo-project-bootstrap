@@ -2,6 +2,8 @@
 
 When i18n / Storybook unchecked, or API is **none** (REST → [`optional/rest`](../rest/README.md)). Nav is independent — [`navigation/README.md`](../../navigation/README.md). Minimal ships tabs + intro.
 
+**Keep analytics / toast / storage / secure-storage adapters** — always included; do not strip `src/services/{analytics,toast,storage,secure-storage}`, `<AnalyticsScreenTracker />`, or `<AppToast />`.
+
 ## Omit i18n
 
 - Replace `preferences-store`, tab screens, `AppTabs`, onboarding with minimal copies
