@@ -1,10 +1,6 @@
-import {
-  analytics,
-  createConsoleAnalyticsAdapter,
-  createDefaultAdapter,
-  createNoopAnalyticsAdapter,
-  setAdapter,
-} from "./index";
+import { createConsoleAnalyticsAdapter } from "./adapters/console";
+import { createNoopAnalyticsAdapter } from "./adapters/noop";
+import { analytics, createDefaultAdapter, setAdapter } from "./client";
 import type { AnalyticsAdapter } from "./types";
 
 function createMockAdapter(): jest.Mocked<AnalyticsAdapter> {

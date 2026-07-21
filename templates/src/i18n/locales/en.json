@@ -37,7 +37,7 @@
     "languageEnglish": "English",
     "languageSpanish": "Spanish",
     "toasts": "Toasts",
-    "toastsDescription": "Sample success, error, and info toasts via @/utils/toast (adapter).",
+    "toastsDescription": "Sample success, error, and info toasts via @/services/toast (adapter).",
     "toastSuccess": "Success",
     "toastError": "Error",
     "toastInfo": "Info",

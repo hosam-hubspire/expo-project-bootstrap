@@ -42,9 +42,7 @@ function ensureDir(dir) {
 }
 
 function writeGenerated(fileName, body) {
-  const withBanner = body.startsWith("/* AUTO-GENERATED")
-    ? body
-    : `${GENERATED_BANNER}\n${body}`;
+  const withBanner = body.startsWith("/* AUTO-GENERATED") ? body : `${GENERATED_BANNER}\n${body}`;
   const filePath = path.join(OUT_DIR, fileName);
   fs.writeFileSync(filePath, withBanner.endsWith("\n") ? withBanner : `${withBanner}\n`);
   console.log(`  wrote ${path.relative(ROOT, filePath)}`);
@@ -80,10 +78,7 @@ function patchMetroExtraThemes(schemeSlugs) {
 
 /** @param {string} source */
 function isGitHubUrl(source) {
-  return (
-    /^https?:\/\/(www\.)?github\.com[/:]/i.test(source) ||
-    /^git@github\.com:/i.test(source)
-  );
+  return /^https?:\/\/(www\.)?github\.com[/:]/i.test(source) || /^git@github\.com:/i.test(source);
 }
 
 /** @param {string} source */
@@ -149,9 +144,7 @@ function resolveTokensSource() {
 
   const stat = fs.statSync(localPath);
   if (stat.isFile() && !/\.json$/i.test(localPath)) {
-    throw new Error(
-      `Local design tokens source must be a .json file (got: ${localPath})`,
-    );
+    throw new Error(`Local design tokens source must be a .json file (got: ${localPath})`);
   }
 
   console.log(`Using local tokens source: ${localPath}`);

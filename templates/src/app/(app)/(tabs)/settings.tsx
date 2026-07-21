@@ -2,10 +2,7 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 import { AnalyticsExamples } from "@/components/AnalyticsExamples";
-import {
-  BottomSheetExamples,
-  BottomSheetExamplesRoot,
-} from "@/components/BottomSheetExamples";
+import { BottomSheetExamples, BottomSheetExamplesRoot } from "@/components/BottomSheetExamples";
 import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
 import {

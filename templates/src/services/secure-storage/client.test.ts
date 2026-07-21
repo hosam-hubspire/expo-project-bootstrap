@@ -4,11 +4,7 @@ jest.mock("expo-secure-store", () => ({
   deleteItemAsync: jest.fn(async () => undefined),
 }));
 
-import {
-  createMemorySecureStorageAdapter,
-  secureStorage,
-  setSecureStorageAdapter,
-} from "./index";
+import { createMemorySecureStorageAdapter, secureStorage, setSecureStorageAdapter } from "./index";
 import type { SecureStorageAdapter } from "./types";
 
 describe("secureStorage client", () => {
@@ -16,10 +12,13 @@ describe("secureStorage client", () => {
 
   beforeEach(() => {
     mock = {
-      getItem: jest.fn(async () => null),
-      setItem: jest.fn(async () => undefined),
-      deleteItem: jest.fn(async () => undefined),
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      deleteItem: jest.fn(),
     };
+    mock.getItem.mockResolvedValue(null);
+    mock.setItem.mockResolvedValue(undefined);
+    mock.deleteItem.mockResolvedValue(undefined);
     setSecureStorageAdapter(mock);
   });
 

@@ -64,7 +64,7 @@ src/
   services/      # API clients + analytics / toast / storage / secure-storage adapters
   theme/         # Uniwind + design tokens
   stores/        # Zustand
-  utils/         # toast re-export (+ permissions when enabled)
+  utils/         # permissions helpers when enabled
   …
 assets/icons/    # SVG → nano-icons (prebuild)
 ```

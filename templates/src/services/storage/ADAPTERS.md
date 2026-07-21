@@ -25,6 +25,26 @@ setStorageAdapterFactory((id) => createMemoryStorageAdapter(id));
 
 Or implement `StorageAdapter` / `StorageAdapterFactory` for another sync KV store.
 
+## Apollo `MMKVWrapper` ↔ `StorageAdapter`
+
+GraphQL cache persistence uses `apollo3-cache-persist`'s `MMKVWrapper` over `createStorage("apollo-cache")` in `src/services/graphql/apollo-cache-storage.ts`.
+
+`MMKVWrapper` expects an MMKV-shaped interface whose `set` accepts `boolean | string | number`. Our `StorageAdapter.set` is **string-only** (prefs / Zustand JSON). Bridge with `String(value)` when wrapping — do not widen `StorageAdapter` to match Apollo:
+
+```ts
+export const apolloCacheStorage = new MMKVWrapper({
+  set: (key, value) => {
+    apolloStorage.set(key, String(value));
+  },
+  getString: (key) => apolloStorage.getString(key) ?? undefined,
+  delete: (key) => {
+    apolloStorage.remove(key);
+  },
+});
+```
+
+Apollo persist writes stringified cache JSON in practice; the coerce keeps TypeScript aligned with the adapter contract.
+
 ## AsyncStorage (reference)
 
 AsyncStorage is async; this adapter surface is sync (MMKV / Apollo `MMKVWrapper`). Options:

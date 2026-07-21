@@ -1,6 +1,6 @@
 # Toast adapters
 
-Scaffold ships an imperative `toast.*` API and a swappable `ToastAdapter`. Call sites import from `@/utils/toast` (re-export) or `@/services/toast`.
+Scaffold ships an imperative `toast.*` API and a swappable `ToastAdapter`. Call sites import from `@/services/toast`.
 
 **Default:** `react-native-toast-message` via `createRnToastMessageAdapter`. Mount `<AppToast />` once in the root layout.
 

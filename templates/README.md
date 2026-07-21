@@ -31,7 +31,7 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 
 **Safe area** — `Screen` + `useSafeAreaInsets()`; no `SafeAreaView`. Tabs: `edges={["top","left","right"]}`. Drawer header visible → `Screen` skips top inset.
 
-**Toasts** — `<AppToast />` in root `_layout` (always). `toast.*` from `@/utils/toast` (adapter under `@/services/toast`). Settings: `ToastExamples` + `SettingsUI/`. Swap vendors via [`src/services/toast/ADAPTERS.md`](./src/services/toast/ADAPTERS.md).
+**Toasts** — `<AppToast />` in root `_layout` (always). `toast.*` from `@/services/toast`. Settings: `ToastExamples` + `SettingsUI/`. Swap vendors via [`src/services/toast/ADAPTERS.md`](./src/services/toast/ADAPTERS.md).
 
 **Analytics** — always. Imperative `analytics.*` from `@/services/analytics`; mount `<AnalyticsScreenTracker />` in root `_layout`. Default adapter: console in `__DEV__`, noop in production. Swap Firebase / Mixpanel (or custom) via [`src/services/analytics/ADAPTERS.md`](./src/services/analytics/ADAPTERS.md) — no vendor packages in core installs. Settings: `AnalyticsExamples`.
 

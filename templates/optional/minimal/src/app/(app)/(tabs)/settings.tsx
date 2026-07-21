@@ -1,10 +1,7 @@
 import { View } from "react-native";
 
 import { AnalyticsExamples } from "@/components/AnalyticsExamples";
-import {
-  BottomSheetExamples,
-  BottomSheetExamplesRoot,
-} from "@/components/BottomSheetExamples";
+import { BottomSheetExamples, BottomSheetExamplesRoot } from "@/components/BottomSheetExamples";
 import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
 import {
@@ -76,7 +73,7 @@ export default function SettingsScreen() {
 
         <ToastExamples
           title="Toasts"
-          description="Sample success, error, and info toasts via @/utils/toast (adapter)."
+          description="Sample success, error, and info toasts via @/services/toast (adapter)."
           successLabel="Success"
           errorLabel="Error"
           infoLabel="Info"

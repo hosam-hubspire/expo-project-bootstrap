@@ -6,8 +6,8 @@ jest.mock("react-native-toast-message", () => ({
   },
 }));
 
-import type { ToastAdapter } from "./types";
 import { setToastAdapter, toast } from "./client";
+import type { ToastAdapter } from "./types";
 
 function createMockAdapter(): jest.Mocked<ToastAdapter> {
   return {

@@ -1,5 +1,5 @@
 export {
   BottomSheetExamples,
-  BottomSheetExamplesRoot,
   type BottomSheetExamplesLabels,
+  BottomSheetExamplesRoot,
 } from "./BottomSheetExamples";

@@ -168,3 +168,7 @@ export function createMixpanelAnalyticsAdapter(): AnalyticsAdapter {
 ## Custom adapter
 
 Implement `AnalyticsAdapter` from `./types` and pass it to `analytics.setAdapter(...)`.
+
+## Unit tests
+
+`client.test.ts` must import from `./client` and `./adapters/*` — **not** the barrel `./index`. The barrel re-exports `AnalyticsScreenTracker`, which pulls in `expo-router` (and ESM deps like `standard-navigation`) and breaks Jest. App code can keep using `@/services/analytics`.
