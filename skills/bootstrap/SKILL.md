@@ -12,7 +12,7 @@ disable-model-invocation: true
 
 **Repo:** https://github.com/hosam-hubspire/expo-project-bootstrap
 
-**Templates:** local clone `templates/` next to `skills/`, else [templates on GitHub](https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates). Do not use `../../templates` from a global skills folder.
+**Templates:** always from GitHub — [templates on `main`](https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates). Never use a local clone, sibling `templates/` folder, or `../../templates`.
 
 **Workflow:** [bootstrap.md](bootstrap.md) · **Installs:** [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md)
 
@@ -118,7 +118,7 @@ Procedure: [bootstrap.md](bootstrap.md) + [templates/README.md](https://github.c
 - Tabs: Expo Router JS `Tabs` + nano `Icon`; `Icon` must accept RN `ColorValue` (not `string` only)
 - API: GraphQL / REST / none per intake; always gitignore `.env`
 - EAS / C2 / B / prebuild / Argent: follow bootstrap.md — skip A2 when EAS off; skip Argent + C2 + prebuild when both smokes off
-- Core toasts always; PermissionsExamples when any permission on
+- Core toasts always; Settings ships PermissionsExamples (Biome-clean) — keep + trim labels when any permission on; strip when all off
 - Core analytics always: `src/services/analytics` adapter facade (`analytics.track` / `identify` / `screen` / `reset`); default console in `__DEV__`, noop in production; mount `<AnalyticsScreenTracker />` in root layout; swap Firebase/Mixpanel via [ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/analytics/ADAPTERS.md) — no vendor SDK in core installs
 - Core toast adapter always: `src/services/toast` (`toast.*`); default `react-native-toast-message`; mount `<AppToast />`; swap via [toast ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/toast/ADAPTERS.md)
 - Core storage adapter always: `src/services/storage` (`createStorage`); default MMKV; `@/lib/mmkv` + Apollo cache use it; swap via [storage ADAPTERS.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/src/services/storage/ADAPTERS.md)

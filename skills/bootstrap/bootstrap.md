@@ -1,7 +1,8 @@
 # Bootstrap workflow
 
 **Intake:** [SKILL.md](SKILL.md) — wait for confirmed name + defaults/custom.  
-**Templates:** prefer local clone; else https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates  
+**Templates:** always from GitHub — https://github.com/hosam-hubspire/expo-project-bootstrap/tree/main/templates (never a local clone or sibling `templates/`)  
+
 **Nav assembly:** [navigation/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/navigation/README.md)  
 **Installs:** [templates/README.md](https://github.com/hosam-hubspire/expo-project-bootstrap/blob/main/templates/README.md)
 

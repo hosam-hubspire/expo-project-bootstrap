@@ -41,7 +41,7 @@ Adapt **after** `bunx create-expo-app@latest … --template default` and removin
 
 **Bottom sheet** — always. Wrap root in `BottomSheetProvider` (inside `KeyboardProvider`). Fabric native — needs a dev/client build (`expo run:*` / prebuild), not Expo Go. Settings: `BottomSheetExamplesRoot` + `BottomSheetExamples` (inline + backdrop, modal + scrim, keyboard, a11y).
 
-**Permissions** — when any on: `PermissionsExamples/` + Settings import; trim labels. [`permissions/README.md`](./src/utils/permissions/README.md).
+**Permissions** — Settings already includes `PermissionsExamples` (Biome-clean). When any on: keep + trim labels; when all off: strip import/JSX. [`permissions/README.md`](./src/utils/permissions/README.md).
 
 ## Installs
 
@@ -112,7 +112,7 @@ bunx expo install expo-image-picker                       # camera + photos
 bunx expo install expo-document-picker expo-file-system   # documents
 ```
 
-Always copy when any on: `types.ts`, `ios-strings.ts`, `open-settings.ts`, `index.ts` (trim exports). Plus selected modules. Merge iOS strings from `IOS_PERMISSION_STRINGS`. Copy `PermissionsExamples/` + Settings import.
+Always copy when any on: `types.ts`, `ios-strings.ts`, `open-settings.ts`, `index.ts` (trim exports). Plus selected modules. Merge iOS strings from `IOS_PERMISSION_STRINGS`. Keep Settings `PermissionsExamples` + trim labels (do not re-insert imports — templates are already Biome-sorted).
 
 ### Default add-ons (unless unchecked)
 

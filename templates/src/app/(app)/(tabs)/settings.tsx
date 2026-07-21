@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { AnalyticsExamples } from "@/components/AnalyticsExamples";
 import { BottomSheetExamples, BottomSheetExamplesRoot } from "@/components/BottomSheetExamples";
 import { Icon } from "@/components/Icon";
+import { PermissionsExamples } from "@/components/PermissionsExamples";
 import { Screen } from "@/components/Screen";
 import {
   SettingsButtonRow,
@@ -116,6 +117,23 @@ export default function SettingsScreen() {
         />
 
         <BottomSheetExamples />
+
+        <PermissionsExamples
+          title={t("settings.permissions")}
+          description={t("settings.permissionsDescription")}
+          statusLabel={t("settings.permissionStatus")}
+          requestLabel={t("settings.permissionRequest")}
+          openSettingsLabel={t("settings.permissionOpenSettings")}
+          labels={{
+            microphone: t("settings.permissionMicrophone"),
+            locationForeground: t("settings.permissionLocationForeground"),
+            locationBackground: t("settings.permissionLocationBackground"),
+            locationServices: t("settings.permissionLocationServices"),
+            notifications: t("settings.permissionNotifications"),
+            camera: t("settings.permissionCamera"),
+            mediaLibrary: t("settings.permissionMediaLibrary"),
+          }}
+        />
 
         <SettingsFooterButton
           label={t("settings.replayOnboarding")}

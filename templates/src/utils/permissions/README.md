@@ -36,7 +36,7 @@ Merge into `expo.plugins`. Use strings from `IOS_PERMISSION_STRINGS` in `ios-str
 2. Merge plugins + iOS strings from `ios-strings.ts`
 3. Copy shared files + selected modules; trim `index.ts` exports
 4. `bunx expo prebuild` after plugin changes (when native projects exist)
-5. Copy `PermissionsExamples/` → Settings import + JSX; keep only selected `labels`; trim unused rows/imports
+5. Settings already ships `PermissionsExamples` (Biome-clean import order). When any permission on: keep the block + trim `labels` to selected toggles only. When all off: strip the import + JSX and omit `PermissionsExamples/`
 6. Toast examples always via `ToastExamples` + `SettingsUI/`
 7. Bottom sheet examples always via `BottomSheetExamplesRoot` + `BottomSheetExamples`
 
