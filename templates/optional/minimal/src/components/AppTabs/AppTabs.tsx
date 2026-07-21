@@ -1,12 +1,10 @@
 import { Tabs } from "expo-router";
-import { useUniwind } from "uniwind";
 
 import { Icon } from "@/components/Icon";
-import { colorTokens } from "@/theme/tokens/generated/colors";
+import { useColorTokens } from "@/hooks/use-token-color";
 
 export default function AppTabs() {
-  const { theme } = useUniwind();
-  const colors = colorTokens[theme === "dark" ? "dark" : "light"];
+  const colors = useColorTokens();
 
   return (
     <Tabs
