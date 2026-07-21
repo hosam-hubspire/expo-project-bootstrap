@@ -1,13 +1,11 @@
 import type { ColorValue } from "react-native";
 import { createNanoIconSet, type IconProps as NanoIconProps } from "react-native-nano-icons";
-import { withUniwind } from "uniwind";
 
 import glyphMap from "@/assets/icons/nanoicons.glyphmap.json";
+import { useTokenColor } from "@/hooks/use-token-color";
 import type { ColorTokenName } from "@/theme";
-import { accentColorClassName } from "@/theme/typography";
 
 const NanoIcon = createNanoIconSet(glyphMap);
-const StyledNanoIcon = withUniwind(NanoIcon);
 
 export type IconName = keyof typeof glyphMap.i;
 
@@ -28,11 +26,11 @@ function resolveIconColor(color: ColorValue): string {
 }
 
 export function Icon({ color, colorToken = "text-text-default", ...props }: CustomIconProps) {
-  if (color != null) {
-    return <NanoIcon {...props} color={resolveIconColor(color)} />;
-  }
+  const tokenColor = useTokenColor(colorToken);
 
-  return <StyledNanoIcon {...props} colorClassName={accentColorClassName(colorToken)} />;
+  return (
+    <NanoIcon {...props} color={color != null ? resolveIconColor(color) : tokenColor} />
+  );
 }
 
 export { NanoIcon };

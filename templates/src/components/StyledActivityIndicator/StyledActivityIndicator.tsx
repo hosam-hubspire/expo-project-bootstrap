@@ -1,10 +1,7 @@
 import { ActivityIndicator, type ActivityIndicatorProps } from "react-native";
-import { withUniwind } from "uniwind";
 
+import { useTokenColor } from "@/hooks/use-token-color";
 import type { ColorTokenName } from "@/theme";
-import { accentColorClassName } from "@/theme/typography";
-
-const UniwindActivityIndicator = withUniwind(ActivityIndicator);
 
 type StyledActivityIndicatorProps = ActivityIndicatorProps & {
   colorToken?: ColorTokenName;
@@ -15,9 +12,7 @@ export function StyledActivityIndicator({
   colorToken = "text-text-default",
   ...props
 }: StyledActivityIndicatorProps) {
-  if (color != null) {
-    return <ActivityIndicator {...props} color={color} />;
-  }
+  const tokenColor = useTokenColor(colorToken);
 
-  return <UniwindActivityIndicator {...props} colorClassName={accentColorClassName(colorToken)} />;
+  return <ActivityIndicator {...props} color={color ?? tokenColor} />;
 }

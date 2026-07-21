@@ -89,11 +89,6 @@ export function colorClassName(colorToken: ColorTokenName): string {
   return `text-${colorToken}`;
 }
 
-/** For `colorClassName` props on withUniwind-wrapped components (ActivityIndicator, Icon, etc.) */
-export function accentColorClassName(colorToken: ColorTokenName): string {
-  return `accent-${colorToken}`;
-}
-
 export function bgClassName(colorToken: ColorTokenName): string {
   return `bg-${colorToken}`;
 }
